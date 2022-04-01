@@ -1,0 +1,23 @@
+{
+	"name": "devops-metodik-1-groupwork",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"start": "node ./backend/index.js",
+		"test": "echo \"Error: no test specified, run test-unit or test-rest instead\" && exit 1",
+		"test-unit": "jest",
+		"test-rest": "newman run test/api-test/api-test.postman_collection.json"
+	},
+	"author": "Albin, Mauro, Pawel",
+	"license": "ISC",
+	"dependencies": {
+		"better-express-store": "^1.0.4",
+		"better-sqlite3": "^7.5.0",
+		"express": "^4.17.2",
+		"express-session": "^1.17.2"
+	},
+	"devDependencies": {
+		"jest": "^27.5.1",
+		"jsdom": "^19.0.0"
+	}
+}
