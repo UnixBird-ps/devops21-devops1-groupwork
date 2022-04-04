@@ -22,7 +22,7 @@ jobs:
         cache: 'npm'
     - name: Install test dependencies
       run: |
-        npm ci
+        npm install
         npm install -g pm2
         npm install -g newman
     - name: Run unit tests
