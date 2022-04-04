@@ -1,6 +1,11 @@
+*
+{
+	font-family: Trebuchet MS, Arial, sans-serif;
+}
+
 body {
-  background-color: black;
-  color: white;
+  background-color: white;
+  color: black;
 }
 
 table {
@@ -42,7 +47,6 @@ form {
 input[type="text"], input[type="password"], input[type="email"] {
   width: 340px;
 }
-
 
 label {
   display: block;
@@ -94,7 +98,7 @@ input[type="submit"] {
   top: 0;
   left: 0;
   background-color: white;
-  opacity: 0.3;
+  opacity: 0.85;
 }
 
 a {
