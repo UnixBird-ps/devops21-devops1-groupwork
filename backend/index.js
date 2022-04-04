@@ -1,5 +1,3 @@
-console.log( 'proc cwd: ' + process.cwd() );
-
 const path = require( 'path' );
 const betterSqlite3 = require( 'better-sqlite3' );
 const express = require( 'express' );

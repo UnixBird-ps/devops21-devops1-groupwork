@@ -1,8 +1,8 @@
-console.log( 'module dir: ' + __dirname );
-const session = require('express-session');
-const store = require('better-express-store');
-const acl = require('./acl');
-const passwordEncryptor = require('./passwordEncryptor');
+const path = require( 'path' );
+const session = require( 'express-session' );
+const store = require( 'better-express-store' );
+const acl = require( './acl' );
+const passwordEncryptor = require( './passwordEncryptor' );
 const passwordField = 'password';
 
 module.exports = function (app, db) {
