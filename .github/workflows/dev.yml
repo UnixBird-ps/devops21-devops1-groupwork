@@ -24,7 +24,6 @@ jobs:
       run: |
         npm install
         npm install -g pm2
-        npm install -g newman
     - name: Run unit tests
       run: npm run test-unit
     - name: Run REST API tests

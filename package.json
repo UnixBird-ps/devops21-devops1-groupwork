@@ -6,8 +6,8 @@
 		"start": "node ./backend/index.js",
 		"test": "echo \"Run tests by executing 'npm run' with one of following scripts: test-unit, test-rest or test-bdd\" && exit 1",
 		"test-unit": "jest || exit 1",
-		"test-rest": "newman run test/api-test/api-test.postman_collection.json || exit 1",
-		"test-bdd": "node ./node_modules/selenium-cucumber-js/index.js || exit 1"
+		"test-rest": "newman run test/api-test.postman_collection.json || exit 1",
+		"test-bdd": "wdio run test/wdio.conf.js || exit 1"
 	},
 	"author": "Albin, Mauro, Pawel",
 	"license": "ISC",
@@ -19,7 +19,7 @@
 	},
 	"devDependencies": {
 		"jest": "^27.5.1",
-		"jsdom": "^19.0.0",
-		"selenium-cucumber-js": "^1.4.9"
+		"newman": "^5.3.2",
+		"@wdio/cli": "^7.16.0"
 	}
 }
