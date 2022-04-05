@@ -24,6 +24,8 @@ jobs:
       run: |
         npm install
         npm install -g pm2
+    - name: Daemonize node app
+      run: pm2 start ./backend/index.js --name our-webshop
     - name: Run REST API tests
       run: npm run test-rest
     - name: Run unit tests
