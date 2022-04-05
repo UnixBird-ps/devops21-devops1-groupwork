@@ -24,9 +24,9 @@ jobs:
       run: |
         npm install
         npm install -g pm2
-    - name: Run unit tests
-      run: npm run test-unit
     - name: Run REST API tests
       run: npm run test-rest
+    - name: Run unit tests
+      run: npm run test-unit
     - name: Run BDD tests
       run: npm run test-bdd

@@ -6,7 +6,7 @@
 		"start": "node ./backend/index.js",
 		"test": "echo \"Run tests by executing 'npm run' with one of following scripts: test-unit, test-rest or test-bdd\" && exit 1",
 		"test-unit": "jest || exit 1",
-		"test-rest": "newman run test/api-test.postman_collection.json || exit 1",
+		"test-rest": "newman run test/rest-api-test.postman_collection.json || exit 1",
 		"test-bdd": "wdio run test/wdio.conf.js || exit 1"
 	},
 	"author": "Albin, Mauro, Pawel",
