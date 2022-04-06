@@ -339,7 +339,6 @@
 							"// Get the response JSON\r",
 							"let responseJSON = pm.response.json();\r",
 							"\r",
-							"console.log( responseJSON );\r",
 							"\r",
 							"// The tests\r",
 							"\r",
