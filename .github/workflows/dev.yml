@@ -29,6 +29,6 @@ jobs:
     - name: Run REST API tests
       run: npm run test-rest
     - name: Run unit tests
-      run: echo "Not implemented yet, would run: 'npm run test-unit'"
+      run: echo "Not implemented yet, would run 'npm run test-unit'"
     - name: Run BDD tests
-      run: echo "Not implemented yet, would run: 'npm run test-bdd'"
+      run: echo "Not implemented yet, would run 'npm run test-bdd'"
