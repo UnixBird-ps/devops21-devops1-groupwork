@@ -7,28 +7,53 @@ const userRoleField = 'userRole';
 
 let db;
 
-function runQuery(tableName, req, res, parameters, sqlForPreparedStatement, onlyOne = false) {
+function runQuery( tableName, req, res, parameters, sqlForPreparedStatement, onlyOne = false )
+{
+	if ( !acl( tableName, req ) )
+	{
+		res.status( 405 );
+		res.json( { error: 'Not allowed!' } );
+		return;
+	}
 
-  if (!acl(tableName, req)) {
-    res.status(405);
-    res.json({ _error: 'Not allowed!' });
-    return;
-  }
+	let result;
+	try
+	{
+		let stmt = db.prepare( sqlForPreparedStatement );
+		let method = sqlForPreparedStatement.trim().toLowerCase().indexOf( 'select' ) === 0 ? 'all' : 'run';
+		result = stmt[ method ]( parameters );
+	}
+	catch ( _error )
+	{
+		result = { error: _error + '' };
+		console.log( _error );
+	}
+//   if (onlyOne) { result = result[0]; }
+//   result === undefined && (result = { error: 'No such post' });
+//   result = result || null;
+//   res.status(result ? (result.error ? 500 : 200) : 404);
+//   setTimeout(() => res.json(result), 1);
 
-  let result;
-  try {
-    let stmt = db.prepare(sqlForPreparedStatement);
-    let method = sqlForPreparedStatement.trim().toLowerCase().indexOf('select') === 0 ?
-      'all' : 'run';
-    result = stmt[method](parameters);
-  }
-  catch (error) {
-    result = { _error: error + '' };
-  }
-  if (onlyOne) { result = result[0]; }
-  result = result || null;
-  res.status(result ? (result._error ? 500 : 200) : 404);
-  setTimeout(() => res.json(result), 1);
+
+	//, table = req.params.table;
+	//let select = sqlForPreparedStatement.trim().toUpperCase().indexOf( 'SELECT' ) === 0;
+
+	// run query (and catch any errors)
+	// try {
+	// 	result = result || db.prepare( query )[ select ? 'all' : 'run' ]( params );
+	// }
+	// catch ( e )
+	// {
+	// 	result = { error: e + '' };
+	// }
+
+	// unwrap object from array if one = true
+	onlyOne && result instanceof Array && ( result = result[ 0 ] );
+	result === undefined && ( result = { error: 'No such post' } );
+
+	// status ( 404 = missing, 500 = error or 200 = ok )
+	let status = ( result.error + '' ).indexOf( 'No such' ) === 0 || !result ? 404 : result.error ? 500 : 200;
+	res.status( status ).json( result || null );
 }
 
 module.exports = function setupRESTapi(app, databaseConnection) {
@@ -46,7 +71,7 @@ module.exports = function setupRESTapi(app, databaseConnection) {
   app.get('/api/tablesAndViews', (req, res) => {
     if (!acl('tablesAndViews', req)) {
       res.status(405);
-      res.json({ _error: 'Not allowed!' });
+      res.json({ error: 'Not allowed!' });
       return;
     }
     res.json(tablesAndViews);
@@ -118,13 +143,13 @@ module.exports = function setupRESTapi(app, databaseConnection) {
 
   app.all('/api/*', (req, res) => {
     res.status(404);
-    res.json({ _error: 'No such route!' });
+    res.json({ error: 'No such route!' });
   });
 
   app.use((error, req, res, next) => {
     if (error) {
       let result = {
-        _error: error + ''
+        error: error + ''
       };
       res.json(result);
     }

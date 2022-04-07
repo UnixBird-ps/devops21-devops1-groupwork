@@ -1,12 +1,12 @@
 {
 	"info": {
-		"_postman_id": "d4cb7c9a-6d4c-4178-a63c-7661f1b0deb4",
+		"_postman_id": "1906a3a5-003b-4f95-9c0d-9f4cc5cf4a55",
 		"name": "rest-api-test",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Add new customers",
+			"name": "Register new customers",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -83,6 +83,7 @@
 							"// Get the response JSON\r",
 							"let responseJSON = pm.response.json();\r",
 							"\r",
+							"\r",
 							"// The tests\r",
 							"\r",
 							"pm.test(\r",
@@ -92,6 +93,7 @@
 							"\t\tpm.expect( responseJSON.changes ).to.equal( 1 );\r",
 							"\t}\r",
 							");\r",
+							"\r",
 							"\r",
 							"pm.test(\r",
 							"\t\"Check that we get lastInsertRowid as a number.\",\r",
@@ -110,7 +112,7 @@
 							"\r",
 							"if ( mockDataCustomers[ counter ] )\r",
 							"{\r",
-							"\tpostman.setNextRequest( \"Add new customers\" );\r",
+							"\tpostman.setNextRequest( pm.info.requestName );\r",
 							"}\r",
 							"else\r",
 							"{\r",
@@ -152,6 +154,202 @@
 			"response": []
 		},
 		{
+			"name": "Fail unauthed update of customers",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Get outside data from previous test\r",
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let counter = pm.variables.get( \"counter\" );\r",
+							"\r",
+							"//Add an s to the end\r",
+							"mockDataCustomers[ counter ].firstName += '_test_modified';\r",
+							"mockDataCustomers[ counter ].lastName += '_test_modified';\r",
+							"mockDataCustomers[ counter ].email += '_test_modified';\r",
+							"\r",
+							"pm.variables.set( \"mockDataCustomers\", mockDataCustomers ); //, Array\r",
+							"\r",
+							"let { id } = mockDataCustomers[ counter ];\r",
+							"pm.variables.set( \"id\", id );\r",
+							"\r",
+							"// Set local vars to be used in the request body\r",
+							"let { firstName, lastName, email } = mockDataCustomers[ counter ];\r",
+							"pm.variables.set( \"firstName\", firstName );\r",
+							"pm.variables.set( \"lastName\", lastName );\r",
+							"pm.variables.set( \"email\", email );\r",
+							"\r",
+							"console.log( `${ 1 + counter } of ${ mockDataCustomers.length }` );\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Get local vars\r",
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let counter = pm.variables.get( \"counter\" );\r",
+							"\r",
+							"let responseJSON = pm.response.json();\r",
+							"\r",
+							"\r",
+							"// The tests\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that the response JSON has an error with value 'Not allowed!'\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( responseJSON.error ).to.equal( 'Not allowed!' );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that the response error code is 405\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( pm.response.code ).to.equal( 405 );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"// Prep for next iteration\r",
+							"counter++;\r",
+							"pm.variables.set( \"counter\", counter );\r",
+							"\r",
+							"if ( mockDataCustomers[ counter ] )\r",
+							"{\r",
+							"\tpostman.setNextRequest( pm.info.requestName );\r",
+							"}\r",
+							"else\r",
+							"{\r",
+							"\tpm.variables.set( \"counter\", 0 );\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"firstName\": \"{{firstName}}\",\r\n\t\"lastName\": \"{{lastName}}\",\r\n\t\"email\": \"{{email}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/customers/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"customers",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail unauthed get of customers",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Get external data from previous test\r",
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let counter = pm.variables.get( \"counter\" );\r",
+							"\r",
+							"let { id } = mockDataCustomers[ counter ];\r",
+							"pm.variables.set( \"id\", id );\r",
+							"\r",
+							"console.log( `${ 1 + counter } of ${ mockDataCustomers.length }` );\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Get local vars\r",
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let counter = pm.variables.get( \"counter\" );\r",
+							"\r",
+							"let responseJSON = pm.response.json();\r",
+							"\r",
+							"\r",
+							"// The tests\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that the response JSON has an error with value 'Not allowed!'\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( responseJSON.error ).to.equal( 'Not allowed!' );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that the response error code is 405\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( pm.response.code ).to.equal( 405 );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"// Prep for next iteration\r",
+							"counter++;\r",
+							"pm.variables.set( \"counter\", counter );\r",
+							"\r",
+							"if ( mockDataCustomers[ counter ] )\r",
+							"{\r",
+							"\tpostman.setNextRequest( pm.info.requestName );\r",
+							"}\r",
+							"else\r",
+							"{\r",
+							"\tpm.variables.set( \"counter\", 0 );\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/customers/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"customers",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Auth as admin",
 			"event": [
 				{
@@ -185,6 +383,7 @@
 							"// Get the response JSON\r",
 							"let responseJSON = pm.response.json();\r",
 							"\r",
+							"\r",
 							"// The tests\r",
 							"\r",
 							"pm.test(\r",
@@ -194,6 +393,7 @@
 							"\t\tpm.expect( pm.response.code ).to.equal( 200 );\r",
 							"\t}\r",
 							");\r",
+							"\r",
 							"\r",
 							"pm.test(\r",
 							"\t\"Check that the login was successful.\",\r",
@@ -238,7 +438,117 @@
 			"response": []
 		},
 		{
-			"name": "Remove added customers",
+			"name": "Succeed authed update of customers",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Get outside data from previous test\r",
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let counter = pm.variables.get( \"counter\" );\r",
+							"\r",
+							"//Add an s to the end\r",
+							"mockDataCustomers[ counter ].firstName += '_test_modified';\r",
+							"mockDataCustomers[ counter ].lastName += '_test_modified';\r",
+							"mockDataCustomers[ counter ].email += '_test_modified';\r",
+							"\r",
+							"pm.variables.set( \"mockDataCustomers\", mockDataCustomers ); //, Array\r",
+							"\r",
+							"let { id } = mockDataCustomers[ counter ];\r",
+							"pm.variables.set( \"id\", id );\r",
+							"\r",
+							"// Set local vars to be used in the request body\r",
+							"let { firstName, lastName, email } = mockDataCustomers[ counter ];\r",
+							"pm.variables.set( \"firstName\", firstName );\r",
+							"pm.variables.set( \"lastName\", lastName );\r",
+							"pm.variables.set( \"email\", email );\r",
+							"\r",
+							"console.log( `${ 1 + counter } of ${ mockDataCustomers.length }` );\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Get local vars\r",
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let counter = pm.variables.get( \"counter\" );\r",
+							"\r",
+							"let responseJSON = pm.response.json();\r",
+							"\r",
+							"\r",
+							"// The tests\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that the response error code is 200\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( pm.response.code ).to.equal( 200 );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that the database reports 1 change.\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( responseJSON.changes ).to.equal( 1 );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"\r",
+							"// Prep for next iteration\r",
+							"counter++;\r",
+							"pm.variables.set( \"counter\", counter );\r",
+							"\r",
+							"if ( mockDataCustomers[ counter ] )\r",
+							"{\r",
+							"\tpostman.setNextRequest( pm.info.requestName );\r",
+							"}\r",
+							"else\r",
+							"{\r",
+							"\tpm.variables.set( \"counter\", 0 );\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"firstName\": \"{{firstName}}\",\r\n\t\"lastName\": \"{{lastName}}\",\r\n\t\"email\": \"{{email}}\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/customers/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"customers",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Succeed authed remove of customers",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -263,14 +573,24 @@
 						"exec": [
 							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
 							"let counter = pm.variables.get( \"counter\" );\r",
-							"let response = pm.response.json();\r",
+							"\r",
+							"let responseJSON = pm.response.json();\r",
+							"\r",
 							"\r",
 							"// The tests\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that the response error code is 200\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( pm.response.code ).to.equal( 200 );\r",
+							"\t}\r",
+							");\r",
 							"\r",
 							"pm.test( \"Check that deletion was successful\",\r",
 							"\tfunction()\r",
 							"\t{\r",
-							"\t\tpm.expect( response.changes ).to.equal( 1 );\r",
+							"\t\tpm.expect( responseJSON.changes ).to.equal( 1 );\r",
 							"\t}\r",
 							");\r",
 							"\r",
@@ -281,7 +601,7 @@
 							"\r",
 							"if ( mockDataCustomers[ counter ] )\r",
 							"{\r",
-							"\tpostman.setNextRequest( \"Remove added customers\" );\r",
+							"\tpostman.setNextRequest( pm.info.requestName );\r",
 							"}\r",
 							"else\r",
 							"{\r",
@@ -298,6 +618,188 @@
 					"type": "noauth"
 				},
 				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/customers/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"customers",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail authed remove of customers",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Get external data from previous test\r",
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let counter = pm.variables.get( \"counter\" );\r",
+							"\r",
+							"let { id } = mockDataCustomers[ counter ];\r",
+							"pm.variables.set( \"id\", id );\r",
+							"\r",
+							"console.log( `${ 1 + counter } of ${ mockDataCustomers.length }` );\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let counter = pm.variables.get( \"counter\" );\r",
+							"\r",
+							"let responseJSON = pm.response.json();\r",
+							"\r",
+							"\r",
+							"// The tests\r",
+							"\r",
+							"pm.test( \"Check that deletion was unsuccessful\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( responseJSON.changes ).to.equal( 0 );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"\r",
+							"// Prep for next iteration\r",
+							"counter++;\r",
+							"pm.variables.set( \"counter\", counter );\r",
+							"\r",
+							"if ( mockDataCustomers[ counter ] )\r",
+							"{\r",
+							"\tpostman.setNextRequest( pm.info.requestName );\r",
+							"}\r",
+							"else\r",
+							"{\r",
+							"\tpm.variables.set( \"counter\", 0 );\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/customers/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"customers",
+						"{{id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail authed get of removed customers",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Get external data from previous test\r",
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let counter = pm.variables.get( \"counter\" );\r",
+							"\r",
+							"let { id } = mockDataCustomers[ counter ];\r",
+							"pm.variables.set( \"id\", id );\r",
+							"\r",
+							"console.log( `${ 1 + counter } of ${ mockDataCustomers.length }` );\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Get local vars\r",
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let counter = pm.variables.get( \"counter\" );\r",
+							"\r",
+							"let responseJSON = pm.response.json();\r",
+							"\r",
+							"\r",
+							"// The tests\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that the response status code is 404\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( pm.response.code ).to.equal( 404 );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that the removed customer does not exist\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( responseJSON.error ).to.equal( 'No such post' );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"\r",
+							"// Prep for next iteration\r",
+							"counter++;\r",
+							"pm.variables.set( \"counter\", counter );\r",
+							"\r",
+							"if ( mockDataCustomers[ counter ] )\r",
+							"{\r",
+							"\tpostman.setNextRequest( pm.info.requestName );\r",
+							"}\r",
+							"else\r",
+							"{\r",
+							"\tpm.variables.set( \"counter\", 0 );\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
