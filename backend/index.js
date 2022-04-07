@@ -4,7 +4,7 @@ const express = require( 'express' );
 const login = require( './login' );
 
 const port = process.env.PORT || 3000;
-const db = betterSqlite3( './backend/database/bookshop.db' );
+const db = betterSqlite3( './backend/database/webshop.db' );
 
 const app = express();
 

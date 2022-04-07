@@ -11,7 +11,7 @@ module.exports = function (app, db) {
     resave: false,
     saveUninitialized: true,
     cookie: { secure: 'auto' },
-    store: store({ dbPath: './backend/database/bookshop.db' })
+    store: store({ dbPath: './backend/database/webshop.db' })
   }));
 
   app.post('/api/login', (req, res) => {
