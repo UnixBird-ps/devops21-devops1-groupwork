@@ -1,0 +1,30 @@
+{
+    "name": "devops-metodik-1-groupwork",
+    "version": "1.0.0",
+    "main": "index.js",
+    "scripts": {
+        "start": "node ./backend/index.js",
+        "test": "echo \"Run tests by executing 'npm run' with one of following scripts: test-unit, test-rest or test-bdd\" && exit 1",
+        "test-unit": "jest --config tests/jest.config.js || exit 1",
+        "test-rest": "newman run tests/rest-api-test.postman_collection.json || exit 1",
+        "test-bdd": "wdio run tests/wdio.conf.js || exit 1"
+    },
+    "author": "Albin, Mauro, Pawel",
+    "license": "ISC",
+    "dependencies": {
+        "better-express-store": "^1.0.4",
+        "better-sqlite3": "^7.5.0",
+        "express": "^4.17.2",
+        "express-session": "^1.17.2"
+    },
+    "devDependencies": {
+        "@wdio/cli": "^7.19.3",
+        "@wdio/cucumber-framework": "^7.19.3",
+        "@wdio/local-runner": "^7.19.3",
+        "@wdio/spec-reporter": "^7.19.1",
+        "chromedriver": "^100.0.0",
+        "jest": "^27.5.1",
+        "newman": "^5.3.2",
+        "wdio-chromedriver-service": "^7.3.2"
+    }
+}
