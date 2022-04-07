@@ -1,12 +1,6 @@
 {
   "visitor": {
-    "authors": {
-      "get": true
-    },
-    "books": {
-      "get": true
-    },
-    "booksWithAuthors": {
+    "products": {
       "get": true
     },
     "login": {
@@ -18,13 +12,7 @@
     }
   },
   "user": {
-    "authors": {
-      "get": true
-    },
-    "books": {
-      "get": true
-    },
-    "booksWithAuthors": {
+    "products": {
       "get": true
     },
     "login": {
@@ -39,19 +27,7 @@
     }
   },
   "superadmin": {
-    "authors": {
-      "get": true,
-      "post": true,
-      "put": true,
-      "delete": true
-    },
-    "authorsXbooks": {
-      "get": true,
-      "post": true,
-      "put": true,
-      "delete": true
-    },
-    "books": {
+    "products": {
       "get": true,
       "post": true,
       "put": true,
@@ -69,14 +45,11 @@
       "put": true,
       "delete": true
     },
-    "ordersXbooks": {
+    "ordersXproducts": {
       "get": true,
       "post": true,
       "put": true,
       "delete": true
-    },
-    "booksWithAuthors": {
-      "get": true
     },
     "orderDetails": {
       "get": true
