@@ -1,7 +1,8 @@
 {
     "name": "devops-metodik-1-groupwork",
     "version": "1.0.0",
-    "main": "index.js",
+	 "private": true,
+    "main": "./backend/index.js",
     "scripts": {
         "start": "node ./backend/index.js",
         "test": "echo \"Run tests by executing 'npm run' with one of following scripts: test-unit, test-rest or test-bdd\" && exit 1",
