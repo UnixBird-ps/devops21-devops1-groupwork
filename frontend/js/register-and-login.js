@@ -9,6 +9,8 @@ async function getLogInfo()
 	}
 	catch ( ignore ) { }
 
+	if ( loggedIn && loggedIn.userRole !== 'superadmin' ) new ProductList();
+
 	if ( !loggedIn || loggedIn._error )
 	{
 		div.innerHTML = `
