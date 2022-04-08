@@ -1,6 +1,7 @@
 {
     "name": "devops-metodik-1-groupwork",
     "version": "1.0.0",
+    "private": true,
     "main": "index.js",
     "scripts": {
         "start": "node ./backend/index.js",
