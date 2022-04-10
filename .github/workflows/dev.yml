@@ -3,9 +3,9 @@ name: CICD
 
 on:
   push:
-    branches: [ main, feature-* ]
+    branches: [ main, dev, feature* ]
   pull_request:
-    branches: [ main, feature-* ]
+    branches: [ main, dev, feature* ]
 
 jobs:
   test:
@@ -28,9 +28,8 @@ jobs:
       run: pm2 start ./backend/index.js --name our-webshop
     - name: Run REST API tests
       run: npm run test-rest
+    - name: Run BDD tests
+      run: npm run test-bdd
     - if: ${{ !startsWith( github.ref, 'refs/heads/feature' ) }}
       name: Run unit tests
       run: npm run test-unit
-    - if: ${{ !startsWith( github.ref, 'refs/heads/feature' ) }}
-      name: Run BDD tests
-      run: npm run test-bdd
