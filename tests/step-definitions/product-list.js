@@ -14,10 +14,12 @@ When(
 	/^I click on the quantity increase button for "(.*)"$/,
 	async ( productName ) =>
 	{
+		console.log( productName );
 		let products = await $$( '.productInList' );
 		let foundProduct;
 		for ( let product of products )
 		{
+			console.log( product.getText() );
 			if ( ( await product.getText() ).includes( productName ) )
 			{
 				foundProduct = product;

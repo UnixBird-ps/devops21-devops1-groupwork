@@ -17,14 +17,12 @@ Feature: Product list
 	Scenario: Entering a number under 1 the quantity text box
 		Given that I can see the product list
 		When I click in the quantity text box and enter 0 for "Bath sponge - Green, 15x10x5"
-		Then the content in the quantity box for "Bath sponge - Green, 15x10x5"
-		     should return to the previous value
+		Then the content in the quantity box for "Bath sponge - Green, 15x10x5" should return to the previous value
 
 	Scenario: Entering a number above max limit in the quantity text box
 		Given that I can see the product list
 		When I click in the quantity text box and enter 101 for "Bath sponge - Green, 15x10x5"
-		Then the content in the quantity box for "Bath sponge - Green, 15x10x5"
-		     should return to the previous value
+		Then the content in the quantity box for "Bath sponge - Green, 15x10x5" should return to the previous value
 
 	Scenario: Clicking on the product name
 		Given that I can see the product list

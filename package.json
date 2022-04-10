@@ -24,6 +24,7 @@
         "@wdio/local-runner": "^7.19.3",
         "@wdio/spec-reporter": "^7.19.1",
         "chromedriver": "^100.0.0",
+        "dotenv": "^16.0.0",
         "jest": "^27.5.1",
         "newman": "^5.3.2",
         "wdio-chromedriver-service": "^7.3.2"
