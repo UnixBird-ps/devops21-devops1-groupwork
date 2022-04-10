@@ -21,7 +21,7 @@ exports.config = {
     // will be called from there.
     //
     specs: [
-        './features/**/*.feature'
+        './tests/features/**/*.feature'
     ],
     // Patterns to exclude.
     exclude: [
@@ -57,6 +57,21 @@ exports.config = {
         maxInstances: 5,
         //
         browserName: 'chrome',
+
+        'goog:chromeOptions': {
+            args: [
+                '--disable-infobars',
+                '--window-size=1280,800',
+            ].concat((() => process.env.HEADLESS_CHROME !== 'yes' ? [] : [
+                '--headless',
+                '--no-sandbox',
+                '--disable-gpu',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage'
+            ]
+            )())
+        },
+
         acceptInsecureCerts: true
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.
@@ -139,7 +154,7 @@ exports.config = {
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
-        require: ['./step-definitions/**/*.js'],
+        require: ['./tests/step-definitions/**/*.js'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
