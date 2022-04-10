@@ -28,3 +28,9 @@ jobs:
       run: pm2 start ./backend/index.js --name our-webshop
     - name: Run REST API tests
       run: npm run test-rest
+    - if: ${{ !startsWith( github.ref, 'refs/heads/feature' ) }}
+      name: Run unit tests
+      run: npm run test-unit
+    - if: ${{ !startsWith( github.ref, 'refs/heads/feature' ) }}
+      name: Run BDD tests
+      run: npm run test-bdd
