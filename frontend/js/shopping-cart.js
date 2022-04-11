@@ -3,11 +3,25 @@ class ShoppingCart {
   orderRows = [];
 
   add(quantity, product) {
-    // Add a new order row
-    this.orderRows.push({
-      quantity,
-      product
-    });
+
+	// check if the product alread is in the cart
+    let found = false;
+    for (let orderRow of this.orderRows) {
+      if (orderRow.product === product) {
+        // add quantity
+        orderRow.quantity += quantity;
+        found = true;
+      }
+    }
+
+	// if the product wasn't in the cart already
+    if (!found) {
+		// Add a new order row
+		this.orderRows.push({
+		  quantity,
+		  product
+		});
+	}
 
     console.log(this.orderRows);
 
@@ -27,7 +41,7 @@ class ShoppingCart {
 	{
 		// create a html table where we display
 		// the order rows of the shopping cart
-		let html = '<table class="shoppingList">';
+		let html = '<table class="shoppingCart">';
 		let totalSum = 0;
 		for (let orderRow of this.orderRows) {
 			let rowSum =
@@ -46,6 +60,7 @@ class ShoppingCart {
 		html += `<tr>
 			<td colspan="3">Total:</td>
 			<td>${  this.formatSEK( totalSum ) }</td>
+			<td><button class="orderButton">Order</button></td>
 		</tr>`;
 		html += '</table>';
 		return html;
