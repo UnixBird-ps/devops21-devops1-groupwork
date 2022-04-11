@@ -7,3 +7,8 @@ Feature: Product list
 		Given that I can see the product list
 		When I click on the product name for "Bath sponge - Green, 15x10x5"
 		Then a page with more information on the product "Bath sponge - Green, 15x10x5" should be shown
+
+	Scenario: Clicking on the back button
+		Given that I can see the detailed product page
+		When I click on the back button
+		Then the page with the list of products should be shown again
