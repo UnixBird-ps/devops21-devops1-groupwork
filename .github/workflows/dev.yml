@@ -3,9 +3,9 @@ name: CICD
 
 on:
   push:
-    branches: [ dev, main, feature-* ]
+    branches: [ main, dev, feature* ]
   pull_request:
-    branches: [ dev, main, feature-* ]
+    branches: [ main, dev, feature* ]
 
 jobs:
   test:
@@ -26,11 +26,14 @@ jobs:
         npm install -g pm2
     - name: Daemonize node app
       run: pm2 start ./backend/index.js --name our-webshop
+    - name: Install Chrome
+      run: |
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        sudo apt install ./google-chrome-stable_current_amd64.deb
     - name: Run REST API tests
       run: npm run test-rest
-    - if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' }}
+    - name: Run BDD tests
+      run: HEADLESS_CHROME=yes WDIO_LOG_LEVEL=warn npm run test-bdd
+    - if: ${{ !startsWith( github.ref, 'refs/heads/feature' ) }}
       name: Run unit tests
       run: npm run test-unit
-    - if: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' }}
-      name: Run BDD tests
-      run: npm run test-bdd
