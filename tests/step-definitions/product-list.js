@@ -1,4 +1,5 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
+const pauseTime = 3000;
 
 
 Given(
@@ -11,87 +12,41 @@ Given(
 
 
 When(
-	/^I click on the quantity increase button for "(.*)"$/,
+	/^I click on the product name for "(.*)"$/,
 	async ( productName ) =>
 	{
-		console.log( productName );
+		await $( '.productInList' ).waitForClickable();
 		let products = await $$( '.productInList' );
 		let foundProduct;
 		for ( let product of products )
 		{
-			console.log( product.getText() );
 			if ( ( await product.getText() ).includes( productName ) )
 			{
 				foundProduct = product;
+				console.log( 'Found product: ', productName );
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
-		let quantityBox = await foundProduct.$( '.quantity' );
-		await quantityBox.scrollIntoView();
-		quantityBox.oldValue = quantityBox.value
-		await quantityBox.stepUp();
+		await foundProduct.scrollIntoView( true );
+		await browser.pause(pauseTime);
+		let titleEl = await foundProduct.$( 'h3' );
+		//browser.execute( 'arguments[0].click();', titleEl );
+		await titleEl.click();
 	}
 );
 
 
 Then(
-	/^the number in the quantity box for "(.*)" should increase by one$/,
-	async ( quantity, productName ) =>
-	{
-		let products = await $$( '.productInList' );
-		let foundProduct;
-		for ( let product of products )
-		{
-			if ( ( await product.getText() ).includes( productName ) )
-			{
-				foundProduct = product;
-			}
-		}
-		expect( foundProduct ).toBeTruthy();
-		let quantityBox = await foundProduct.$( '.quantity' );
-		expect( quantityBox.value ).toEqual( quantityBox.oldValue + 1 );
-	}
-);
-
-
-When(
-	/^I click on the quantity decrease button for "(.*)"$/,
+	/^a page with more information on the product "(.*)" should be shown$/,
 	async ( productName ) =>
 	{
-		let products = await $$( '.productInList' );
-		let foundProduct;
-		for ( let product of products )
-		{
-			if ( ( await product.getText() ).includes( productName ) )
-			{
-				foundProduct = product;
-			}
-		}
-		expect( foundProduct ).toBeTruthy();
-		let quantityBox = await foundProduct.$( '.quantity' );
-		await quantityBox.scrollIntoView();
-		quantityBox.value = 5
-		quantityBox.oldValue = quantityBox.value
-		await quantityBox.stepDown();
-	}
-);
+		let product = await $( '.product' );
+		let lTitleEl = await product.$( 'h3' );
+		let lTittleInnerHTML = await lTitleEl.getHTML( false );
+		expect( lTittleInnerHTML ).toEqual( productName );
 
-
-Then(
-	/^the number in the quantity box for "(.*)" should decrease by one$/,
-	async ( quantity, productName ) =>
-	{
-		let products = await $$( '.productInList' );
-		let foundProduct;
-		for ( let product of products )
-		{
-			if ( ( await product.getText() ).includes( productName ) )
-			{
-				foundProduct = product;
-			}
-		}
-		expect( foundProduct ).toBeTruthy();
-		let quantityBox = await foundProduct.$( '.quantity' );
-		expect( quantityBox.value ).toEqual( quantityBox.oldValue - 1 );
+		let lBackBtn = await $( 'main .backButton' );
+		let lBtnInnerHTML = await lBackBtn.getHTML( false );
+		expect( lBtnInnerHTML ).toContain( 'Back to product list' );
 	}
 );
