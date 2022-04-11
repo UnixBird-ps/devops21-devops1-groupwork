@@ -1,5 +1,8 @@
 class ShoppingCart {
 
+  constructor() {
+    this.addOrderButtonEvent();
+  }
   orderRows = [];
 
   add(quantity, product) {
@@ -66,4 +69,12 @@ class ShoppingCart {
 		return html;
 	}
 
+	addOrderButtonEvent() {
+		listen('click', '.orderButton', () => {
+		  	let shoppingCart = grabEl('.shoppingCart')
+			alert('Test');
+			console.log(shoppingCart);
+			return;
+		});
+	}
 }
