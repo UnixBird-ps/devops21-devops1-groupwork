@@ -69,7 +69,6 @@ Given(
 		await lTitleEl.click();
 
 		await $( '.product h3' ).waitForClickable();
-		await browser.pause(pauseTime);
 	}
 );
 
@@ -81,7 +80,7 @@ When(
 		let lBackBtn = await $( 'main .backButton' );
 		await lBackBtn.scrollIntoView( true );
 		await lBackBtn.click();
-		//await browser.pause(pauseTime);
+		await browser.pause( pauseTime );
 	}
 );
 
@@ -99,6 +98,6 @@ Then(
 		let firstProduct = await $( '.productInList' );
 		expect( firstProduct ).toBeTruthy();
 
-		await browser.pause(pauseTime);
+		await browser.pause( pauseTime );
 	}
 );
