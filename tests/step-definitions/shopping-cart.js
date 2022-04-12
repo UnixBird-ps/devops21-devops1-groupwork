@@ -3,11 +3,11 @@ const pauseTime = 1000;
 
 
 Given(
-	'that I can see the product list',
+	"that I can see the product list",
 	async () =>
 	{
 		await browser.url( '/' );
-		await $( '.productInList h3' ).waitForDisplayed();
+		await $( '.productInList' ).waitForDisplayed();
 	}
 );
 
