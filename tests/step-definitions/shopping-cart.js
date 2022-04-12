@@ -7,7 +7,7 @@ Given(
 	async () =>
 	{
 		await browser.url( '/' );
-		await $( '.productInList' ).waitForDisplayed();
+		await $( '.productInList h3' ).waitForClickable();
 	}
 );
 
