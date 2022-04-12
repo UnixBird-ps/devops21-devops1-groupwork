@@ -3,7 +3,7 @@ const pauseTime = 1000;
 
 
 Given(
-	"that I can see the product list",
+	"that I can see the products on main page",
 	async () =>
 	{
 		await browser.url( '/' );
