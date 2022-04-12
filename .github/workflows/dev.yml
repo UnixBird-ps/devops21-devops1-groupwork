@@ -24,12 +24,12 @@ jobs:
       run: |
         npm install
         npm install -g pm2
-    - name: Daemonize node app
-      run: pm2 start ./backend/index.js --name our-webshop
     - name: Install Chrome
       run: |
         wget --no-verbose https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
         sudo apt install ./google-chrome-stable_current_amd64.deb
+    - name: Daemonize node app
+      run: pm2 start ./backend/index.js --name our-webshop
     - name: Run REST API tests
       run: npm run test-rest
     - name: Run BDD tests
