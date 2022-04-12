@@ -1,4 +1,5 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
+const pauseTime = 1000;
 
 
 Given(
@@ -6,56 +7,13 @@ Given(
 	async () =>
 	{
 		await browser.url( '/' );
+		await $( '.productInList h3' ).waitForClickable();
 	}
 );
 
 
 When(
-	/^I click on the quantity increase button for "(.*)"$/,
-	async ( productName ) =>
-	{
-		console.log( productName );
-		let products = await $$( '.productInList' );
-		let foundProduct;
-		for ( let product of products )
-		{
-			console.log( product.getText() );
-			if ( ( await product.getText() ).includes( productName ) )
-			{
-				foundProduct = product;
-			}
-		}
-		expect( foundProduct ).toBeTruthy();
-		let quantityBox = await foundProduct.$( '.quantity' );
-		await quantityBox.scrollIntoView();
-		quantityBox.oldValue = quantityBox.value
-		await quantityBox.stepUp();
-	}
-);
-
-
-Then(
-	/^the number in the quantity box for "(.*)" should increase by one$/,
-	async ( quantity, productName ) =>
-	{
-		let products = await $$( '.productInList' );
-		let foundProduct;
-		for ( let product of products )
-		{
-			if ( ( await product.getText() ).includes( productName ) )
-			{
-				foundProduct = product;
-			}
-		}
-		expect( foundProduct ).toBeTruthy();
-		let quantityBox = await foundProduct.$( '.quantity' );
-		expect( quantityBox.value ).toEqual( quantityBox.oldValue + 1 );
-	}
-);
-
-
-When(
-	/^I click on the quantity decrease button for "(.*)"$/,
+	/^I click on the product name for "(.*)"$/,
 	async ( productName ) =>
 	{
 		let products = await $$( '.productInList' );
@@ -65,33 +23,81 @@ When(
 			if ( ( await product.getText() ).includes( productName ) )
 			{
 				foundProduct = product;
+				console.log( 'Found product: ', productName );
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
-		let quantityBox = await foundProduct.$( '.quantity' );
-		await quantityBox.scrollIntoView();
-		quantityBox.value = 5
-		quantityBox.oldValue = quantityBox.value
-		await quantityBox.stepDown();
+		await foundProduct.scrollIntoView( true );
+		//await browser.pause(pauseTime);
+		let titleEl = await foundProduct.$( 'h3' );
+		//browser.execute( 'arguments[0].click();', titleEl );
+		await titleEl.click();
 	}
 );
 
 
 Then(
-	/^the number in the quantity box for "(.*)" should decrease by one$/,
-	async ( quantity, productName ) =>
+	/^a page with more information on the product "(.*)" should be shown$/,
+	async ( productName ) =>
 	{
-		let products = await $$( '.productInList' );
-		let foundProduct;
-		for ( let product of products )
-		{
-			if ( ( await product.getText() ).includes( productName ) )
-			{
-				foundProduct = product;
-			}
-		}
-		expect( foundProduct ).toBeTruthy();
-		let quantityBox = await foundProduct.$( '.quantity' );
-		expect( quantityBox.value ).toEqual( quantityBox.oldValue - 1 );
+		let lBackBtn = await $( 'main .backButton' );
+		let lBtnInnerHTML = await lBackBtn.getHTML( false );
+		expect( lBtnInnerHTML ).toContain( 'Back to product list' );
+
+		let product = await $( 'main .product' );
+		let lTitleEl = await product.$( 'h3' );
+		let lTittleInnerHTML = await lTitleEl.getHTML( false );
+		expect( lTittleInnerHTML ).toEqual( productName );
+	}
+);
+
+
+Given(
+	'that I can see the detailed product page',
+	async () =>
+	{
+		// Load the main page with products
+		await browser.url( '/' );
+		await $( '.productInList h3' ).waitForClickable();
+
+		let firstProduct = await $( '.productInList' );
+		await firstProduct.scrollIntoView( true );
+
+		// Load a detailed product page
+		let lTitleEl = await $( '.productInList h3' );
+		expect( lTitleEl ).toBeTruthy();
+		await lTitleEl.click();
+
+		await $( '.product h3' ).waitForClickable();
+	}
+);
+
+
+When(
+	'I click on the back button',
+	async () =>
+	{
+		let lBackBtn = await $( 'main .backButton' );
+		await lBackBtn.scrollIntoView( true );
+		await lBackBtn.click();
+		await browser.pause( pauseTime );
+	}
+);
+
+
+Then(
+	'the page with the list of products should be shown again',
+	async () =>
+	{
+		// Load the main page with products again
+		await $( '.productInList h3' ).waitForClickable();
+
+		let lBackBtns = await $$( '.backButton' );
+		expect( lBackBtns ).toBeElementsArrayOfSize( 0 );
+
+		let firstProduct = await $( '.productInList' );
+		expect( firstProduct ).toBeTruthy();
+
+		await browser.pause( pauseTime );
 	}
 );

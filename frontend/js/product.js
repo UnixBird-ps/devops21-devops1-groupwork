@@ -10,7 +10,7 @@ class Product {
       this.addEventListeners();
     }
 
-    // it could be wist to have specifications
+    // it could be wise to have specifications
     // for a program where we EXPECT the program
     // to throw errors on bad input
     if (typeof id !== 'number') {
