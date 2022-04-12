@@ -9,7 +9,7 @@ Feature: Register and login pages
 
 	Scenario: Signing up using the registration form
 		Given that I see the registration form
-		When I enter my info and click on the submit button
+		When I enter my registration info and click on the submit button
 		Then the page should inform me that the registration was successful
 
 	Scenario: Clicking on the 'Login' link
@@ -19,10 +19,10 @@ Feature: Register and login pages
 
 	Scenario: Signing in using the login form
 		Given that I see the login form
-		When I enter my info and cklick on the submit button
+		When I enter my login info and click on the submit button
 		Then the page should inform me that the login was successful
 
-	# Scenario: Clicking on the 'Logout' link
-	# 	Given that I'm on the main page
-	# 	When I click on the 'Logout' link
-	# 	Then page with the list of products should be shown again
+	Scenario: Clicking on the 'Logout' link
+		Given that I'm currently signed in and on the main page
+		When I click on the 'Logout' link
+		Then the page should inform me that I was signed off
