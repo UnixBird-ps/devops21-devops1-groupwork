@@ -7,7 +7,7 @@ Given(
 	async () =>
 	{
 		await browser.url( '/' );
-		await $( '.productInList h3' ).waitForClickable();
+		await $( '.productInList h3' ).waitForDisplayed();
 	}
 );
 
@@ -114,7 +114,7 @@ Then(
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
-        await expect($('body')).toHaveTextContaining('368,68&nbsp;kr');
+        await expect($('body')).toHaveTextContaining('Total: 368,68 kr');
 	}
 );
 
