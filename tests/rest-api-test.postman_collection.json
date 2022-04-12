@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "1906a3a5-003b-4f95-9c0d-9f4cc5cf4a55",
+		"_postman_id": "d0c85a82-067d-47dc-b105-e5fbc7a1c993",
 		"name": "rest-api-test",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -154,7 +154,7 @@
 			"response": []
 		},
 		{
-			"name": "Fail unauthed get of customers",
+			"name": "Fail unauthed get of customers #1",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -432,6 +432,101 @@
 					"path": [
 						"api",
 						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Succeed authed get of customers",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Get external data from previous test\r",
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let counter = pm.variables.get( \"counter\" );\r",
+							"\r",
+							"let { id } = mockDataCustomers[ counter ];\r",
+							"pm.variables.set( \"id\", id );\r",
+							"\r",
+							"console.log( `${ 1 + counter } of ${ mockDataCustomers.length }` );\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Get local vars\r",
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let counter = pm.variables.get( \"counter\" );\r",
+							"\r",
+							"let responseJSON = pm.response.json();\r",
+							"responseJSON.password = '';\r",
+							"\r",
+							"//console.log( pm.response );\r",
+							"console.log( responseJSON );\r",
+							"\r",
+							"\r",
+							"// The tests\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that the response JSON is valid\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( responseJSON ).to.have.all.keys( 'id', 'email', 'firstName', 'lastName', 'password', 'userRole' );\r",
+							"\t\t// pm.expect( responseJSON ).to.include( 'email' );\r",
+							"\t\t// pm.expect( responseJSON ).to.include( 'firstName' );\r",
+							"\t\t// pm.expect( responseJSON ).to.include( 'lastName' );\r",
+							"\t\t// pm.expect( responseJSON ).to.include( 'userRole' );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that the response code is 200\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( pm.response.code ).to.equal( 200 );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"// Prep for next iteration\r",
+							"counter++;\r",
+							"pm.variables.set( \"counter\", counter );\r",
+							"\r",
+							"if ( mockDataCustomers[ counter ] )\r",
+							"{\r",
+							"\tpostman.setNextRequest( pm.info.requestName );\r",
+							"}\r",
+							"else\r",
+							"{\r",
+							"\tpm.variables.set( \"counter\", 0 );\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/customers/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"customers",
+						"{{id}}"
 					]
 				}
 			},
@@ -878,6 +973,93 @@
 					"path": [
 						"api",
 						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fail unauthed get of customers #2",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"// Get external data from previous test\r",
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let counter = pm.variables.get( \"counter\" );\r",
+							"\r",
+							"let { id } = mockDataCustomers[ counter ];\r",
+							"pm.variables.set( \"id\", id );\r",
+							"\r",
+							"console.log( `${ 1 + counter } of ${ mockDataCustomers.length }` );\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Get local vars\r",
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let counter = pm.variables.get( \"counter\" );\r",
+							"\r",
+							"let responseJSON = pm.response.json();\r",
+							"\r",
+							"\r",
+							"// The tests\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that the response JSON has an error with value 'Not allowed!'\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( responseJSON.error ).to.equal( 'Not allowed!' );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that the response error code is 405\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( pm.response.code ).to.equal( 405 );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"// Prep for next iteration\r",
+							"counter++;\r",
+							"pm.variables.set( \"counter\", counter );\r",
+							"\r",
+							"if ( mockDataCustomers[ counter ] )\r",
+							"{\r",
+							"\tpostman.setNextRequest( pm.info.requestName );\r",
+							"}\r",
+							"else\r",
+							"{\r",
+							"\tpm.variables.set( \"counter\", 0 );\r",
+							"}\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/customers/{{id}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"customers",
+						"{{id}}"
 					]
 				}
 			},
