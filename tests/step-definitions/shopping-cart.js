@@ -3,11 +3,11 @@ const pauseTime = 1000;
 
 
 Given(
-	"that I can see the product list",
+	"that I'm on the main page",
 	async () =>
 	{
 		await browser.url( '/' );
-		await $( '.productInList h3' ).waitForClickable();
+		await $( '.register-and-login-links' ).waitForDisplayed();
 	}
 );
 

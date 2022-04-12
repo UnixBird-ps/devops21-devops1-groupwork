@@ -4,7 +4,7 @@ Feature: Shopping Cart
     of all my products in the shopping cart
 
 	Scenario: Adding product to shopping cart
-		Given that I can see the product list
+		Given that I'm on the main page
 		When I click on the buy button for "Bath sponge - Green, 15x10x5"
 		Then the product "Bath sponge - Green, 15x10x5" gets added to my shopping cart
 
