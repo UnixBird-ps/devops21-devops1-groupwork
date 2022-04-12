@@ -11,7 +11,7 @@ async function getLogInfo()
 
 	if ( loggedIn && loggedIn.userRole !== 'superadmin' ) new ProductList();
 
-	if ( !loggedIn || loggedIn._error )
+	if ( !loggedIn || loggedIn.error )
 	{
 		div.innerHTML = `
 			<a href="/register">Register</a>
