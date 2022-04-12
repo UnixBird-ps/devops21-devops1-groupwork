@@ -38,7 +38,17 @@ Then(
 	/^the product "(.*)" gets added to my shopping cart$/,
 	async ( productName ) =>
 	{
-		await expect($('td')).toHaveTextContaining(productName);
+		let products = await $$( '.shoppingCart' );
+		let foundProduct;
+		for ( let product of products )
+		{
+			if ( ( await product.getText() ).includes( productName ) )
+			{
+				foundProduct = product;
+				console.log( 'Found product: ', productName );
+			}
+		}
+		expect( foundProduct ).toBeTruthy();
 	}
 );
 
@@ -93,8 +103,18 @@ Then(
 	/^add "(.*)" to shopping cart and show total sum$/,
 	async ( productName ) =>
 	{
-		await expect($('td')).toHaveTextContaining(productName);
-        await expect($('td')).toHaveTextContaining('368,68&nbsp;kr');
+		let products = await $$( '.shoppingCart' );
+		let foundProduct;
+		for ( let product of products )
+		{
+			if ( ( await product.getText() ).includes( productName ) )
+			{
+				foundProduct = product;
+				console.log( 'Found product: ', productName );
+			}
+		}
+		expect( foundProduct ).toBeTruthy();
+        await expect($('body')).toHaveTextContaining('368,68&nbsp;kr');
 	}
 );
 
@@ -147,7 +167,17 @@ Then(
 	/^increase quantity of "(.*)" without adding a new product$/,
 	async ( productName ) =>
 	{
-		await expect($('td')).toHaveTextContaining(productName);
-        await expect($('td')).toHaveTextContaining('2');
+		let products = await $$( '.shoppingCart' );
+		let foundProduct;
+		for ( let product of products )
+		{
+			if ( ( await product.getText() ).includes( productName ) )
+			{
+				foundProduct = product;
+				console.log( 'Found product: ', productName );
+			}
+		}
+		expect( foundProduct ).toBeTruthy();
+		await expect($('footer')).toHaveTextContaining('2');
 	}
 );
