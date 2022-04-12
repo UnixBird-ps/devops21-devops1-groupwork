@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 /backend/database/*.db
+=======
+#backend/database/*.db
+/package-lock.json
+>>>>>>> f094d85d39c5a78ab1e8ad3063a65187a4c555cd
 
 # Logs
 logs

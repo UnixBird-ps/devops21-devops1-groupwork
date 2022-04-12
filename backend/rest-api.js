@@ -28,24 +28,6 @@ function runQuery( tableName, req, res, parameters, sqlForPreparedStatement, onl
 		result = { error: _error + '' };
 		console.log( _error );
 	}
-//   if (onlyOne) { result = result[0]; }
-//   result === undefined && (result = { error: 'No such post' });
-//   result = result || null;
-//   res.status(result ? (result.error ? 500 : 200) : 404);
-//   setTimeout(() => res.json(result), 1);
-
-
-	//, table = req.params.table;
-	//let select = sqlForPreparedStatement.trim().toUpperCase().indexOf( 'SELECT' ) === 0;
-
-	// run query (and catch any errors)
-	// try {
-	// 	result = result || db.prepare( query )[ select ? 'all' : 'run' ]( params );
-	// }
-	// catch ( e )
-	// {
-	// 	result = { error: e + '' };
-	// }
 
 	// unwrap object from array if one = true
 	onlyOne && result instanceof Array && ( result = result[ 0 ] );
@@ -55,6 +37,7 @@ function runQuery( tableName, req, res, parameters, sqlForPreparedStatement, onl
 	let status = ( result.error + '' ).indexOf( 'No such' ) === 0 || !result ? 404 : result.error ? 500 : 200;
 	res.status( status ).json( result || null );
 }
+
 
 module.exports = function setupRESTapi(app, databaseConnection) {
 
