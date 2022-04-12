@@ -1,5 +1,4 @@
-#backend/database/*.db
-/package-lock.json
+backend/database/*.db
 
 # Logs
 logs
