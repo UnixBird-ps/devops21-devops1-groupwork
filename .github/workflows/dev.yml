@@ -34,6 +34,5 @@ jobs:
       run: npm run test-rest
     - name: Run BDD tests
       run: HEADLESS_CHROME=yes WDIO_LOG_LEVEL=warn npm run test-bdd
-    - if: ${{ !startsWith( github.ref, 'refs/heads/feature' ) }}
-      name: Run unit tests
+    - name: Run unit tests
       run: npm run test-unit
