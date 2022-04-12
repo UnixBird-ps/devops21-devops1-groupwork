@@ -7,10 +7,20 @@ Feature: Register and login pages
 		When I click on the 'Register' link
 		Then a dialog with a registration form should appear on the page
 
+	Scenario: Signing up using the registration form
+		Given that I see the registration form
+		When I enter my info and click on the submit button
+		Then the page should inform me that the registration was successful
+
 	Scenario: Clicking on the 'Login' link
 		Given that I'm on the main page
 		When I click on the 'Login' link
 		Then a dialog with a login form should appear on the page
+
+	Scenario: Signing in using the login form
+		Given that I see the login form
+		When I enter my info and cklick on the submit button
+		Then the page should inform me that the login was successful
 
 	# Scenario: Clicking on the 'Logout' link
 	# 	Given that I'm on the main page
