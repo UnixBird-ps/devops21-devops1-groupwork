@@ -50,7 +50,7 @@ document.querySelector( 'body' ).addEventListener(
 		}
 		catch (ignore) { }
 
-		if ( !result || result._error )
+		if ( !result || result.error )
 		{
 			document.querySelector( '.login' ).innerHTML = renderLoginForm( true );
 			return;
