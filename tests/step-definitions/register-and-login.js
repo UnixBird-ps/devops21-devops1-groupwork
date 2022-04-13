@@ -1,5 +1,7 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
-const pauseTime = 3000;
+const pauseTime = 2000;
+
+// Placed empty templates at the end
 
 
 Given(
@@ -26,7 +28,7 @@ When(
 			}
 		}
 
-		expect( foundLinkElm ).toBeTruthy();
+		await expect( foundLinkElm ).toBeTruthy();
 		await foundLinkElm.waitForClickable();
 		await foundLinkElm.click();
 	}
@@ -56,7 +58,7 @@ When(
 			}
 		}
 
-		expect( foundLinkElm ).toBeTruthy();
+		await expect( foundLinkElm ).toBeTruthy();
 		await foundLinkElm.waitForClickable();
 		await foundLinkElm.click();
 	}
@@ -89,7 +91,7 @@ Given(
 			}
 		}
 
-		expect( foundLinkElm ).toBeTruthy();
+		await expect( foundLinkElm ).toBeTruthy();
 		await foundLinkElm.waitForClickable();
 		await foundLinkElm.click();
 
@@ -108,7 +110,7 @@ When(
 		await $( 'form[name="registration"] input[name="password"]' ).setValue( '12345678' );
 		await $( 'form[name="registration"] input[name="passwordRepeated"]' ).setValue( '12345678' );
 		let foundSubmitBtn = await $( 'form[name="registration"] input[type="submit"]' );
-		expect( foundSubmitBtn ).toBeTruthy();
+		await expect( foundSubmitBtn ).toBeTruthy();
 		await foundSubmitBtn.waitForClickable();
 		await foundSubmitBtn.click();
 	}
@@ -119,13 +121,12 @@ Then(
 	"the page should inform me that the registration was successful",
 	async () =>
 	{
-		await browser.pause( pauseTime );
 		let foundWelcomeMsgElm = await $( "div.register h3" );
-		expect( foundWelcomeMsgElm ).toBeTruthy();
-		expect( await foundWelcomeMsgElm.getText() ).toContain( "Welcome as a member!" );
+		await expect( foundWelcomeMsgElm ).toBeTruthy();
+		await expect( await foundWelcomeMsgElm.getText() ).toContain( "Welcome as a member!" );
 		let foundSuccessMsgElm = await $( "div.register p" );
-		expect( foundSuccessMsgElm ).toBeTruthy();
-		expect( await foundSuccessMsgElm.getText() ).toContain( "You are now successfully registrered as a member!" );
+		await expect( foundSuccessMsgElm ).toBeTruthy();
+		await expect( await foundSuccessMsgElm.getText() ).toContain( "You are now successfully registrered as a member!" );
 		await browser.pause( pauseTime );
 	}
 );
@@ -148,7 +149,7 @@ Given(
 			}
 		}
 
-		expect( foundLinkElm ).toBeTruthy();
+		await expect( foundLinkElm ).toBeTruthy();
 		await foundLinkElm.waitForClickable();
 		await foundLinkElm.click();
 
@@ -164,7 +165,7 @@ When(
 		await $( 'form[name="login"] input[name="email"]' ).setValue( 'tester2@testare2.test' );
 		await $( 'form[name="login"] input[name="password"]' ).setValue( '12345678' );
 		let foundSubmitBtn = await $( 'form[name="login"] input[type="submit"]' );
-		expect( foundSubmitBtn ).toBeTruthy();
+		await expect( foundSubmitBtn ).toBeTruthy();
 		await foundSubmitBtn.waitForClickable();
 		await foundSubmitBtn.click();
 	}
@@ -176,10 +177,77 @@ Then(
 	"the page should inform me that the login was successful",
 	async () =>
 	{
-		await browser.pause( pauseTime );
 		let foundLoggedInAsElm = await $( "div.register-and-login-links" );
-		expect( foundLoggedInAsElm ).toBeTruthy();
-		expect( await foundLoggedInAsElm.getText() ).toContain( "Logged in as Tester2 Testare2" );
+		await expect( foundLoggedInAsElm ).toBeTruthy();
+		await expect( await foundLoggedInAsElm.getText() ).toContain( "Logged in as Tester2 Testare2" );
 		await browser.pause( pauseTime );
 	}
 );
+
+
+Given(
+	"that I'm currently signed in and on the main page",
+	async () =>
+	{
+		let foundLoggedInAsElm = await $( "div.register-and-login-links" );
+		await expect( foundLoggedInAsElm ).toBeTruthy();
+		await expect( await foundLoggedInAsElm.getText() ).toContain( "Logged in as Tester2 Testare2" );
+	}
+);
+
+
+When(
+	"I click on the 'Logout' link",
+	async () =>
+	{
+		let authLinkElms = await $$( '.register-and-login-links a' );
+		let foundLogoutLinkElm;
+		for ( let aLinkElm of authLinkElms )
+		{
+			if ( ( await aLinkElm.getAttribute( 'href' ) ) === '/logout' )
+			{
+				foundLogoutLinkElm = aLinkElm;
+			}
+		}
+
+		await expect( foundLogoutLinkElm ).toBeTruthy();
+		await foundLogoutLinkElm.waitForClickable();
+		await foundLogoutLinkElm.click();
+		await browser.pause( pauseTime );
+	}
+);
+
+
+Then(
+	"the page should inform me that I was signed off",
+	async () =>
+	{
+		let authLinkElms = await $$( '.register-and-login-links a' );
+		await expect( authLinkElms[ 0 ] ).toHaveHref( '/register' );
+		await expect( authLinkElms[ 1 ] ).toHaveHref( '/login' );
+		await browser.pause( pauseTime );
+	}
+);
+
+
+/*
+// Templates
+Given(
+	"",
+	async () =>
+	{
+	}
+);
+When(
+	"",
+	async () =>
+	{
+	}
+);
+Then(
+	"",
+	async () =>
+	{
+	}
+);
+*/
