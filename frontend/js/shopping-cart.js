@@ -1,9 +1,9 @@
 
 class ShoppingCart {
 
-  constructor() {
-    this.addOrderButtonEvent();
-  }
+  //constructor() {
+    //this.addOrderButtonEvent();
+  //}
   orderRows = [];
 
   add(quantity, product) {
