@@ -70,14 +70,14 @@ class ShoppingCart {
 		return html;
 	}
 
-	addOrderButtonEvent() {
-		listen('click', '.orderButton', () => {
-		  	let shoppingCart = grabEl('.shoppingCart')
-			alert('Test');
-			console.log(shoppingCart);
-			return;
-		});
-	}
+	//addOrderButtonEvent() {
+		//listen('click', '.orderButton', () => {
+		  	//let shoppingCart = grabEl('.shoppingCart')
+			//alert('Test');
+			//console.log(shoppingCart);
+			//return;
+		//});
+	//}
 }
 
 

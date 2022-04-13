@@ -1,6 +1,5 @@
 
 require( './fakedom.js' );
-require( '../frontend/js/helpers.js' );
 const { test, expect } = require( '@jest/globals' );
 
 
