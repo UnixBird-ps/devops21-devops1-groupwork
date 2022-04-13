@@ -17,7 +17,7 @@ module.exports = function (app, db) {
   app.post('/api/login', (req, res) => {
     if (!acl('login', req)) {
       res.status(405);
-      res.json({ _error: 'Not allowed' });
+      res.json({ error: 'Not allowed' });
     }
     req.body[passwordField] =
       passwordEncryptor(req.body[passwordField]);
@@ -25,9 +25,9 @@ module.exports = function (app, db) {
       SELECT * FROM customers
       WHERE email = :email AND password = :password
     `);
-    let result = stmt.all(req.body)[0] || { _error: 'No such user.' };
+    let result = stmt.all(req.body)[0] || { error: 'No such user.' };
     delete result.password;
-    if (!result._error) {
+    if (!result.error) {
       req.session.user = result;
     }
     res.json(result);
@@ -36,15 +36,15 @@ module.exports = function (app, db) {
   app.get('/api/login', (req, res) => {
     if (!acl('login', req)) {
       res.status(405);
-      res.json({ _error: 'Not allowed' });
+      res.json({ error: 'Not allowed' });
     }
-    res.json(req.session.user || { _error: 'Not logged in' });
+    res.json(req.session.user || { error: 'Not logged in' });
   });
 
   app.delete('/api/login', (req, res) => {
     if (!acl('login', req)) {
       res.status(405);
-      res.json({ _error: 'Not allowed' });
+      res.json({ error: 'Not allowed' });
     }
     delete req.session.user;
     res.json({ success: 'logged out' });
