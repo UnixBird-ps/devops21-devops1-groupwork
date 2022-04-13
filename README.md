@@ -11,6 +11,6 @@ All step-definitions are in the folder /tests/step-definitions.
 All REST API tests are in the file /tests/rest-api-test.postman_collection.json.
 
 Config for WebdriverIO is in the file /tests/wdio.conf.js.  
-Config for Jest, if ever needed, place it in the file /tests/jest.config.js.
+Config for Jest is in the file /tests/jest.config.js.
 
 The above folder structure is used in our CI/CD workflows.
