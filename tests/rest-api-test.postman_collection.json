@@ -581,7 +581,7 @@
 			"response": []
 		},
 		{
-			"name": "Auth as registered customer",
+			"name": "Auth as registered user",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -686,7 +686,7 @@
 			"response": []
 		},
 		{
-			"name": "Fail get customer after as registered user",
+			"name": "Fail get customer as registered user",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -817,7 +817,7 @@
 			"response": []
 		},
 		{
-			"name": "Unauth registered customer",
+			"name": "Unauth registered user",
 			"event": [
 				{
 					"listen": "prerequest",
