@@ -11,10 +11,11 @@ A code review will then be required by the code owner.
 When we are happy with the dev branch and all necessary merges have been made from the feature branches  
 then a pull request to the main branch should be made.
 
-We use a workflow file to run some tests on the code. A merge will not happen if the tests fail.  
-We use Jest for unit tests, Newman for REST API tests, and WebdriverIO from BDD tests.
+We use a workflow file to run some tests on the code. A merge to dev or main branches will not happen if the tests fail.  
+We use Jest for unit tests, Newman for REST API tests, and WebdriverIO for BDD tests.
 
-
+We will be adding a deployment step to our workflow file as soon as we have two servers available for the dev and main branches.  
+  
 The following folder structure is used in our CI/CD workflows.
 
 Backend and frontend are in their separate folders /backend and /frontend.  
