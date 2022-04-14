@@ -39,106 +39,105 @@ function runQuery( tableName, req, res, parameters, sqlForPreparedStatement, onl
 }
 
 
-module.exports = function setupRESTapi(app, databaseConnection) {
+module.exports = function setupRESTapi(app, databaseConnection)
+{
+	db = databaseConnection;
 
-  db = databaseConnection;
+	let tablesAndViews = db.prepare(`
+		SELECT name, type 
+		FROM sqlite_schema
+		WHERE 
+		(type = 'table' OR type = 'view') 
+		AND name NOT LIKE 'sqlite_%'
+	`).all();
 
-  let tablesAndViews = db.prepare(`
-    SELECT name, type 
-    FROM sqlite_schema
-    WHERE 
-      (type = 'table' OR type = 'view') 
-      AND name NOT LIKE 'sqlite_%'
-  `).all();
+	app.get('/api/tablesAndViews', (req, res) => {
+		if (!acl('tablesAndViews', req)) {
+		res.status(405);
+		res.json({ error: 'Not allowed!' });
+		return;
+		}
+		res.json(tablesAndViews);
+	});
 
-  app.get('/api/tablesAndViews', (req, res) => {
-    if (!acl('tablesAndViews', req)) {
-      res.status(405);
-      res.json({ error: 'Not allowed!' });
-      return;
-    }
-    res.json(tablesAndViews);
-  });
+	for (let { name, type } of tablesAndViews) {
 
-  for (let { name, type } of tablesAndViews) {
+		app.get('/api/' + name, (req, res) => {
+		runQuery(name, req, res, {}, `
+			SELECT *
+			FROM ${name}
+		`);
+		});
 
-    app.get('/api/' + name, (req, res) => {
-      runQuery(name, req, res, {}, `
-        SELECT *
-        FROM ${name}
-      `);
-    });
+		app.get('/api/' + name + '/:id', (req, res) => {
+		runQuery(name, req, res, req.params, `
+			SELECT *
+			FROM ${name}
+			WHERE id = :id
+		`, true);
+		});
 
-    app.get('/api/' + name + '/:id', (req, res) => {
-      runQuery(name, req, res, req.params, `
-        SELECT *
-        FROM ${name}
-        WHERE id = :id
-      `, true);
-    });
+		if (type === 'view') {
+		continue;
+		}
 
-    if (type === 'view') {
-      continue;
-    }
+		app.post('/api/' + name, (req, res) => {
+			delete req.body.id;
 
-    app.post('/api/' + name, (req, res) => {
-      delete req.body.id;
+			if (name === userTable) {
+				req.body[userRoleField] = 'user';
+				req.body[passwordField] = passwordEncryptor(req.body[passwordField]);
+			}
 
-      if (name === userTable) {
-        req.body[userRoleField] = 'user';
-        req.body[passwordField] =
-          passwordEncryptor(req.body[passwordField]);
-      }
+			runQuery(name, req, res, req.body, `
+				INSERT INTO ${name} (${Object.keys(req.body)})
+				VALUES (${Object.keys(req.body).map(x => ':' + x)})
+			`);
+		});
 
-      runQuery(name, req, res, req.body, `
-        INSERT INTO ${name} (${Object.keys(req.body)})
-        VALUES (${Object.keys(req.body).map(x => ':' + x)})
-      `);
-    });
+		let putAndPatch = (req, res) =>
+		{
+			if (name === userTable && req.body[passwordField]) {
+				req.body[passwordField] =
+					passwordEncryptor(req.body[passwordField]);
+			}
 
-    let putAndPatch = (req, res) => {
+			runQuery(name, req, res, { ...req.body, ...req.params }, `
+				UPDATE ${name}
+				SET ${Object.keys(req.body).map(x => x + ' = :' + x)}
+				WHERE id = :id
+			`);
+		};
 
-      if (name === userTable && req.body[passwordField]) {
-        req.body[passwordField] =
-          passwordEncryptor(req.body[passwordField]);
-      }
+		app.put('/api/' + name + '/:id', putAndPatch);
+		app.patch('/api/' + name + '/:id', putAndPatch);
 
-      runQuery(name, req, res, { ...req.body, ...req.params }, `
-        UPDATE ${name}
-        SET ${Object.keys(req.body).map(x => x + ' = :' + x)}
-        WHERE id = :id
-      `);
-    };
+		app.delete('/api/' + name + '/:id', (req, res) => {
+		runQuery(name, req, res, req.params, `
+			DELETE FROM ${name}
+			WHERE id = :id
+		`);
+		});
 
-    app.put('/api/' + name + '/:id', putAndPatch);
-    app.patch('/api/' + name + '/:id', putAndPatch);
+	}
 
-    app.delete('/api/' + name + '/:id', (req, res) => {
-      runQuery(name, req, res, req.params, `
-        DELETE FROM ${name}
-        WHERE id = :id
-      `);
-    });
+	specialRestRoutes(app, runQuery, db);
 
-  }
+	app.all('/api/*', (req, res) => {
+		res.status(404);
+		res.json({ error: 'No such route!' });
+	});
 
-  specialRestRoutes(app, runQuery, db);
-
-  app.all('/api/*', (req, res) => {
-    res.status(404);
-    res.json({ error: 'No such route!' });
-  });
-
-  app.use((error, req, res, next) => {
-    if (error) {
-      let result = {
-        error: error + ''
-      };
-      res.json(result);
-    }
-    else {
-      next();
-    }
-  });
+	app.use((error, req, res, next) => {
+		if (error) {
+		let result = {
+			error: error + ''
+		};
+		res.json(result);
+		}
+		else {
+		next();
+		}
+	});
 
 }
