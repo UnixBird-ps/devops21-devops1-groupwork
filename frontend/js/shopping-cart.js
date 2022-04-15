@@ -1,9 +1,10 @@
 
 class ShoppingCart {
 
-  //constructor() {
-    //this.addOrderButtonEvent();
-  //}
+  constructor() {
+    this.addOrderButtonEvent();
+  }
+
   orderRows = [];
 
   add(quantity, product) {
@@ -70,14 +71,22 @@ class ShoppingCart {
 		return html;
 	}
 
-	//addOrderButtonEvent() {
-		//listen('click', '.orderButton', () => {
-		  	//let shoppingCart = grabEl('.shoppingCart')
-			//alert('Test');
-			//console.log(shoppingCart);
-			//return;
-		//});
-	//}
+	//supposed to send customer order info into webshop.db
+	addOrderButtonEvent() {
+		listen('click', '.orderButton', () => {
+		  	let shoppingCart = grabEl('.shoppingCart')
+			//todo : make this work lol
+			addOrders();
+			alert('Test');
+			console.log(shoppingCart);
+			return;
+		});
+	}
+	//todo : send array to rest api
+	addOrders(){
+		
+		return html = this.orderRows;
+	}
 }
 
 
