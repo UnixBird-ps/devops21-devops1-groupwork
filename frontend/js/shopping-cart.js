@@ -71,21 +71,47 @@ class ShoppingCart {
 		return html;
 	}
 
-	//supposed to send customer order info into webshop.db
 	addOrderButtonEvent() {
 		listen('click', '.orderButton', () => {
 		  	let shoppingCart = grabEl('.shoppingCart')
-			//todo : make this work lol
-			addOrders();
+			this.addOrders();
 			alert('Test');
 			console.log(shoppingCart);
 			return;
 		});
 	}
-	//todo : send array to rest api
-	addOrders(){
-		
-		return html = this.orderRows;
+	
+	addOrders() {
+		let data = this.orderRows; 
+		// hahahahaha
+		let nProducts = [];
+		for (let i = 0; i < data.length; i++) {
+			let nProduct = {
+				id: data[i].product.id,
+				name: data[i].product.name, 
+				price: data[i].product.price, 
+				description: data[i].product.description, 
+				image: data[i].product.image, 
+				myProductList: []
+			};
+			nProducts.push(data[i].quantity, nProduct);
+		}
+		fetch('/api/post-new-order', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(nProducts),
+		})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Success:', data);
+				alert('YOU DID IT');
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+				alert('FAILURE');
+			});
 	}
 }
 
