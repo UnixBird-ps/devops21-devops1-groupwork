@@ -25,7 +25,7 @@
     "edit-my-user-info": {
       "put": true
     },
-    "post-new-order": {
+    "new-order": {
       "post": true
     }
   },
