@@ -66,6 +66,7 @@ class ShoppingCart
 		html += '</table>';
 		return html;
 	}
+
 }
 
 
