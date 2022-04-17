@@ -36,30 +36,21 @@ jobs:
       run: HEADLESS_CHROME=yes WDIO_LOG_LEVEL=warn npm run test-bdd
     - name: Run unit tests
       run: npm run test-unit
-  check-env:
-    name: Check if development server for deployment is defined
-    runs-on: ubuntu-latest
-    outputs:
-      dev-host-defined: ${{ steps.dev-host-defined.outputs.defined }}
-    steps:
-    - id: dev-host-defined
-      env:
-        DEV_SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
-    - if: "${{ env.DEV_SSH_HOST == '' }}"
-      run: exit 1
-    - if: "${{ env.DEV_SSH_HOST != '' }}"
-      run: echo "::set-output name=dev-host-defined::true"
   deploy_dev:
     name: Deploy to development server
-    needs: [ test, check-env ]
-    if: github.ref == 'refs/heads/dev' && needs.check-env.outputs.dev-host-defined == 'true'
+    needs: test
+    if: github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+    - name: Check if development server for deployment is defined
+      env:
+        DEV_SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
+      if: "${{ env.DEV_SSH_HOST == '' }}"
+      run: exit 1
     - name: Setup SSH
       env:
         DEV_SSH_KEY: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
-        DEV_SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
         DEV_SSH_USER: ${{ secrets.DEV_SSH_USER }}
         DEV_SSH_PORT: ${{ secrets.DEV_SSH_PORT }}
       run: |
