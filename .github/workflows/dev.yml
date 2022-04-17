@@ -36,9 +36,20 @@ jobs:
       run: HEADLESS_CHROME=yes WDIO_LOG_LEVEL=warn npm run test-bdd
     - name: Run unit tests
       run: npm run test-unit
+  check-env:
+    name: Check if a host for deployment is defined
+    outputs:
+      dev-host-defined: ${{ steps.dev-host-defined.outputs.defined }}
+    steps:
+    - id: dev-host-defined
+      env:
+        DEV_SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
+      if: "${{ env.DEV_SSH_HOST != '' }}"
+      run: echo "::set-output name=defined::true"
   deploy_dev:
+    needs: [ test, check-env ]
     if: github.ref == 'refs/heads/dev'
-    needs: test
+    if: needs.check-env.outputs.dev-host-defined == 'true'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
