@@ -15,9 +15,9 @@ module.exports = function (app, runQuery, db) {
 
 
 	app.post(
-		"/api/post-new-order", ( req, res ) =>
+		"/api/new-order", ( req, res ) =>
 		{
-			if ( !acl( "post-new-order", req ) )
+			if ( !acl( "new-order", req ) )
 			{
 				res.status( 405 );
 				res.json( { error: "Not allowed!" } );

@@ -83,8 +83,9 @@ class ShoppingCart {
 	
 	addOrders() {
 		let data = this.orderRows; 
-		// hahahahaha
 		let nProducts = [];
+		// remove all this later
+		/*
 		for (let i = 0; i < data.length; i++) {
 			let nProduct = {
 				id: data[i].product.id,
@@ -96,7 +97,16 @@ class ShoppingCart {
 			};
 			nProducts.push(data[i].quantity, nProduct);
 		}
-		fetch('/api/post-new-order', {
+		*/
+		// setup new solution here
+		for(let nOrder in data){
+			let nLib = {};
+			nLib['productId'] = data[nOrder].product.id;
+			nLib['quantity'] = data[nOrder].quantity;
+			nProducts.push(nLib);
+		}
+		// send request to backend
+		fetch('/api/new-order', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
