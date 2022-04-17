@@ -1,9 +1,6 @@
 
-class ShoppingCart {
-
-  //constructor() {
-    //this.addOrderButtonEvent();
-  //}
+class ShoppingCart
+{
   orderRows = [];
 
   add(quantity, product) {
@@ -35,7 +32,7 @@ class ShoppingCart {
   }
 
 
-	formatSEK(number)
+	formatSEK( number )
 	{
 		return new Intl.NumberFormat( 'sv-SE', { style: 'currency', currency: 'SEK' } ).format( number );
 	}
@@ -70,14 +67,6 @@ class ShoppingCart {
 		return html;
 	}
 
-	//addOrderButtonEvent() {
-		//listen('click', '.orderButton', () => {
-		  	//let shoppingCart = grabEl('.shoppingCart')
-			//alert('Test');
-			//console.log(shoppingCart);
-			//return;
-		//});
-	//}
 }
 
 

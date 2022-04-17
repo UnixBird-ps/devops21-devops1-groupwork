@@ -24,6 +24,9 @@
     },
     "edit-my-user-info": {
       "put": true
+    },
+    "new-order": {
+      "post": true
     }
   },
   "superadmin": {
