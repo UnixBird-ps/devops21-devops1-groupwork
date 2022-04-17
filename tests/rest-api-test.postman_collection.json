@@ -587,11 +587,10 @@
 					"listen": "prerequest",
 					"script": {
 						"exec": [
-							"let mockOneCustomer;\r",
 							"\r",
 							"// Get mock data\r",
-							"// let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
-							"// mockOneCustomer = mockDataCustomers[ 0 ];\r",
+							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
+							"let mockOneCustomer = mockDataCustomers[ 0 ];\r",
 							"\r",
 							"if ( !mockOneCustomer )\r",
 							"{\r",
@@ -752,91 +751,6 @@
 			"response": []
 		},
 		{
-			"name": "Send in new order",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"\r",
-							"let responseJSON = pm.response.json();\r",
-							"\r",
-							"pm.variables.set( \"lastOrderId\", responseJSON.lastInsertRowid );\r",
-							"\r",
-							"\r",
-							"// The tests\r",
-							"\r",
-							"pm.test(\r",
-							"\t\"Check that the response code was 200.\",\r",
-							"\tfunction()\r",
-							"\t{\r",
-							"\t\tpm.expect( pm.response.code ).to.equal( 200 );\r",
-							"\t}\r",
-							");\r",
-							"\r",
-							"\r",
-							"pm.test(\r",
-							"\t\"Check that the order was confirmed in the JSON of the response\",\r",
-							"\tfunction()\r",
-							"\t{\r",
-							"\t\tpm.expect( responseJSON.status ).to.equal( \"Was accepted\" );\r",
-							"\t}\r",
-							");\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							"\r",
-							"// Create mock data if not exist\r",
-							"let mockOrder =\r",
-							"[\r",
-							"\t{ productId : 20, quantity : 2 },\r",
-							"\t{ productId :  1, quantity : 3 }\r",
-							"];\r",
-							"\r",
-							"pm.variables.set( \"mockOrder\", JSON.stringify( mockOrder ) );\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
-			},
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{{mockOrder}}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/api/post-new-order",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"api",
-						"post-new-order"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Succeed get own orders as registered user",
 			"event": [
 				{
@@ -855,14 +769,7 @@
 					"script": {
 						"exec": [
 							"// Get local vars\r",
-							"let lastOrderId = pm.variables.get( \"lastOrderId\" );\r",
-							"\r",
 							"let responseJSON = pm.response.json();\r",
-							"\r",
-							"responseJSON2 = responseJSON.filter( x => x.orderId == lastOrderId );\r",
-							"\r",
-							"let lTotalItems = 0;\r",
-							"for ( x of responseJSON2 ) { lTotalItems += x.quantity; }\r",
 							"\r",
 							"\r",
 							"// The tests\r",
@@ -872,25 +779,17 @@
 							"\tfunction()\r",
 							"\t{\r",
 							"\t\tpm.response.to.have.status( 200 );\r",
+							"\t\t//pm.expect( pm.response.code ).to.equal( 200 );\r",
 							"\t}\r",
 							");\r",
 							"\r",
 							"\r",
 							"pm.test(\r",
-							"\t\"Check that an order's length is 2\",\r",
+							"\t\"Check that the orders array is of size 0\",\r",
 							"\tfunction()\r",
 							"\t{\r",
-							"\t\tpm.expect( responseJSON2 ).to.be.an( 'array' );\r",
-							"\t\tpm.expect( responseJSON2 ).to.have.lengthOf( 2 );\r",
-							"\t}\r",
-							");\r",
-							"\r",
-							"\r",
-							"pm.test(\r",
-							"\t`Check that an order's total size is 5 }`,\r",
-							"\tfunction()\r",
-							"\t{\r",
-							"\t\tpm.expect( lTotalItems ).to.equal( 5 );\r",
+							"\t\tpm.expect( responseJSON ).to.be.an( 'array' );\r",
+							"\t\tpm.expect( responseJSON ).to.empty;\r",
 							"\t}\r",
 							");\r",
 							""
