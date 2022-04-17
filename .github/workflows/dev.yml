@@ -37,7 +37,8 @@ jobs:
     - name: Run unit tests
       run: npm run test-unit
   check-env:
-    name: Check if a host for deployment is defined
+    name: Check if development server for deployment is defined
+    runs-on: ubuntu-latest
     outputs:
       dev-host-defined: ${{ steps.dev-host-defined.outputs.defined }}
     steps:
@@ -47,6 +48,7 @@ jobs:
       if: "${{ env.DEV_SSH_HOST != '' }}"
       run: echo "::set-output name=dev-host-defined::true"
   deploy_dev:
+    name: Deploy to development server
     needs: [ test, check-env ]
     if: github.ref == 'refs/heads/dev' && needs.check-env.outputs.dev-host-defined == 'true'
     runs-on: ubuntu-latest
