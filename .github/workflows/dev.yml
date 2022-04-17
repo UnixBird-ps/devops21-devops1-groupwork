@@ -3,9 +3,9 @@ name: CICD
 
 on:
   push:
-    branches: [ main, dev, feature* ]
+    branches: [ main, dev, ps-feature*, feature* ]
   pull_request:
-    branches: [ main, dev, feature* ]
+    branches: [ main, dev, ps-feature*, feature* ]
 
 jobs:
   test:
@@ -36,3 +36,34 @@ jobs:
       run: HEADLESS_CHROME=yes WDIO_LOG_LEVEL=warn npm run test-bdd
     - name: Run unit tests
       run: npm run test-unit
+  deploy_dev:
+    if: github.ref == 'refs/heads/dev'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup SSH
+      env:
+        DEV_SSH_KEY: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
+        DEV_SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
+        DEV_SSH_USER: ${{ secrets.DEV_SSH_USER }}
+        DEV_SSH_PORT: ${{ secrets.DEV_SSH_PORT }}
+      run: |
+        mkdir -p ~/.ssh/
+        echo "$DEV_SSH_KEY" > ~/.ssh/dev.key
+        chmod 600 ~/.ssh/dev.key
+        cat >>~/.ssh/config <<_EOF_
+        Host dev
+          HostName $DEV_SSH_HOST
+          User $DEV_SSH_USER
+          Port $DEV_SSH_PORT
+          IdentityFile ~/.ssh/dev.key
+          StrictHostKeyChecking no
+        _EOF_
+    - name: Prepare app dirs
+      run: |
+        ssh dev 'mkdir -p ~/our-webshop/{app,log}'
+        rsync -vaR -e 'ssh' package.json backend/*.js backend/*.json frontend/* dev:~/our-webshop/app/
+        rsync -vaR -e 'ssh' --ignore-existing backend/database/webshop.db dev:~/our-webshop/app/
+    - name: Install dependencies and start the app
+      run: ssh dev 'cd ~/our-webshop/app && npm install && { pm2 start backend --name our-webshop --log ../log/app.log --time || pm2 restart our-webshop; }'
