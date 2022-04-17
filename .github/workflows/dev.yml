@@ -45,6 +45,8 @@ jobs:
     - id: dev-host-defined
       env:
         DEV_SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
+      if: "${{ env.DEV_SSH_HOST == '' }}"
+      run: exit 1
       if: "${{ env.DEV_SSH_HOST != '' }}"
       run: echo "::set-output name=dev-host-defined::true"
   deploy_dev:
