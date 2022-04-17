@@ -45,7 +45,7 @@ jobs:
       env:
         DEV_SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
       if: "${{ env.DEV_SSH_HOST != '' }}"
-      run: echo "::set-output name=defined::true"
+      run: echo "::set-output name=dev-host-defined::true"
   deploy_dev:
     needs: [ test, check-env ]
     if: github.ref == 'refs/heads/dev'
