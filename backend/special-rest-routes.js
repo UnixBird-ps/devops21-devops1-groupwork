@@ -13,10 +13,11 @@ module.exports = function (app, runQuery, db) {
 
 	});
 
-
+	// Route for receiving new orders
 	app.post(
 		"/api/new-order", ( req, res ) =>
 		{
+			// Check user's access right
 			if ( !acl( "new-order", req ) )
 			{
 				res.status( 405 );
