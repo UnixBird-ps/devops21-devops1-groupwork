@@ -48,8 +48,7 @@ jobs:
       run: echo "::set-output name=dev-host-defined::true"
   deploy_dev:
     needs: [ test, check-env ]
-    if: github.ref == 'refs/heads/dev'
-    if: needs.check-env.outputs.dev-host-defined == 'true'
+    if: github.ref == 'refs/heads/dev' && needs.check-env.outputs.dev-host-defined == 'true'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
