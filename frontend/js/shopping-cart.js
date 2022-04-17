@@ -75,6 +75,7 @@ class ShoppingCart {
 		listen('click', '.orderButton', () => {
 		  	let shoppingCart = grabEl('.shoppingCart')
 			this.addOrders();
+			alert('Test');
 			console.log(shoppingCart);
 			return;
 		});
@@ -82,14 +83,19 @@ class ShoppingCart {
 	
 	addOrders() {
 		let data = this.orderRows; 
+
 		let nProducts = [];
-		for(let nOrder in data){
-			let nLib = {};
-			nLib['productId'] = data[nOrder].product.id;
-			nLib['quantity'] = data[nOrder].quantity;
-			nProducts.push(nLib);
+		for (let i = 0; i < data.length; i++) {
+			let nProduct = {
+				id: data[i].product.id,
+				name: data[i].product.name, 
+				price: data[i].product.price, 
+				description: data[i].product.description, 
+				image: data[i].product.image, 
+				myProductList: []
+			};
+			nProducts.push(data[i].quantity, nProduct);
 		}
-		// send request to backend
 		fetch('/api/new-order', {
 			method: 'POST',
 			headers: {
@@ -100,11 +106,11 @@ class ShoppingCart {
 			.then(response => response.json())
 			.then(data => {
 				console.log('Success:', data);
-				//alert('YOU DID IT');
+				alert('YOU DID IT');
 			})
 			.catch((error) => {
 				console.error('Error:', error);
-				//alert('FAILURE');
+				alert('FAILURE');
 			});
 	}
 }
