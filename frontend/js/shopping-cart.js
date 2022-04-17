@@ -1,9 +1,10 @@
 
 class ShoppingCart {
 
-  //constructor() {
-    //this.addOrderButtonEvent();
-  //}
+  constructor() {
+    this.addOrderButtonEvent();
+  }
+
   orderRows = [];
 
   add(quantity, product) {
@@ -70,14 +71,42 @@ class ShoppingCart {
 		return html;
 	}
 
-	//addOrderButtonEvent() {
-		//listen('click', '.orderButton', () => {
-		  	//let shoppingCart = grabEl('.shoppingCart')
-			//alert('Test');
-			//console.log(shoppingCart);
-			//return;
-		//});
-	//}
+	addOrderButtonEvent() {
+		listen('click', '.orderButton', () => {
+		  	let shoppingCart = grabEl('.shoppingCart')
+			this.addOrders();
+			console.log(shoppingCart);
+			return;
+		});
+	}
+	
+	addOrders() {
+		let data = this.orderRows; 
+		let nProducts = [];
+		for(let nOrder in data){
+			let nLib = {};
+			nLib['productId'] = data[nOrder].product.id;
+			nLib['quantity'] = data[nOrder].quantity;
+			nProducts.push(nLib);
+		}
+		// send request to backend
+		fetch('/api/new-order', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(nProducts),
+		})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Success:', data);
+				//alert('YOU DID IT');
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+				//alert('FAILURE');
+			});
+	}
 }
 
 
