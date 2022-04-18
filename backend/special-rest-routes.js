@@ -13,40 +13,49 @@ module.exports = function (app, runQuery, db) {
 
 	});
 
+
 	// Route for receiving new orders
 	app.post(
 		"/api/new-order", ( req, res ) =>
 		{
-			// Check user's access right
+			// Check that the current user has the right to create new orders
 			if ( !acl( "new-order", req ) )
 			{
 				res.status( 405 );
 				res.json( { error: "Not allowed!" } );
 				return;
 			}
-			console.log( req.body );
 
+			// Get user id from session
 			let userId = req.session.user?.id;
-			let queryParameters = { ...req.body, id: userId };
-
 			let lOrderId = -1;
 
 			try
 			{
+				// Prep time string
+				let lTimeStr = new Date().toISOString();
+				// replace 'T' with a space
+				lTimeStr = lTimeStr.split( "T" ).join( " " );
+				// remove miliseconds part and time zone abbreviation character
+				lTimeStr = lTimeStr.split( "." )[ 0 ];
+
+				// Add single order row to db
 				let result;
 				let lSql = "";
 				lSql  = `INSERT INTO orders ( customerId, date )`;
-				lSql += ` VALUES ( ${ userId }, '1970-01-01 00:00:00' )`;
+				lSql += ` VALUES ( ${ userId }, '${ lTimeStr }' )`;
 				result = db.prepare( lSql ).run();
 				lOrderId = result.lastInsertRowid;
 
+				// Add product rows of the order to db
 				let values = "";
 				for ( let i = 0; i < req.body.length; i++ )
 				{
 					let r = req.body[ i ];
+					// Construct ( productId, quantity ) for every row,
+					// adding a comma at the end of every but the last row
 					values += `( ${ result.lastInsertRowid },${ Object.values( r ).map( x => " '" + x + "'" ) } )${ i < req.body.length - 1 ? ",\n" : "" }`;
 				}
-
 				lSql  = `INSERT INTO ordersXproducts ( orderId, ${ Object.keys( req.body[ 0 ] ) } )`;
 				lSql += ` VALUES ${ values }`,
 				result = db.prepare( lSql ).run();
@@ -57,6 +66,7 @@ module.exports = function (app, runQuery, db) {
 				console.log( e );
 			}
 
+			// Prep a respone to HTTP client
 			res.json( { status : "Was accepted", lastInsertRowid : lOrderId } );
 		}
 	);
