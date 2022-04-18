@@ -43,16 +43,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Check if development server for deployment is defined
+    - name: Check if development server is defined
       env:
         DEV_SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
       if: "${{ env.DEV_SSH_HOST == '' }}"
       run: exit 1
     - name: Setup SSH
       env:
-        DEV_SSH_KEY: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
+        DEV_SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
         DEV_SSH_USER: ${{ secrets.DEV_SSH_USER }}
         DEV_SSH_PORT: ${{ secrets.DEV_SSH_PORT }}
+        DEV_SSH_KEY: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
       run: |
         mkdir -p ~/.ssh/
         echo "$DEV_SSH_KEY" > ~/.ssh/dev.key
