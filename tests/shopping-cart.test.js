@@ -8,8 +8,6 @@ describe(
 	() =>
 	{
 		const ShoppingCart = require( '../frontend/js/shopping-cart.js' );
-		const Product = require( '../frontend/js/product.js' );
-
 		const myShoppingCart = new ShoppingCart();
 
 
