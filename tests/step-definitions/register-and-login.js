@@ -167,6 +167,7 @@ When(
 		await expect( foundSubmitBtn ).toBeTruthy();
 		await foundSubmitBtn.waitForClickable();
 		await foundSubmitBtn.click();
+		await $( "div.navbar div.login" ).waitForDisplayed( { reverse : true } );
 	}
 );
 
@@ -176,14 +177,18 @@ Then(
 	"the page should inform me that the login was successful",
 	async () =>
 	{
+		let firstAuthLink = await $( 'div.register-and-login-links a' );
+		await firstAuthLink.waitUntil(
+			async function ()
+			{
+				return ( await this.getAttribute( "href" ) === "/logout" );
+			}
+		);
+		await firstAuthLink.waitForClickable();
+
 		let foundLoggedInAsElm = await $( "div.register-and-login-links" );
 		await expect( foundLoggedInAsElm ).toBeTruthy();
 		await expect( await foundLoggedInAsElm.getHTML( false ) ).toContain( "Logged in as Tester" );
-		await expect( await $( "div.login" ).isDisplayed() ).toBeFalsy();
-
-		let authLinkElms = await $$( '.register-and-login-links a' );
-		await expect( authLinkElms[ 0 ] ).toHaveHref( '/logout' );
-		await authLinkElms[ 0 ].waitForClickable();
 
 		await browser.pause( pauseTime );
 	}
