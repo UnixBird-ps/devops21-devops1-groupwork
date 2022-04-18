@@ -1,5 +1,6 @@
 const passwordEncryptor = require('./passwordEncryptor');
 const acl = require('./acl');
+const debugMsg = require( './debug-funcs.js' ).debugMsg;
 
 module.exports = function (app, runQuery, db) {
 
@@ -57,7 +58,8 @@ module.exports = function (app, runQuery, db) {
 					values += `( ${ result.lastInsertRowid },${ Object.values( r ).map( x => " '" + x + "'" ) } )${ i < req.body.length - 1 ? ",\n" : "" }`;
 				}
 				lSql  = `INSERT INTO ordersXproducts ( orderId, ${ Object.keys( req.body[ 0 ] ) } )`;
-				lSql += ` VALUES ${ values }`,
+				lSql += ` VALUES\n${ values }`,
+				debugMsg( "lSql:\n", lSql );
 				result = db.prepare( lSql ).run();
 			}
 			catch ( e )
