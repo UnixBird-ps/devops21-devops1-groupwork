@@ -1,5 +1,5 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
-const pauseTime = 2000;
+const pauseTime = 1000;
 
 // Placed empty templates at the end
 
@@ -127,7 +127,6 @@ Then(
 		let foundSuccessMsgElm = await $( "div.register p" );
 		await expect( foundSuccessMsgElm ).toBeTruthy();
 		await expect( await foundSuccessMsgElm.getText() ).toContain( "You are now successfully registrered as a member!" );
-		await browser.pause( pauseTime );
 	}
 );
 
@@ -177,9 +176,15 @@ Then(
 	"the page should inform me that the login was successful",
 	async () =>
 	{
+		let authLinkElms = await $$( '.register-and-login-links a' );
+		await expect( authLinkElms[ 0 ] ).toHaveHref( '/logout' );
+		await authLinkElms[ 0 ].waitForClickable();
+
 		let foundLoggedInAsElm = await $( "div.register-and-login-links" );
 		await expect( foundLoggedInAsElm ).toBeTruthy();
-		await expect( await foundLoggedInAsElm.getText() ).toContain( "Logged in as Tester2 Testare2" );
+		await expect( await foundLoggedInAsElm.getHTML( false ) ).toContain( "Logged in as Tester" );
+		await expect( await $( "div.login" ).isDisplayed() ).toBeFalsy();
+
 		await browser.pause( pauseTime );
 	}
 );
@@ -191,7 +196,7 @@ Given(
 	{
 		let foundLoggedInAsElm = await $( "div.register-and-login-links" );
 		await expect( foundLoggedInAsElm ).toBeTruthy();
-		await expect( await foundLoggedInAsElm.getText() ).toContain( "Logged in as Tester2 Testare2" );
+		await expect( await foundLoggedInAsElm.getText() ).toContain( "Logged in as Tester" );
 	}
 );
 
