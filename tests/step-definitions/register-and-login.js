@@ -176,14 +176,14 @@ Then(
 	"the page should inform me that the login was successful",
 	async () =>
 	{
-		let authLinkElms = await $$( '.register-and-login-links a' );
-		await expect( authLinkElms[ 0 ] ).toHaveHref( '/logout' );
-		await authLinkElms[ 0 ].waitForClickable();
-
 		let foundLoggedInAsElm = await $( "div.register-and-login-links" );
 		await expect( foundLoggedInAsElm ).toBeTruthy();
 		await expect( await foundLoggedInAsElm.getHTML( false ) ).toContain( "Logged in as Tester" );
 		await expect( await $( "div.login" ).isDisplayed() ).toBeFalsy();
+
+		let authLinkElms = await $$( '.register-and-login-links a' );
+		await expect( authLinkElms[ 0 ] ).toHaveHref( '/logout' );
+		await authLinkElms[ 0 ].waitForClickable();
 
 		await browser.pause( pauseTime );
 	}
