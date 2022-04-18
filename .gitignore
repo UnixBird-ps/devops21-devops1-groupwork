@@ -1,3 +1,5 @@
+backend/database/*.db
+
 # Logs
 logs
 *.log
