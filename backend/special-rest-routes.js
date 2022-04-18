@@ -59,7 +59,6 @@ module.exports = function (app, runQuery, db) {
 				}
 				lSql  = `INSERT INTO ordersXproducts ( orderId, ${ Object.keys( req.body[ 0 ] ) } )`;
 				lSql += ` VALUES\n${ values }`,
-				debugMsg( "lSql:\n", lSql );
 				result = db.prepare( lSql ).run();
 			}
 			catch ( e )
