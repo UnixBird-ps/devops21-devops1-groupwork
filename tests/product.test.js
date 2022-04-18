@@ -3,7 +3,7 @@ require( "./fakedom.js" );
 const { test, expect } = require( "@jest/globals" );
 global.listen = require( "../frontend/js/helpers.js" ).listen;
 const Product = require( "../frontend/js/product.js");
-const debugMsg = require( "../backend/debug-funcs.js" );
+const debugMsg = require( "../backend/debug-funcs.js" ).debugMsg;
 
 
 describe(
@@ -43,14 +43,52 @@ describe(
 		test( 'Rendering of a product',
 			() =>
 			{
-				let lRenderStr = lTestProduct.render();
-				console.log( lRenderStr );
-				lRenderStr = lRenderStr.split( os.EOL );
-				console.log( lRenderStr );
-				for ( s of lRenderStr ) s = s.trim() + os.EOL;
-				console.log( lRenderStr );
-				lRenderStr = lRenderStr.join();
-				console.log( lRenderStr );
+				// Prep a string that will be compared with the received string from renderer
+				// Removing any leading and trailing new-lines, removing any indentation
+				let lExpectedHTML = `
+				<div class="product" id="i9999">
+				<img src="">
+				<h3>The brick</h3>
+				<div><p>A very useful tool</p></div>
+				<p class="price">Price: 14.95 kr</p>
+				<form>
+				<input type="number" value="1" class="quantity" min="1" max="100">
+				<button type="submit" class="buyButton">Buy</button>
+				</form>
+				</div>
+				`.trim().split( "\n" ).map( s => s.trim() ).join( "\n" );
+
+				// Get the rendering string
+				// Removing any leading and trailing new-lines, removing any indentation
+				let lRenderedHTML = lTestProduct.render().trim().split( "\n" ).map( s => s.trim() ).join( "\n" );
+
+				expect( lRenderedHTML ).toBe( lExpectedHTML );
+			}
+		);
+
+
+		test( 'Rendering of a product in list',
+			() =>
+			{
+				// Prep a string that will be compared with the received string from renderer
+				// Removing any leading and trailing new-lines, removing any indentation
+				let lExpectedHTML = `
+				<div class="productInList" id="i9999">
+				<img src="">
+				<h3>The brick</h3>
+				<p class="price">Price: 14.95 kr</p>
+				<form>
+				<input type="number" value="1" class="quantity" min="1" max="100">
+				<button type="submit" class="buyButton">Buy</button>
+				</form>
+				</div>
+				`.trim().split( "\n" ).map( s => s.trim() ).join( "\n" );
+
+				// Get the rendering string
+				// Removing any leading and trailing new-lines, removing any indentation
+				let lRenderedHTML = lTestProduct.renderInList().trim().split( "\n" ).map( s => s.trim() ).join( "\n" );
+
+				expect( lRenderedHTML ).toBe( lExpectedHTML );
 			}
 		);
 
