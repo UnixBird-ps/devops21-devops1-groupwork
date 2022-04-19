@@ -1,0 +1,14 @@
+
+name: Prevent merge
+
+on:
+  [ push, pull_request, merge ]:
+    branches: ps-feature*
+
+jobs:
+  prevent_merge:
+    name: Stop merge if not owner
+    runs-on: ubuntu-latest
+    if: github.actor !== github.repository_owner
+    steps:
+    - run: exit 1
