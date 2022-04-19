@@ -40,6 +40,7 @@ Then(
 	async () =>
 	{
 		await $( 'form[name="registration"]' ).waitForDisplayed();
+		await browser.pause( 2000 );
 	}
 );
 
@@ -69,7 +70,8 @@ Then(
 	'a dialog with a login form should appear on the page',
 	async () =>
 	{
-		await $( 'form[name="login"]' ).waitForDisplayed();
+		await $( 'form[name="login"]' ).waitForDisplayed( { timeout : 5000 } );
+		await browser.pause( 2000 );
 	}
 );
 
@@ -138,19 +140,27 @@ Given(
 		await browser.url( '/' );
 		await $( '.register-and-login-links' ).waitForDisplayed();
 
-		let authLinkElms = await $$( '.register-and-login-links a' );
-		let foundLinkElm;
-		for ( let aLinkElm of authLinkElms )
-		{
-			if ( ( await aLinkElm.getAttribute( 'href' ) ) === '/login' )
+		let secondAuthLink;
+		// let authLinkElms = await $$( '.register-and-login-links a' );
+		// for ( let aLinkElm of authLinkElms )
+		// {
+		// 	if ( ( await aLinkElm.getAttribute( 'href' ) ) === '/login' )
+		// 	{
+		// 		foundLinkElm = aLinkElm;
+		// 	}
+		// }
+		let authLinksContainer = await $( '.register-and-login-links' );
+		await authLinksContainer.waitUntil(
+			async function ()
 			{
-				foundLinkElm = aLinkElm;
+				secondAuthLink = await this.$$( "a" )[ 1 ];
+				return ( secondAuthLink && await secondAuthLink.getAttribute( "href" ) === "/login" );
 			}
-		}
+		);
 
-		await expect( foundLinkElm ).toBeTruthy();
-		await foundLinkElm.waitForClickable();
-		await foundLinkElm.click();
+		await expect( secondAuthLink ).toBeTruthy();
+		await secondAuthLink.waitForClickable();
+		await secondAuthLink.click();
 
 		await $( "form[name='login']" ).waitForDisplayed();
 	}
