@@ -1,5 +1,5 @@
 
-name: Prevent merge
+name: prevent-merge
 
 on: [ push, pull_request, merge ]
   branches: ps-feature*
