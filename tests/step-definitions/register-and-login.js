@@ -1,5 +1,6 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
-const pauseTime = 1000;
+const pauseTime = 500;
+const timeOut = 10000;
 
 // Placed empty templates at the end
 
@@ -9,7 +10,7 @@ Given(
 	async () =>
 	{
 		await browser.url( '/' );
-		await $( '.register-and-login-links' ).waitForDisplayed();
+		await $( '.register-and-login-links a' ).waitForClickable();
 	}
 );
 
@@ -29,10 +30,8 @@ When(
 			}
 		);
 
-		expect( firstAuthLink ).toBeTruthy();
 		await firstAuthLink.waitForClickable();
 		await firstAuthLink.click();
-		await browser.pause( pauseTime );
 	}
 );
 
@@ -59,13 +58,15 @@ When(
 			{
 				secondAuthLink = await this.$$( "a" )[ 1 ];
 				return ( secondAuthLink && await secondAuthLink.getAttribute( "href" ) === "/login" );
+			},
+			{
+				timeout: timeOut,
+				timeoutMsg: "Reached timeout when wating for element"
 			}
 		);
 
-		expect( secondAuthLink ).toBeTruthy();
 		await secondAuthLink.waitForClickable();
 		await secondAuthLink.click();
-		await browser.pause( pauseTime );
 	}
 );
 
@@ -88,19 +89,6 @@ Given(
 		await $( '.register-and-login-links' ).waitForDisplayed();
 
 		let firstAuthLink;
-
-		// let authLinkElms = await $$( '.register-and-login-links a' );
-		// for ( let aLinkElm of authLinkElms )
-		// {
-		// 	if ( ( await aLinkElm.getAttribute( 'href' ) ) === '/register' )
-		// 	{
-		// 		firstAuthLink = aLinkElm;
-		// 	}
-		// }
-
-		// await expect( firstAuthLink ).toBeTruthy();
-		// await firstAuthLink.waitForClickable();
-		// await firstAuthLink.click();
 
 		let authLinksContainer = await $( '.register-and-login-links' );
 		await authLinksContainer.waitUntil
@@ -213,6 +201,10 @@ Then(
 			async function ()
 			{
 				return ( await this.getAttribute( "href" ) === "/logout" );
+			},
+			{
+				timeout: timeOut,
+				timeoutMsg: "Reached timeout when wating for element"
 			}
 		);
 		await firstAuthLink.waitForClickable();
