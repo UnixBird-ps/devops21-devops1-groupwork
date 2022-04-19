@@ -3,11 +3,11 @@ name: Prevent change
 
 on:
   push:
-    branches: ps-test*
+    branches: [ ps-feature*, ps-test* ]
   pull_request:
-    branches: ps-test*
+    branches: [ ps-feature*, ps-test* ]
   delete:
-    branches: ps-test*
+    branches: [ ps-feature*, ps-test* ]
 
 jobs:
   prevent_change:
