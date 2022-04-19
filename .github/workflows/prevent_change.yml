@@ -1,16 +1,19 @@
 
-name: Prevent merge
+name: Prevent change
 
 on:
   push:
     branches: ps-test*
   pull_request:
     branches: ps-test*
+  delete:
+    branches: ps-test*
 
 jobs:
-  prevent_merge:
-    name: Stop merge if not owner
+  prevent_change:
+    name: Stop if not owner
     runs-on: ubuntu-latest
     if: github.actor != github.repository_owner
     steps:
-    - run: exit 1
+    - name: Bailing out
+      run: exit 1
