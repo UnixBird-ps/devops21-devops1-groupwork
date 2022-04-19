@@ -106,6 +106,7 @@ class ShoppingCart {
 				console.error('Error:', error);
 				//alert('FAILURE');
 			});
+			this.orderRows = [];
 	}
 }
 
