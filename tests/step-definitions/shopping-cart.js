@@ -100,7 +100,7 @@ When(
 
 
 Then(
-	/^add "(.*)" to shopping cart and show total sum$/,
+	/^"(.*)" is added to the shopping cart and total sum is displayed$/,
 	async ( productName ) =>
 	{
 		let products = await $$( '.shoppingCart' );
@@ -164,7 +164,7 @@ When(
 );
 
 Then(
-	/^increase quantity of "(.*)" without adding a new product$/,
+	/^the quantity of "(.*)" is increased without adding a new product$/,
 	async ( productName ) =>
 	{
 		let products = await $$( '.shoppingCart' );
