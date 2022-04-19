@@ -11,6 +11,6 @@ jobs:
   prevent_merge:
     name: Stop merge if not owner
     runs-on: ubuntu-latest
-    if: github.actor !== github.repository_owner
+    if: github.actor != github.repository_owner
     steps:
     - run: exit 1
