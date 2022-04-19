@@ -2,7 +2,7 @@ const { Given, When, Then } = require( '@wdio/cucumber-framework' );
 const pauseTime = 500;
 const timeOut = 10000;
 
-// Placed empty templates at the end
+// Empty templates at the end
 
 
 Given(
@@ -163,7 +163,6 @@ Given(
 			}
 		);
 
-		await expect( secondAuthLink ).toBeTruthy();
 		await secondAuthLink.waitForClickable();
 		await secondAuthLink.click();
 

@@ -61,18 +61,20 @@ document.querySelector( 'body' ).addEventListener(
 );
 
 
-document.querySelector( 'body' ).addEventListener( 'click', ( event ) =>
-{
+document.querySelector( 'body' ).addEventListener(
+	'click',
+	( event ) =>
+	{
+		if ( !event.target.closest( 'a[href="/login"]' ) ) { return; }
 
-  if ( !event.target.closest( 'a[href="/login"]' ) ) { return; }
+		event.preventDefault();
 
-  event.preventDefault();
-
-  let loginDiv = document.querySelector( '.login' );
-  loginDiv.innerHTML = renderLoginForm();
-  loginDiv.classList.remove( 'hidden' );
-  document.querySelector( '.modal-hider' ).classList.remove( 'hidden' );
-});
+		let loginDiv = document.querySelector( '.login' );
+		loginDiv.innerHTML = renderLoginForm();
+		loginDiv.classList.remove( 'hidden' );
+		document.querySelector( '.modal-hider' ).classList.remove( 'hidden' );
+	}
+);
 
 
 document.querySelector( 'body' ).addEventListener(

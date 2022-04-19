@@ -22,6 +22,7 @@ async function getLogInfo()
 	{
 		div.innerHTML = `
 			Logged in as ${loggedIn.firstName} ${loggedIn.lastName}
+			<a href="/my-orders">My orders</a>
 			<a href="/logout">Logout</a>
 		`;
 		start( loggedIn?.userRole );
@@ -31,18 +32,85 @@ async function getLogInfo()
 getLogInfo();
 
 
-document.querySelector('body').addEventListener('click', async (event) => {
+document.querySelector('body').addEventListener
+(
+	'click',
+	async (event) =>
+	{
+		if ( event.target.closest( 'a[href="/my-orders"]' ) )
+		{
+			event.preventDefault();
 
-  if (!event.target.closest('a[href="/logout"]')) { return; }
+			let lFirstLink = document.querySelector( '.register-and-login-links a' );
+			lFirstLink.outerHTML = '<a href="/">Home</a>';
 
-  event.preventDefault();
+			// read the json data
+			let rawData = await fetch( '/api/my-orders' );
+			// convert from json to a JavaScript data structure
+			// data will be an array of generic objects
+			let data = await rawData.json();
 
-  let result;
-  try {
-    result = await (await fetch('/api/login', { method: 'DELETE' })).json();
-  }
-  catch (ignore) { }
+			let lProducts = [];
+			// loop through the data we fetched from json
+			for ( let element of data )
+			{
+				lProducts.push( element );
+			}
 
-  location.reload();
+			let html = "";
+			for ( let product of lProducts )
+			{
+				html += Object.entries( product ).map( x => x[ 0 ] + x[ 1 ] );
+			}
 
-});
+			grabEl('main').innerHTML = html;
+		}
+
+		if ( !event.target.closest( 'a[href="/logout"]' ) ) { return; }
+
+		event.preventDefault();
+
+		let result;
+		try {
+			result = await (await fetch('/api/login', { method: 'DELETE' })).json();
+		}
+		catch (ignore) { }
+
+		location.reload();
+	}
+);
+
+
+
+
+// document.querySelector( ".register-and-login-links" ).addEventListener
+// (
+// 	'click',
+// 	( event ) =>
+// 	{
+// 		if ( !event.target.closest( 'a[href="/my-orders"]' ) ) { return; }
+
+// 		event.preventDefault();
+
+// 		// read the json data
+// 		let rawData = await fetch( '/api/products' );
+// 		// convert from json to a JavaScript data structure
+// 		// data will be an array of generic objects
+// 		let data = await rawData.json();
+
+// 		let lProducts = [];
+// 		// loop through the data we fetched from json
+// 		for ( let element of data )
+// 		{
+// 			lProducts.push( element );
+// 		}
+
+// 		let html = "";
+// 		for ( let product of lProducts )
+// 		{
+// 			html += product.renderInList();
+// 		}
+
+// 		grabEl('main').innerHTML = html;
+// 	}
+// );
