@@ -2,11 +2,7 @@
 name: Prevent merge
 
 on:
-  push:
-    branches: ps-test*
-  pull_request:
-    branches: ps-test*
-  merge:
+  [ push, pull_request ]:
     branches: ps-test*
 
 jobs:
