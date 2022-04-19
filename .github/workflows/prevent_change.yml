@@ -1,0 +1,21 @@
+
+name: Prevent change
+
+on:
+  push:
+    branches: [ ps-feature*, ps-test* ]
+  pull_request:
+    branches: [ ps-feature*, ps-test* ]
+  delete:
+    branches: [ ps-feature*, ps-test* ]
+
+jobs:
+  prevent_change:
+    name: Stop if not owner
+    runs-on: ubuntu-latest
+    steps:
+    - name: Bailing out
+      if: github.actor != github.repository_owner
+      run: exit 1
+    - name: Continue
+      run: exit 0
