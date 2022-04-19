@@ -1,8 +1,13 @@
 
 name: Prevent merge
 
-on: [ push, pull_request, merge ]
-  branches: ps-test*
+on:
+  push:
+    branches: ps-test*
+  pull_request:
+    branches: ps-test*
+  merge:
+    branches: ps-test*
 
 jobs:
   prevent_merge:
