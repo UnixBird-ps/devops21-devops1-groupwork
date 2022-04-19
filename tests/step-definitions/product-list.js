@@ -23,14 +23,11 @@ When(
 			if ( ( await product.getText() ).includes( productName ) )
 			{
 				foundProduct = product;
-				console.log( 'Found product: ', productName );
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
 		await foundProduct.scrollIntoView( true );
-		//await browser.pause(pauseTime);
 		let titleEl = await foundProduct.$( 'h3' );
-		//browser.execute( 'arguments[0].click();', titleEl );
 		await titleEl.click();
 	}
 );
