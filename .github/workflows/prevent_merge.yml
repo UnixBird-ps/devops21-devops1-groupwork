@@ -1,8 +1,8 @@
 
-name: prevent-merge
+name: Prevent merge
 
 on: [ push, pull_request, merge ]
-  branches: ps-feature*
+  branches: ps-test*
 
 jobs:
   prevent_merge:
