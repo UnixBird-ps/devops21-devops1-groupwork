@@ -54,16 +54,42 @@ document.querySelector('body').addEventListener
 			// loop through the data we fetched from json
 			for ( let element of data )
 			{
-				lProducts.push( element );
+				lProducts.push
+				(
+					{
+						"Order" : element.orderId,
+						"Date" : element.orderDate,
+						"Product" : element.name,
+						"Quantity" : element.quantity
+					}
+				);
 			}
+			let lLabels = [ "Order", "Date", "Product", "Quantity" ];
 
 			let html = "";
+			html += "<table name='my-orders'>";
+			if ( lProducts.length > 0 )
+				html += "<caption>My Orders</caption>";
+			else
+				html += "<caption>No orders yet.</caption>";
+
+			html += "<thead>";
+			html += "<tr>";
+			for ( let lLabel of lLabels ) html += "<td>" + lLabel + "</td>";
+			html +="</tr>";
+			html += "</thead>";
+			html += "<tbody>";
 			for ( let product of lProducts )
 			{
-				html += Object.entries( product ).map( x => x[ 0 ] + x[ 1 ] );
+				html += "<tr>";
+				for ( let lVal of Object.values( product ) ) html += "<td>" + lVal + "</td>";
+				html +="</tr>";
 			}
+			html += "</tbody>";
 
-			grabEl('main').innerHTML = html;
+			html += "</table>";
+
+			grabEl( "main" ).innerHTML = html;
 		}
 
 		if ( !event.target.closest( 'a[href="/logout"]' ) ) { return; }
@@ -79,38 +105,3 @@ document.querySelector('body').addEventListener
 		location.reload();
 	}
 );
-
-
-
-
-// document.querySelector( ".register-and-login-links" ).addEventListener
-// (
-// 	'click',
-// 	( event ) =>
-// 	{
-// 		if ( !event.target.closest( 'a[href="/my-orders"]' ) ) { return; }
-
-// 		event.preventDefault();
-
-// 		// read the json data
-// 		let rawData = await fetch( '/api/products' );
-// 		// convert from json to a JavaScript data structure
-// 		// data will be an array of generic objects
-// 		let data = await rawData.json();
-
-// 		let lProducts = [];
-// 		// loop through the data we fetched from json
-// 		for ( let element of data )
-// 		{
-// 			lProducts.push( element );
-// 		}
-
-// 		let html = "";
-// 		for ( let product of lProducts )
-// 		{
-// 			html += product.renderInList();
-// 		}
-
-// 		grabEl('main').innerHTML = html;
-// 	}
-// );

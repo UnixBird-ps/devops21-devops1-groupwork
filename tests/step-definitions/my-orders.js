@@ -13,8 +13,8 @@ Given(
 		await browser.pause( pauseTime );
 
 		let lSecondAuthLink;
-		let lAuthLinksContainer = await $( '.register-and-login-links' );
-		await lAuthLinksContainer.waitUntil
+		let lLinksContainer = await $( '.register-and-login-links' );
+		await lLinksContainer.waitUntil
 		(
 			async function ()
 			{
@@ -48,8 +48,40 @@ Given(
 	"that I can see the main page containing the product list",
 	async () =>
 	{
-		await $( 'div.productInList' ).waitForDisplayed( { reverse : true } );
+		await $( 'div.productInList' ).waitForDisplayed();
 
+		await browser.pause( pauseTime );
+	}
+);
+
+
+When(
+	"I click on the link 'My orders' in the top right corner",
+	async () =>
+	{
+		let lMyOrdersLink;
+		let lLinksContainer = await $( '.register-and-login-links' );
+		await lLinksContainer.waitUntil
+		(
+			async function ()
+			{
+				lMyOrdersLink = await this.$$( "a" )[ 0 ];
+				return ( lMyOrdersLink && await lMyOrdersLink.getAttribute( "href" ) === "/my-orders" );
+			}
+		);
+
+		await lMyOrdersLink.waitForClickable();
+		await lMyOrdersLink.click();
+		await $( 'table[name="my-orders"]' ).waitForDisplayed();
+	}
+);
+
+
+Then(
+	"the product list should be replaced by a list containing my order history",
+	async () =>
+	{
+		await expect( await $( 'table[name="my-orders"]' ) ).toBePresent();
 		await browser.pause( pauseTime );
 	}
 );
