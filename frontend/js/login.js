@@ -83,6 +83,12 @@ document.querySelector( 'body' ).addEventListener(
 	{
 		if ( !event.target.closest( '.modal-hider' ) ) { return; }
 
+		let lElmsToEmpty = document.querySelectorAll( "div.register, div.login" );
+		for ( el of lElmsToEmpty )
+		{
+			el.innerHTML = "";
+		}
+
 		let elementsToHide = document.querySelectorAll( '.register, .login, .modal-hider' );
 
 		for ( element of elementsToHide )
