@@ -1,6 +1,6 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
-const pauseTime = 500;
-const timeOut = 10000;
+const pauseTime = 0;
+const timeOut = 5000;
 
 // Empty templates at the end
 
@@ -257,10 +257,20 @@ Then(
 	"the page should inform me that I was signed off",
 	async () =>
 	{
-		let authLinkElms = await $$( '.register-and-login-links a' );
+		// let authLinkElms = await $$( '.register-and-login-links a' );
 
-		await expect( authLinkElms[ 0 ] ).toHaveHref( '/register' );
-		await expect( authLinkElms[ 1 ] ).toHaveHref( '/login' );
+		// await expect( authLinkElms[ 0 ] ).toHaveHref( '/register' );
+		// await expect( authLinkElms[ 1 ] ).toHaveHref( '/login' );
+
+		let lLinksContainer = await $( 'div.register-and-login-links' );
+		await lLinksContainer.waitUntil
+		(
+			async function ()
+			{
+				let lSecondAuthLink = await this.$$( "a" )[ 1 ];
+				return ( lSecondAuthLink && await lSecondAuthLink.getAttribute( "href" ) === "/login" );
+			}
+		);
 
 		await browser.pause( pauseTime );
 	}
