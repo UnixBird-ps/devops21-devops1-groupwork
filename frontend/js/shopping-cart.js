@@ -3,6 +3,7 @@ class ShoppingCart {
 
   constructor() {
     this.addOrderButtonEvent();
+	this.addCancelButtonEvent();
   }
 
   orderRows = [];
@@ -63,8 +64,9 @@ class ShoppingCart {
 		// add the totalSum
 		html += `<tr>
 			<td colspan="3">Total:</td>
-			<td>${  this.formatSEK( totalSum ) }</td>
-			<td><button class="orderButton">Order</button></td>
+			<td>${this.formatSEK(totalSum)}</td>
+			<td><button class="cancelButton">Cancel</button>
+			<button class="orderButton">Order</button></td>
 		</tr>`;
 		html += '</table>';
 		return html;
@@ -75,6 +77,14 @@ class ShoppingCart {
 		  	let shoppingCart = grabEl('.shoppingCart')
 			this.addOrders();
 			console.log(shoppingCart);
+			grabEl('.shoppingCart').style.display = 'none';
+			return;
+		});
+	}
+
+	addCancelButtonEvent() {
+		listen('click', '.cancelButton',()=>{
+			this.orderRows = [];
 			grabEl('.shoppingCart').style.display = 'none';
 			return;
 		});
