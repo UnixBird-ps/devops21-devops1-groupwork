@@ -1,5 +1,6 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
-const pauseTime = 1000;
+const pauseTime = 500;
+const timeOut = 10000;
 
 // Placed empty templates at the end
 
@@ -9,7 +10,7 @@ Given(
 	async () =>
 	{
 		await browser.url( '/' );
-		await $( '.register-and-login-links' ).waitForDisplayed();
+		await $( '.register-and-login-links a' ).waitForClickable();
 	}
 );
 
@@ -18,19 +19,19 @@ When(
 	"I click on the 'Register' link",
 	async () =>
 	{
-		let authLinkElms = await $$( '.register-and-login-links a' );
-		let foundLinkElm;
-		for ( let aLinkElm of authLinkElms )
-		{
-			if ( ( await aLinkElm.getAttribute( 'href' ) ) === '/register' )
+		let firstAuthLink;
+		let authLinksContainer = await $( '.register-and-login-links' );
+		await authLinksContainer.waitUntil
+		(
+			async function ()
 			{
-				foundLinkElm = aLinkElm;
+				firstAuthLink = await this.$$( "a" )[ 0 ];
+				return ( firstAuthLink && await firstAuthLink.getAttribute( "href" ) === "/register" );
 			}
-		}
+		);
 
-		await expect( foundLinkElm ).toBeTruthy();
-		await foundLinkElm.waitForClickable();
-		await foundLinkElm.click();
+		await firstAuthLink.waitForClickable();
+		await firstAuthLink.click();
 	}
 );
 
@@ -40,7 +41,7 @@ Then(
 	async () =>
 	{
 		await $( 'form[name="registration"]' ).waitForDisplayed();
-		await browser.pause( 2000 );
+		await browser.pause( pauseTime );
 	}
 );
 
@@ -49,19 +50,23 @@ When(
 	"I click on the 'Login' link",
 	async () =>
 	{
-		let authLinkElms = await $$( '.register-and-login-links a' );
-		let foundLinkElm;
-		for ( let aLinkElm of authLinkElms )
-		{
-			if ( ( await aLinkElm.getAttribute( 'href' ) ) === '/login' )
+		let secondAuthLink;
+		let authLinksContainer = await $( '.register-and-login-links' );
+		await authLinksContainer.waitUntil
+		(
+			async function ()
 			{
-				foundLinkElm = aLinkElm;
+				secondAuthLink = await this.$$( "a" )[ 1 ];
+				return ( secondAuthLink && await secondAuthLink.getAttribute( "href" ) === "/login" );
+			},
+			{
+				timeout: timeOut,
+				timeoutMsg: "Reached timeout when wating for element"
 			}
-		}
+		);
 
-		await expect( foundLinkElm ).toBeTruthy();
-		await foundLinkElm.waitForClickable();
-		await foundLinkElm.click();
+		await secondAuthLink.waitForClickable();
+		await secondAuthLink.click();
 	}
 );
 
@@ -71,7 +76,7 @@ Then(
 	async () =>
 	{
 		await $( 'form[name="login"]' ).waitForDisplayed( { timeout : 5000 } );
-		await browser.pause( 2000 );
+		await browser.pause( pauseTime );
 	}
 );
 
@@ -83,21 +88,25 @@ Given(
 		await browser.url( '/' );
 		await $( '.register-and-login-links' ).waitForDisplayed();
 
-		let authLinkElms = await $$( '.register-and-login-links a' );
-		let foundLinkElm;
-		for ( let aLinkElm of authLinkElms )
-		{
-			if ( ( await aLinkElm.getAttribute( 'href' ) ) === '/register' )
-			{
-				foundLinkElm = aLinkElm;
-			}
-		}
+		let firstAuthLink;
 
-		await expect( foundLinkElm ).toBeTruthy();
-		await foundLinkElm.waitForClickable();
-		await foundLinkElm.click();
+		let authLinksContainer = await $( '.register-and-login-links' );
+		await authLinksContainer.waitUntil
+		(
+			async function ()
+			{
+				firstAuthLink = await this.$$( "a" )[ 0 ];
+				return ( firstAuthLink && await firstAuthLink.getAttribute( "href" ) === "/register" );
+			}
+		);
+
+		expect( firstAuthLink ).toBeTruthy();
+		await firstAuthLink.waitForClickable();
+		await firstAuthLink.click();
 
 		await $( "form[name='registration']" ).waitForDisplayed();
+
+		await browser.pause( pauseTime );
 	}
 );
 
@@ -112,9 +121,12 @@ When(
 		await $( 'form[name="registration"] input[name="password"]' ).setValue( '12345678' );
 		await $( 'form[name="registration"] input[name="passwordRepeated"]' ).setValue( '12345678' );
 		let foundSubmitBtn = await $( 'form[name="registration"] input[type="submit"]' );
+
 		await expect( foundSubmitBtn ).toBeTruthy();
 		await foundSubmitBtn.waitForClickable();
 		await foundSubmitBtn.click();
+
+		await browser.pause( pauseTime );
 	}
 );
 
@@ -141,16 +153,9 @@ Given(
 		await $( '.register-and-login-links' ).waitForDisplayed();
 
 		let secondAuthLink;
-		// let authLinkElms = await $$( '.register-and-login-links a' );
-		// for ( let aLinkElm of authLinkElms )
-		// {
-		// 	if ( ( await aLinkElm.getAttribute( 'href' ) ) === '/login' )
-		// 	{
-		// 		foundLinkElm = aLinkElm;
-		// 	}
-		// }
 		let authLinksContainer = await $( '.register-and-login-links' );
-		await authLinksContainer.waitUntil(
+		await authLinksContainer.waitUntil
+		(
 			async function ()
 			{
 				secondAuthLink = await this.$$( "a" )[ 1 ];
@@ -174,10 +179,13 @@ When(
 		await $( 'form[name="login"] input[name="email"]' ).setValue( 'tester2@testare2.test' );
 		await $( 'form[name="login"] input[name="password"]' ).setValue( '12345678' );
 		let foundSubmitBtn = await $( 'form[name="login"] input[type="submit"]' );
+
 		await expect( foundSubmitBtn ).toBeTruthy();
 		await foundSubmitBtn.waitForClickable();
 		await foundSubmitBtn.click();
 		await $( "div.navbar div.login" ).waitForDisplayed( { reverse : true } );
+
+		await browser.pause( pauseTime );
 	}
 );
 
@@ -188,10 +196,15 @@ Then(
 	async () =>
 	{
 		let firstAuthLink = await $( 'div.register-and-login-links a' );
-		await firstAuthLink.waitUntil(
+		await firstAuthLink.waitUntil
+		(
 			async function ()
 			{
 				return ( await this.getAttribute( "href" ) === "/logout" );
+			},
+			{
+				timeout: timeOut,
+				timeoutMsg: "Reached timeout when wating for element"
 			}
 		);
 		await firstAuthLink.waitForClickable();
@@ -220,19 +233,17 @@ When(
 	"I click on the 'Logout' link",
 	async () =>
 	{
-		let authLinkElms = await $$( '.register-and-login-links a' );
-		let foundLogoutLinkElm;
-		for ( let aLinkElm of authLinkElms )
-		{
-			if ( ( await aLinkElm.getAttribute( 'href' ) ) === '/logout' )
+		let firstAuthLink = await $( 'div.register-and-login-links a' );
+		await firstAuthLink.waitUntil
+		(
+			async function ()
 			{
-				foundLogoutLinkElm = aLinkElm;
+				return ( await this.getAttribute( "href" ) === "/logout" );
 			}
-		}
+		);
+		await firstAuthLink.waitForClickable();
+		await firstAuthLink.click();
 
-		await expect( foundLogoutLinkElm ).toBeTruthy();
-		await foundLogoutLinkElm.waitForClickable();
-		await foundLogoutLinkElm.click();
 		await browser.pause( pauseTime );
 	}
 );
@@ -243,8 +254,10 @@ Then(
 	async () =>
 	{
 		let authLinkElms = await $$( '.register-and-login-links a' );
+
 		await expect( authLinkElms[ 0 ] ).toHaveHref( '/register' );
 		await expect( authLinkElms[ 1 ] ).toHaveHref( '/login' );
+
 		await browser.pause( pauseTime );
 	}
 );
