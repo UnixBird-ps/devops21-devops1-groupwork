@@ -9,7 +9,7 @@ module.exports = function (app, runQuery, db) {
 		let userId = req.session.user?.id;
 
 		runQuery('my-orders', req, res, { customerId: userId }, `
-		SELECT orderId, orderDate, name, quantity FROM orderDetails WHERE customerId = :customerId
+		SELECT * FROM orderDetails WHERE customerId = :customerId
 		`);
 
 	});
