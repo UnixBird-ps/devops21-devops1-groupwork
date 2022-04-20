@@ -114,7 +114,7 @@ Then(
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
-        await expect($('body')).toHaveTextContaining('Total: 368,68 kr');
+        await expect($('body')).toHaveTextContaining('Total: 369,63 kr');
 	}
 );
 

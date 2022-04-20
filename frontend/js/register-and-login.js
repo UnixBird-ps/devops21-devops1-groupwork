@@ -11,6 +11,11 @@ async function getLogInfo()
 
 	if ( loggedIn && loggedIn.userRole !== 'superadmin' ) new ProductList();
 
+	if ( loggedIn && loggedIn.userRole === "user" )
+		document.myOrdersList = new MyOrdersList();
+	else
+		document.myOrdersList = null;
+
 	if ( !loggedIn || loggedIn.error )
 	{
 		div.innerHTML = `
@@ -20,10 +25,10 @@ async function getLogInfo()
 	}
 	else
 	{
-		div.innerHTML = `
-			Logged in as ${loggedIn.firstName} ${loggedIn.lastName}
-			<a href="/logout">Logout</a>
-		`;
+		div.innerHTML = `Logged in as ${loggedIn.firstName} ${loggedIn.lastName}`;
+		if ( loggedIn.userRole === "user" ) div.innerHTML += ' <a href="/my-orders">My orders</a>';
+		div.innerHTML += ' <a href="/logout">Logout</a>';
+
 		start( loggedIn?.userRole );
 	}
 }
@@ -31,18 +36,31 @@ async function getLogInfo()
 getLogInfo();
 
 
-document.querySelector('body').addEventListener('click', async (event) => {
+document.querySelector('body').addEventListener
+(
+	'click',
+	async (event) =>
+	{
+		if ( event.target.closest( 'a[href="/my-orders"]' ) )
+		{
+			event.preventDefault();
 
-  if (!event.target.closest('a[href="/logout"]')) { return; }
+			let lFirstLink = document.querySelector( '.register-and-login-links a' );
+			lFirstLink.outerHTML = '<a href="/">Home</a>';
 
-  event.preventDefault();
+			grabEl( "main" ).innerHTML = document.myOrdersList.render();
+		}
 
-  let result;
-  try {
-    result = await (await fetch('/api/login', { method: 'DELETE' })).json();
-  }
-  catch (ignore) { }
+		if ( !event.target.closest( 'a[href="/logout"]' ) ) { return; }
 
-  location.reload();
+		event.preventDefault();
 
-});
+		let result;
+		try {
+			result = await (await fetch('/api/login', { method: 'DELETE' })).json();
+		}
+		catch (ignore) { }
+
+		location.reload();
+	}
+);
