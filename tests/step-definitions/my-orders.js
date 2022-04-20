@@ -35,9 +35,6 @@ Given(
 		await lSubmitBtn.waitForClickable();
 		await lSubmitBtn.click();
 
-		// let foundLoggedInAsElm = await $( "div.register-and-login-links" );
-		// await expect( await foundLoggedInAsElm.getHTML( false ) ).toContain( "Logged in as Tester" );
-
 		await lLinksContainer.waitUntil
 		(
 			async function ()
@@ -47,8 +44,8 @@ Given(
 				return lHTML.includes( "Logged in as " );
 			},
 			{
-				timeout : 20000,
-				timeoutMsg: "Reached a 20 seconds timeout waiting for the div element 'register-and-login' to contain the string 'Logged in as'"
+				timeout : timeOut,
+				timeoutMsg: `Reached a ${ timeOut } ms timeout waiting for the div element 'register-and-login' to contain the string 'Logged in as'`
 			}
 		);
 

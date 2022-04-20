@@ -175,7 +175,7 @@ When(
 	"I enter my login info and click on the submit button",
 	async () =>
 	{
-		await $( 'form[name="login"] input[name="email"]' ).setValue( 'tester2@testare2.test' );
+		await $( 'form[name="login"] input[name="email"]' ).setValue( 'tester@testare.test' );
 		await $( 'form[name="login"] input[name="password"]' ).setValue( '12345678' );
 		let foundSubmitBtn = await $( 'form[name="login"] input[type="submit"]' );
 
@@ -194,19 +194,21 @@ Then(
 	"the page should inform me that the login was successful",
 	async () =>
 	{
-		let firstAuthLink = await $( 'div.register-and-login-links a' );
-		await firstAuthLink.waitUntil
+		let secondAuthLink;
+		let authLinksContainer = await $( '.register-and-login-links' );
+		await authLinksContainer.waitUntil
 		(
 			async function ()
 			{
-				return ( await this.getAttribute( "href" ) === "/logout" );
+				secondAuthLink = await this.$$( "a" )[ 1 ];
+				return ( await secondAuthLink.getAttribute( "href" ) === "/logout" );
 			},
 			{
 				timeout: timeOut,
 				timeoutMsg: "Reached timeout when waiting for element"
 			}
 		);
-		await firstAuthLink.waitForClickable();
+		await secondAuthLink.waitForClickable();
 
 		let foundLoggedInAsElm = await $( "div.register-and-login-links" );
 		await expect( foundLoggedInAsElm ).toBeTruthy();
@@ -232,16 +234,19 @@ When(
 	"I click on the 'Logout' link",
 	async () =>
 	{
-		let firstAuthLink = await $( 'div.register-and-login-links a' );
-		await firstAuthLink.waitUntil
+		let secondAuthLink;
+		let authLinksContainer = await $( '.register-and-login-links' );
+		await authLinksContainer.waitUntil
 		(
 			async function ()
 			{
-				return ( await this.getAttribute( "href" ) === "/logout" );
+				secondAuthLink = await this.$$( "a" )[ 1 ];
+				return ( await secondAuthLink.getAttribute( "href" ) === "/logout" );
 			}
 		);
-		await firstAuthLink.waitForClickable();
-		await firstAuthLink.click();
+
+		await secondAuthLink.waitForClickable();
+		await secondAuthLink.click();
 
 		await browser.pause( pauseTime );
 	}
