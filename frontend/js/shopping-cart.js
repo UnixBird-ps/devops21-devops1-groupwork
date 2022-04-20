@@ -76,6 +76,7 @@ class ShoppingCart {
 		  	let shoppingCart = grabEl('.shoppingCart')
 			this.addOrders();
 			console.log(shoppingCart);
+			grabEl('.shoppingCart').style.display = 'none';
 			return;
 		});
 	}
