@@ -45,6 +45,10 @@ Given(
 				let lHTML = await this.getHTML( false );
 				console.log( lHTML );
 				return lHTML.includes( "Logged in as " );
+			},
+			{
+				timeout : 20000,
+				timeoutMsg: "Reached a 20 seconds timeout waiting for the div element 'register-and-login' to contain the string 'Logged in as'"
 			}
 		);
 

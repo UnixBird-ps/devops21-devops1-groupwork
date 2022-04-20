@@ -203,7 +203,7 @@ Then(
 			},
 			{
 				timeout: timeOut,
-				timeoutMsg: "Reached timeout when wating for element"
+				timeoutMsg: "Reached timeout when waiting for element"
 			}
 		);
 		await firstAuthLink.waitForClickable();
