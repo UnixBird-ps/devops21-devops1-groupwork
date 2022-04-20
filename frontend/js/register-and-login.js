@@ -11,6 +11,11 @@ async function getLogInfo()
 
 	if ( loggedIn && loggedIn.userRole !== 'superadmin' ) new ProductList();
 
+	if ( loggedIn && loggedIn.userRole === "user" )
+		document.myOrdersList = new MyOrdersList();
+	else
+		document.myOrdersList = null;
+
 	if ( !loggedIn || loggedIn.error )
 	{
 		div.innerHTML = `
@@ -20,11 +25,10 @@ async function getLogInfo()
 	}
 	else
 	{
-		div.innerHTML = `
-			Logged in as ${loggedIn.firstName} ${loggedIn.lastName}
-			<a href="/my-orders">My orders</a>
-			<a href="/logout">Logout</a>
-		`;
+		div.innerHTML = `Logged in as ${loggedIn.firstName} ${loggedIn.lastName}`;
+		if ( loggedIn.userRole === "user" ) div.innerHTML += ' <a href="/my-orders">My orders</a>';
+		div.innerHTML += ' <a href="/logout">Logout</a>';
+
 		start( loggedIn?.userRole );
 	}
 }
@@ -44,52 +48,7 @@ document.querySelector('body').addEventListener
 			let lFirstLink = document.querySelector( '.register-and-login-links a' );
 			lFirstLink.outerHTML = '<a href="/">Home</a>';
 
-			// read the json data
-			let rawData = await fetch( '/api/my-orders' );
-			// convert from json to a JavaScript data structure
-			// data will be an array of generic objects
-			let data = await rawData.json();
-
-			let lProducts = [];
-			// loop through the data we fetched from json
-			for ( let element of data )
-			{
-				lProducts.push
-				(
-					{
-						"Order" : element.orderId,
-						"Date" : element.orderDate,
-						"Product" : element.name,
-						"Quantity" : element.quantity
-					}
-				);
-			}
-			let lLabels = [ "Order", "Date", "Product", "Quantity" ];
-
-			let html = "";
-			html += "<table name='my-orders'>";
-			if ( lProducts.length > 0 )
-				html += "<caption>My Orders</caption>";
-			else
-				html += "<caption>No orders yet.</caption>";
-
-			html += "<thead>";
-			html += "<tr>";
-			for ( let lLabel of lLabels ) html += "<td>" + lLabel + "</td>";
-			html +="</tr>";
-			html += "</thead>";
-			html += "<tbody>";
-			for ( let product of lProducts )
-			{
-				html += "<tr>";
-				for ( let lVal of Object.values( product ) ) html += "<td>" + lVal + "</td>";
-				html +="</tr>";
-			}
-			html += "</tbody>";
-
-			html += "</table>";
-
-			grabEl( "main" ).innerHTML = html;
+			grabEl( "main" ).innerHTML = document.myOrdersList.render();
 		}
 
 		if ( !event.target.closest( 'a[href="/logout"]' ) ) { return; }
