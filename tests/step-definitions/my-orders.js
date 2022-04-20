@@ -28,7 +28,7 @@ Given(
 		await browser.pause( pauseTime );
 
 		await $( "form[name='login']" ).waitForDisplayed();
-		await $( 'form[name="login"] input[name="email"]' ).setValue( 'tester2@testare2.test' );
+		await $( 'form[name="login"] input[name="email"]' ).setValue( 'tester@testare.test' );
 		await $( 'form[name="login"] input[name="password"]' ).setValue( '12345678' );
 		let lSubmitBtn = await $( 'form[name="login"] input[type="submit"]' );
 
