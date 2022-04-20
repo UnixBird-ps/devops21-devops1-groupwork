@@ -34,7 +34,8 @@ Given(
 
 		await lSubmitBtn.waitForClickable();
 		await lSubmitBtn.click();
-		await $( "div.navbar div.login" ).waitForDisplayed( { reverse : true, timeout : timeOut } );
+		const lLoginForm = await $( 'form[name="login"]' );
+		await lLoginForm.waitForDisplayed( { reverse : true, timeout : timeOut } )
 
 		let foundLoggedInAsElm = await $( "div.register-and-login-links" );
 		await expect( await foundLoggedInAsElm.getHTML( false ) ).toContain( "Logged in as Tester" );
