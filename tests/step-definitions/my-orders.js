@@ -1,6 +1,6 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
 const pauseTime = 1000;
-const timeOut = 2000;
+const timeOut = 5000;
 
 // Empty templates at the end
 
@@ -34,7 +34,7 @@ Given(
 
 		await lSubmitBtn.waitForClickable();
 		await lSubmitBtn.click();
-		await $( "div.navbar div.login" ).waitForDisplayed( { reverse : true } );
+		await $( "div.navbar div.login" ).waitForDisplayed( { reverse : true, timeout : timeOut } );
 
 		let foundLoggedInAsElm = await $( "div.register-and-login-links" );
 		await expect( await foundLoggedInAsElm.getHTML( false ) ).toContain( "Logged in as Tester" );
