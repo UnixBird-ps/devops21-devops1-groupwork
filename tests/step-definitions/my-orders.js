@@ -42,7 +42,9 @@ Given(
 		(
 			async function ()
 			{
-				return ( await this.getText() ).includes( "Logged in as Tester" );
+				let lHTML = await this.getHTML( false );
+				console.log( lHTML );
+				return lHTML.includes( "Logged in as " );
 			}
 		);
 
