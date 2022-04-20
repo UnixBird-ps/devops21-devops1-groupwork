@@ -21,26 +21,43 @@ class MyOrdersList
 
 		// create a new property called mMyOrders
 		this.mMyOrders = [];
-		// Loop through the data we fetched and populate our 
-		for ( let iRowItem of lData )
+		// Loop through the data we fetched and populate our
+
+		while ( lData.length > 0 )
 		{
+			let lDataIter = 0;
+			let lOrderId = lData[ lDataIter ].orderId;
+			let lOrderDate = lData[ lDataIter ].orderDate;
+			let lOrderCost = 0;
+
+			let lSameOrderRows = lData.filter( v => v.orderId == lOrderId );
+
+			for ( let e of lSameOrderRows ) lOrderCost += e.price * e.quantity;
+
+			lData = lData.filter( v => v.orderId != lOrderId );
+
 			this.mMyOrders.push
 			(
 				{
-					"Order" : iRowItem.orderId,
-					"Date" : iRowItem.orderDate,
-					"Product" : iRowItem.name,
-					"Quantity" : iRowItem.quantity
+					order : lOrderId,
+					date : lOrderDate,
+					cost : lOrderCost
 				}
 			);
 		}
 	}
 
 
+	formatSEK( number )
+	{
+		return new Intl.NumberFormat( 'sv-SE', { style: 'currency', currency: 'SEK' } ).format( number );
+	}
+
+
 	// Render list of orders
 	render()
 	{
-		let lLabels = [ "Order", "Date", "Product", "Quantity" ];
+		let lLabels = [ "Order#", "Date", "Total" ];
 
 		let html = "";
 		html += "<table name='my-orders'>";
@@ -58,7 +75,9 @@ class MyOrdersList
 		for ( let iOrderRow of this.mMyOrders )
 		{
 			html += "<tr>";
-			for ( let lVal of Object.values( iOrderRow ) ) html += "<td>" + lVal + "</td>";
+			html += "<td>" + iOrderRow.order + "</td>";
+			html += "<td>" + iOrderRow.date + "</td>";
+			html += "<td>" + iOrderRow.cost + "</td>";
 			html +="</tr>";
 		}
 		html += "</tbody>";
