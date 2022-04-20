@@ -13,7 +13,7 @@ Given(
 		await browser.pause( pauseTime );
 
 		let lSecondAuthLink;
-		let lLinksContainer = await $( '.register-and-login-links' );
+		let lLinksContainer = await $( 'div.register-and-login-links' );
 		await lLinksContainer.waitUntil
 		(
 			async function ()
@@ -35,8 +35,16 @@ Given(
 		await lSubmitBtn.waitForClickable();
 		await lSubmitBtn.click();
 
-		let foundLoggedInAsElm = await $( "div.register-and-login-links" );
-		await expect( await foundLoggedInAsElm.getHTML( false ) ).toContain( "Logged in as Tester" );
+		// let foundLoggedInAsElm = await $( "div.register-and-login-links" );
+		// await expect( await foundLoggedInAsElm.getHTML( false ) ).toContain( "Logged in as Tester" );
+
+		await lLinksContainer.waitUntil
+		(
+			async function ()
+			{
+				return ( await this.getText() ).includes( "Logged in as Tester" );
+			}
+		);
 
 		await browser.pause( pauseTime );
 	}
