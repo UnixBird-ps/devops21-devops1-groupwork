@@ -40,7 +40,7 @@ class MyOrdersList
 	// Render list of orders
 	render()
 	{
-		let lLabels = [ "Order", "Date", "Product", "Quantity" ];
+		let lLabels = [ "Order#", "Date", "Total" ];
 
 		let html = "";
 		html += "<table name='my-orders'>";
