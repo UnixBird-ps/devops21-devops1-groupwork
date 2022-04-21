@@ -4,6 +4,7 @@ class ShoppingCart {
   constructor() {
     this.addOrderButtonEvent();
 	this.addCancelButtonEvent();
+	this.addDelTableRowEvent();
   }
 
   orderRows = [];
@@ -54,7 +55,8 @@ class ShoppingCart {
 			let rowSum =
 			orderRow.quantity * orderRow.product.price;
 			html += `
-			<tr>
+			<tr class="tableRow" id="${orderRow.product.id}">
+				<td><button class="delCartWare">X</button></td>
 				<td>${ orderRow.quantity }</td>
 				<td>${ orderRow.product.name }</td>
 				<td>${ this.formatSEK( orderRow.product.price ) }</td>
@@ -73,6 +75,27 @@ class ShoppingCart {
 		<button class="orderButton">Order</button></div>`;
 		html += '</div>';
 		return html;
+	}
+
+	addDelTableRowEvent(){
+		listen('click', '.delCartWare', event =>{
+			let rowElement = event.target.closest('.tableRow, .product');
+			let rowId = +rowElement.getAttribute('id');
+			//alert('AAAA');
+			let index = 0;
+			for(let nOrder in this.orderRows){
+				if(rowId === this.orderRows[nOrder].product.id){
+					this.orderRows.splice(index, 1);
+				}
+				index ++;
+			}
+			if(this.orderRows.length === 0){
+				grabEl('.cartContainer').style.display = 'none';
+			}else{
+				document.querySelector('footer').innerHTML = this.render();
+			}
+			return;
+		});
 	}
 
 	addOrderButtonEvent() {
