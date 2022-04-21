@@ -20,6 +20,7 @@ div.container
 	padding-top: 30px;
 	padding-left: 5px;
 	padding-right: 5px;
+	z-index: -1;
 }
 
 .modal-hider {
@@ -83,6 +84,7 @@ th.number, td.number {
 form {
 	margin-bottom: 100px;
 	max-width: 500px;
+	z-index: 2;
 }
 
 input[type="text"], input[type="password"], input[type="email"] {

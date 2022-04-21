@@ -43,18 +43,20 @@ class ProductList {
     grabEl('main').innerHTML = this.render();
   }
 
-  // Render a list of products
-  render() {
-    // Create the variable html - an empty string
-    let html = '';
-    // Loop through all products and add the html
-    // for each product to the html variable
-    for (let product of this.products) {
-      html += product.renderInList();
-    }
-    // Return html for all the products
-    return html;
-  }
+	// Render a list of products
+	render()
+	{
+		// Create the variable html - an empty string
+		let html = "";
+		html += "<p>Click on a product name to see product details.</p>";
+		// Loop through all products and add the html
+		// for each product to the html variable
+		for (let product of this.products) {
+		html += product.renderInList();
+		}
+		// Return html for all the products
+		return html;
+	}
 
   addEventListeners() {
 

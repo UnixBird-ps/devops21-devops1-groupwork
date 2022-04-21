@@ -1,8 +1,8 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
-const pauseTime = 500;
-const timeOut = 10000;
+const pauseTime = 0;
+const timeOut = 5000;
 
-// Placed empty templates at the end
+// Empty templates at the end
 
 
 Given(
@@ -163,7 +163,6 @@ Given(
 			}
 		);
 
-		await expect( secondAuthLink ).toBeTruthy();
 		await secondAuthLink.waitForClickable();
 		await secondAuthLink.click();
 
@@ -176,7 +175,7 @@ When(
 	"I enter my login info and click on the submit button",
 	async () =>
 	{
-		await $( 'form[name="login"] input[name="email"]' ).setValue( 'tester2@testare2.test' );
+		await $( 'form[name="login"] input[name="email"]' ).setValue( 'tester@testare.test' );
 		await $( 'form[name="login"] input[name="password"]' ).setValue( '12345678' );
 		let foundSubmitBtn = await $( 'form[name="login"] input[type="submit"]' );
 
@@ -195,19 +194,21 @@ Then(
 	"the page should inform me that the login was successful",
 	async () =>
 	{
-		let firstAuthLink = await $( 'div.register-and-login-links a' );
-		await firstAuthLink.waitUntil
+		let secondAuthLink;
+		let authLinksContainer = await $( '.register-and-login-links' );
+		await authLinksContainer.waitUntil
 		(
 			async function ()
 			{
-				return ( await this.getAttribute( "href" ) === "/logout" );
+				secondAuthLink = await this.$$( "a" )[ 1 ];
+				return ( await secondAuthLink.getAttribute( "href" ) === "/logout" );
 			},
 			{
 				timeout: timeOut,
-				timeoutMsg: "Reached timeout when wating for element"
+				timeoutMsg: "Reached timeout when waiting for element"
 			}
 		);
-		await firstAuthLink.waitForClickable();
+		await secondAuthLink.waitForClickable();
 
 		let foundLoggedInAsElm = await $( "div.register-and-login-links" );
 		await expect( foundLoggedInAsElm ).toBeTruthy();
@@ -233,16 +234,19 @@ When(
 	"I click on the 'Logout' link",
 	async () =>
 	{
-		let firstAuthLink = await $( 'div.register-and-login-links a' );
-		await firstAuthLink.waitUntil
+		let secondAuthLink;
+		let authLinksContainer = await $( '.register-and-login-links' );
+		await authLinksContainer.waitUntil
 		(
 			async function ()
 			{
-				return ( await this.getAttribute( "href" ) === "/logout" );
+				secondAuthLink = await this.$$( "a" )[ 1 ];
+				return ( await secondAuthLink.getAttribute( "href" ) === "/logout" );
 			}
 		);
-		await firstAuthLink.waitForClickable();
-		await firstAuthLink.click();
+
+		await secondAuthLink.waitForClickable();
+		await secondAuthLink.click();
 
 		await browser.pause( pauseTime );
 	}
@@ -253,10 +257,20 @@ Then(
 	"the page should inform me that I was signed off",
 	async () =>
 	{
-		let authLinkElms = await $$( '.register-and-login-links a' );
+		// let authLinkElms = await $$( '.register-and-login-links a' );
 
-		await expect( authLinkElms[ 0 ] ).toHaveHref( '/register' );
-		await expect( authLinkElms[ 1 ] ).toHaveHref( '/login' );
+		// await expect( authLinkElms[ 0 ] ).toHaveHref( '/register' );
+		// await expect( authLinkElms[ 1 ] ).toHaveHref( '/login' );
+
+		let lLinksContainer = await $( 'div.register-and-login-links' );
+		await lLinksContainer.waitUntil
+		(
+			async function ()
+			{
+				let lSecondAuthLink = await this.$$( "a" )[ 1 ];
+				return ( lSecondAuthLink && await lSecondAuthLink.getAttribute( "href" ) === "/login" );
+			}
+		);
 
 		await browser.pause( pauseTime );
 	}

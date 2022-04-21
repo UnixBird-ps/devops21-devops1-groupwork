@@ -52,8 +52,7 @@ class ShoppingCart {
 		html += '<table class="shoppingCart">';
 		let totalSum = 0;
 		for (let orderRow of this.orderRows) {
-			let rowSum =
-			orderRow.quantity * orderRow.product.price;
+			let rowSum = orderRow.quantity * orderRow.product.price;
 			html += `
 			<tr class="tableRow" id="${orderRow.product.id}">
 				<td><button class="delCartWare">X</button></td>
