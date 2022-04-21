@@ -22,6 +22,9 @@
     "my-orders": {
       "get": true
     },
+    "my-order-details": {
+      "get": true
+    },
     "edit-my-user-info": {
       "put": true
     },

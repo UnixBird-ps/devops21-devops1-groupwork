@@ -23,28 +23,30 @@ class MyOrdersList
 		this.mMyOrders = [];
 		// Loop through the data we fetched and populate our
 
-		while ( lData.length > 0 )
-		{
-			let lDataIter = 0;
-			let lOrderId = lData[ lDataIter ].orderId;
-			let lOrderDate = lData[ lDataIter ].orderDate;
-			let lOrderCost = 0;
+		// while ( lData.length > 0 )
+		// {
+		// 	let lDataIter = 0;
+		// 	let lOrderId = lData[ lDataIter ].orderId;
+		// 	let lOrderDate = lData[ lDataIter ].orderDate;
+		// 	let lOrderCost = 0;
 
-			let lSameOrderRows = lData.filter( v => v.orderId == lOrderId );
+		// 	let lSameOrderRows = lData.filter( v => v.orderId == lOrderId );
 
-			for ( let e of lSameOrderRows ) lOrderCost += e.price * e.quantity;
+		// 	for ( let e of lSameOrderRows ) lOrderCost += e.price * e.quantity;
 
-			lData = lData.filter( v => v.orderId != lOrderId );
+		// 	lData = lData.filter( v => v.orderId != lOrderId );
 
-			this.mMyOrders.push
-			(
-				{
-					order : lOrderId,
-					date : lOrderDate,
-					cost : lOrderCost
-				}
-			);
-		}
+		// 	this.mMyOrders.push
+		// 	(
+		// 		{
+		// 			order : lOrderId,
+		// 			date : lOrderDate,
+		// 			cost : lOrderCost
+		// 		}
+		// 	);
+		// }
+
+		for ( let lOrder of lData ) this.mMyOrders.push( lOrder );
 	}
 
 
@@ -75,9 +77,9 @@ class MyOrdersList
 		for ( let iOrderRow of this.mMyOrders )
 		{
 			html += "<tr>";
-			html += "<td>" + iOrderRow.order + "</td>";
+			html += "<td>" + iOrderRow.id + "</td>";
 			html += "<td>" + iOrderRow.date + "</td>";
-			html += "<td>" + iOrderRow.cost + "</td>";
+			html += "<td>" + this.formatSEK( iOrderRow.grandTotal ) + "</td>";
 			html +="</tr>";
 		}
 		html += "</tbody>";
