@@ -13,7 +13,7 @@ function debugMsg( ...pMsg )
 {
 	console.log( "DEBUG at:", ( new Error().stack.split( "at " )[ 2 ] ).trim() );
 	let lMsg = "";
-	for ( s of [ ...pMsg ] ) lMsg += s;
+	for ( s of [ ...pMsg ] ) lMsg += JSON.stringify( s );
 	console.log( lMsg );
 }
 

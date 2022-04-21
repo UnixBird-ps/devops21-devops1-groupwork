@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d0c85a82-067d-47dc-b105-e5fbc7a1c993",
+		"_postman_id": "4e5b3399-0aa5-4c46-a453-111bc3dabcfc",
 		"name": "rest-api-test",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -761,6 +761,8 @@
 							"\r",
 							"let responseJSON = pm.response.json();\r",
 							"\r",
+							"console.log( responseJSON );\r",
+							"\r",
 							"pm.variables.set( \"lastOrderId\", responseJSON.lastInsertRowid );\r",
 							"\r",
 							"\r",
@@ -779,7 +781,8 @@
 							"\t\"Check that the order was confirmed in the JSON of the response\",\r",
 							"\tfunction()\r",
 							"\t{\r",
-							"\t\tpm.expect( responseJSON.status ).to.equal( \"Was accepted\" );\r",
+							"\t\tpm.expect( responseJSON ).to.have.property( \"status\" );\r",
+							"\t\tpm.expect( responseJSON.status ).to.include( \" was accepted\" );\r",
 							"\t}\r",
 							");\r",
 							""
@@ -795,7 +798,7 @@
 							"// Create mock data if not exist\r",
 							"let mockOrder =\r",
 							"[\r",
-							"\t{ productId : 20, quantity : 2 },\r",
+							"\t{ productId : 20, quantity : 1 },\r",
 							"\t{ productId :  1, quantity : 3 }\r",
 							"];\r",
 							"\r",
@@ -845,6 +848,8 @@
 						"exec": [
 							"\r",
 							"console.log( '1 of 1' );\r",
+							"\r",
+							"if ( !pm.variables.get( \"lastOrderId\" ) ) pm.variables.set( \"lastOrderId\", 48 );\r",
 							""
 						],
 						"type": "text/javascript"
@@ -858,11 +863,13 @@
 							"let lastOrderId = pm.variables.get( \"lastOrderId\" );\r",
 							"\r",
 							"let responseJSON = pm.response.json();\r",
+							"console.log( responseJSON );\r",
 							"\r",
 							"responseJSON2 = responseJSON.filter( x => x.orderId == lastOrderId );\r",
+							"console.log( responseJSON2 );\r",
 							"\r",
 							"let lTotalItems = 0;\r",
-							"for ( x of responseJSON2 ) { lTotalItems += x.quantity; }\r",
+							"for ( x of responseJSON ) { lTotalItems += x.quantity; }\r",
 							"\r",
 							"\r",
 							"// The tests\r",
@@ -880,17 +887,17 @@
 							"\t\"Check that an order's length is 2\",\r",
 							"\tfunction()\r",
 							"\t{\r",
-							"\t\tpm.expect( responseJSON2 ).to.be.an( 'array' );\r",
-							"\t\tpm.expect( responseJSON2 ).to.have.lengthOf( 2 );\r",
+							"\t\tpm.expect( responseJSON ).to.be.an( 'array' );\r",
+							"\t\tpm.expect( responseJSON ).to.have.lengthOf( 2 );\r",
 							"\t}\r",
 							");\r",
 							"\r",
 							"\r",
 							"pm.test(\r",
-							"\t`Check that an order's total size is 5 }`,\r",
+							"\t`Check that an order's total size is 4 }`,\r",
 							"\tfunction()\r",
 							"\t{\r",
-							"\t\tpm.expect( lTotalItems ).to.equal( 5 );\r",
+							"\t\tpm.expect( lTotalItems ).to.equal( 4 );\r",
 							"\t}\r",
 							");\r",
 							""
@@ -903,7 +910,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/api/my-orders",
+					"raw": "http://localhost:3000/api/my-order-details/{{lastOrderId}}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -911,7 +918,8 @@
 					"port": "3000",
 					"path": [
 						"api",
-						"my-orders"
+						"my-order-details",
+						"{{lastOrderId}}"
 					]
 				}
 			},
