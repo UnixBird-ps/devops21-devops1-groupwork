@@ -47,7 +47,8 @@ class ShoppingCart {
 	{
 		// create a html table where we display
 		// the order rows of the shopping cart
-		let html = '<table class="shoppingCart">';
+		let html = '<div class="cartContainer">'
+		html += '<table class="shoppingCart">';
 		let totalSum = 0;
 		for (let orderRow of this.orderRows) {
 			let rowSum =
@@ -66,10 +67,11 @@ class ShoppingCart {
 		html += `<tr>
 			<td colspan="3">Total:</td>
 			<td>${this.formatSEK(totalSum)}</td>
-			<td><button class="cancelButton">Cancel</button>
-			<button class="orderButton">Order</button></td>
 		</tr>`;
 		html += '</table>';
+		html += `<div class="cartButtons"><button class="cancelButton">Cancel</button>
+		<button class="orderButton">Order</button></div>`;
+		html += '</div>';
 		return html;
 	}
 
@@ -78,7 +80,7 @@ class ShoppingCart {
 		  	let shoppingCart = grabEl('.shoppingCart')
 			this.addOrders();
 			console.log(shoppingCart);
-			grabEl('.shoppingCart').style.display = 'none';
+			grabEl('.cartContainer').style.display = 'none';
 			return;
 		});
 	}
@@ -86,7 +88,7 @@ class ShoppingCart {
 	addCancelButtonEvent() {
 		listen('click', '.cancelButton',()=>{
 			this.orderRows = [];
-			grabEl('.shoppingCart').style.display = 'none';
+			grabEl('.cartContainer').style.display = 'none';
 			return;
 		});
 	}
