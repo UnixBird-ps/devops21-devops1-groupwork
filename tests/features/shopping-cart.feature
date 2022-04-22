@@ -11,9 +11,9 @@ Feature: Shopping Cart
 	Scenario: Adding more products to shopping cart
 		Given that I already have added "Bath sponge - Green, 15x10x5" in my shopping cart
 		When I add "Star Wars: Episode IV - A New Hope" to my shopping cart
-		Then add "Star Wars: Episode IV - A New Hope" to shopping cart and show total sum
+		Then "Star Wars: Episode IV - A New Hope" is added to the shopping cart and total sum is displayed
 
     Scenario: Adding more quantity of previous product
 		Given that I already have "Bath sponge - Green, 15x10x5" in my shopping cart
 		When I add "Bath sponge - Green, 15x10x5" product to my shopping cart again
-		Then increase quantity of "Bath sponge - Green, 15x10x5" without adding a new product
+		Then the quantity of "Bath sponge - Green, 15x10x5" is increased without adding a new product

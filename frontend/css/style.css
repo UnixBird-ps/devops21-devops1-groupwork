@@ -20,6 +20,7 @@ div.container
 	padding-top: 30px;
 	padding-left: 5px;
 	padding-right: 5px;
+	z-index: -1;
 }
 
 .modal-hider {
@@ -45,8 +46,8 @@ div.container
 	padding-left: 5px;
 	padding-right: 5px;
 	background-color: white;
-display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 table {
@@ -83,6 +84,7 @@ th.number, td.number {
 form {
 	margin-bottom: 100px;
 	max-width: 500px;
+	z-index: 2;
 }
 
 input[type="text"], input[type="password"], input[type="email"] {
@@ -195,9 +197,7 @@ p
 }
 
 .shoppingCart {
-	position: fixed;
-	right: 20px;
-	top: 30px;
+	position: relative;
 	background-color: #eee;
 	border-radius: 10px;
 	padding: 20px;
@@ -215,4 +215,24 @@ p
 .shoppingCart tr:last-child {
 	padding-top: 10px;
 	font-weight: bold;
+}
+
+.cartContainer{
+	background-color: whitesmoke;
+	position: fixed;
+	right: 5px;
+	top: 30px;
+	border-radius: 10px;
+	padding-top: 1%;
+	padding-bottom: 25px;
+	padding-right: 1%;
+	padding-left: 1%;
+	display: inline-table;
+}
+
+.cartButtons {
+	position:inherit;
+	contain: content;
+	padding-top: 1px;
+	right: 1.5%;
 }

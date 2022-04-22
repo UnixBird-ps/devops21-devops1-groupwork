@@ -61,18 +61,20 @@ document.querySelector( 'body' ).addEventListener(
 );
 
 
-document.querySelector( 'body' ).addEventListener( 'click', ( event ) =>
-{
+document.querySelector( 'body' ).addEventListener(
+	'click',
+	( event ) =>
+	{
+		if ( !event.target.closest( 'a[href="/login"]' ) ) { return; }
 
-  if ( !event.target.closest( 'a[href="/login"]' ) ) { return; }
+		event.preventDefault();
 
-  event.preventDefault();
-
-  let loginDiv = document.querySelector( '.login' );
-  loginDiv.innerHTML = renderLoginForm();
-  loginDiv.classList.remove( 'hidden' );
-  document.querySelector( '.modal-hider' ).classList.remove( 'hidden' );
-});
+		let loginDiv = document.querySelector( '.login' );
+		loginDiv.innerHTML = renderLoginForm();
+		loginDiv.classList.remove( 'hidden' );
+		document.querySelector( '.modal-hider' ).classList.remove( 'hidden' );
+	}
+);
 
 
 document.querySelector( 'body' ).addEventListener(
@@ -80,6 +82,12 @@ document.querySelector( 'body' ).addEventListener(
 	( event ) =>
 	{
 		if ( !event.target.closest( '.modal-hider' ) ) { return; }
+
+		let lElmsToEmpty = document.querySelectorAll( "div.register, div.login" );
+		for ( el of lElmsToEmpty )
+		{
+			el.innerHTML = "";
+		}
 
 		let elementsToHide = document.querySelectorAll( '.register, .login, .modal-hider' );
 

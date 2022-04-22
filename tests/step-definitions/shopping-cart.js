@@ -100,7 +100,7 @@ When(
 
 
 Then(
-	/^add "(.*)" to shopping cart and show total sum$/,
+	/^"(.*)" is added to the shopping cart and total sum is displayed$/,
 	async ( productName ) =>
 	{
 		let products = await $$( '.shoppingCart' );
@@ -114,7 +114,7 @@ Then(
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
-        await expect($('body')).toHaveTextContaining('Total: 368,68 kr');
+        await expect($('body')).toHaveTextContaining('Total: 369,63 kr');
 	}
 );
 
@@ -164,7 +164,7 @@ When(
 );
 
 Then(
-	/^increase quantity of "(.*)" without adding a new product$/,
+	/^the quantity of "(.*)" is increased without adding a new product$/,
 	async ( productName ) =>
 	{
 		let products = await $$( '.shoppingCart' );
