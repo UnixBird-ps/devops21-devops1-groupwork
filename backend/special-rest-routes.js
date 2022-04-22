@@ -23,9 +23,8 @@ module.exports = function (app, runQuery, db)
 		( req, res ) =>
 		{
 			let userId = req.session.user?.id;
-			debugMsg( "{ customerId: userId, ...req.params }:", { customerId: userId, ...req.params } );
 			runQuery( 'my-order-details', req, res, { customerId: userId, ...req.params },
-				`SELECT name, price, quantity, total FROM orderDetails WHERE customerId = :customerId AND id = :id`
+				`SELECT id, name, price, quantity, total FROM orderDetails WHERE customerId = :customerId AND id = :id`
 			);
 		}
 	);
