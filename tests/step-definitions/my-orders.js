@@ -1,4 +1,5 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
+const allureReporter = require('@wdio/allure-reporter').default;
 const pauseTime = 1000;
 const timeOut = 5000;
 
