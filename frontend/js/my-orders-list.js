@@ -6,31 +6,12 @@ class MyOrdersList
 		// create a new property called mMyOrders
 		this.mMyOrders = [];
 
-		this.readDataFromDb();
-
 		if ( !MyOrdersList.eventListenersAdded )
 		{
 			this.addEventListeners();
 		}
-
-		//this.render();
-
-		// // add some event listeners
-		// this.addEventListeners();
 	}
 
-
-	async readDataFromDb()
-	{
-		// Get data from backend
-		let lData = await ( await fetch( '/api/my-orders' ) ).json();
-
-		// create a new property called mMyOrders
-		this.mMyOrders.length = 0;
-
-		// Loop through the data we fetched and populate our
-		for ( let lOrder of lData ) this.mMyOrders.push( lOrder );
-	}
 
 
 	formatSEK( number )
@@ -75,30 +56,26 @@ class MyOrdersList
 
 	async fetchRender()
 	{
-		fetch( '/api/my-orders' )
+		let result = fetch( '/api/my-orders' )
 		.then
 		(
-			lRes =>
-			{
-				if ( !lRes.ok )
-				{
-					throw new Error( `HTTP error: ${ lRes.status } `);
-				}
-				return lRes.json();
-			}
-		).then
+			( lRes ) => lRes.json()
+		)
+		.then
 		(
-			lRes =>
+			( lRes ) =>
 			{
 				// create a new property called mMyOrders
 				this.mMyOrders.length = 0;
 
-				// Loop through the data we fetched and populate our
+				// Loop through the data we fetched and populate our list
 				for ( let lOrder of lRes ) this.mMyOrders.push( lOrder );
 
-				grabEl( 'main' ).innerHTML = this.render();
+				return this.render();
 			}
-		)
+		);
+
+		return await result;
 	}
 
 
@@ -109,7 +86,7 @@ class MyOrdersList
 		(
 			'click',
 			'.orderlist-row',
-			event =>
+			async event =>
 			{
 				// which product did the user click on?
 				let lOrderRowElement = event.target.closest( '.orderlist-row' );
@@ -121,11 +98,8 @@ class MyOrdersList
 				// by using the array method find
 				let lOrder = this.mMyOrders.find( o => o.id === id );
 
-				// let lOrderDetails = new MyOrderDetails( lOrder.id );
-				// grabEl( 'main' ).innerHTML = lOrderDetails.render();
+				grabEl( 'main' ).innerHTML = "<button class='backButton'>Back to My orders</button>" + ( await ( new MyOrderDetails( lOrder.id ) ).fetchRender() );
 
-				document.orderDetails = new MyOrderDetails( lOrder.id );
-				grabEl( 'main' ).innerHTML = "<button class='backButton'>Back to My orders</button>" + document.orderDetails.render();
 			}
 		);
 

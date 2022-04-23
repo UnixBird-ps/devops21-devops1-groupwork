@@ -48,7 +48,16 @@ document.querySelector('body').addEventListener
 			let lFirstLink = document.querySelector( '.register-and-login-links a' );
 			lFirstLink.outerHTML = '<a href="/">Home</a>';
 
-			await ( new MyOrdersList() ).fetchRender();
+			//let html = await ( new MyOrdersList() ).fetchRender();
+			//console.log ( html );
+			( new MyOrdersList() ).fetchRender()
+			.then
+			(
+				( lRes ) =>
+				{
+					grabEl( 'main' ).innerHTML = lRes
+				}
+			)
 		}
 
 		if ( event.target.closest( 'a[href="/"]' ) )

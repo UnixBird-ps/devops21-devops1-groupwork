@@ -6,35 +6,6 @@ class MyOrderDetails
 		this.mOrderId = pOrderId;
 
 		this.mOrderDetails = [];
-
-		// // create a new property called mMyOrders
-		// this.mOrderDetails =
-		// [
-		// 	{ id : 1, name :        "Soap",  price :  9.95,  quantity: 2, total : 19.90  },
-		// 	{ id : 2, name : "Conditioner",  price : 12.95,  quantity: 1, total : 12.95 }
-		// ];
-
-		this.readDataFromDb();
-
-		//debugMsg( "this.mOrderDetails:\n", this.mOrderDetails );
-
-		// // add some event listeners
-		// this.addEventListeners();
-	}
-
-
-	async readDataFromDb()
-	{
-		this.mOrderDetails.length = 0;// = [];
-
-		// Get data from backend
-		let lData = await ( await fetch( '/api/my-order-details/' + this.mOrderId ) ).json();
-
-		// Loop through the data we fetched and populate our
-		for ( let lOrderDetail of Object.values( lData ) )
-		{
-			this.mOrderDetails.push( lOrderDetail );
-		}
 	}
 
 
@@ -47,10 +18,6 @@ class MyOrderDetails
 	// Render list of orders
 	render()
 	{
-		debugMsg( "typeof this.mOrderDetails:\n", typeof this.mOrderDetails );
-		console.log( this.mOrderDetails );
-		console.log( this.mOrderDetails.length );
-
 		let lLabels = [ "Name", "Price", "Quantity", "Total" ];
 
 		let html = "";
@@ -80,6 +47,30 @@ class MyOrderDetails
 
 		// Return html for all the products
 		return html;
+	}
+
+
+	async fetchRender()
+	{
+		let result = fetch( '/api/my-order-details/' + this.mOrderId )
+		.then
+		(
+			( lRes ) => lRes.json()
+		).then
+		(
+			( lRes ) =>
+			{
+				// create a new property called mMyOrders
+				this.mOrderDetails.length = 0;
+
+				// Loop through the data we fetched and populate our list
+				for ( let lOrderDetail of Object.values( lRes ) ) this.mOrderDetails.push( lOrderDetail );
+
+				return this.render();
+			}
+		);
+
+		return await result;
 	}
 
 }
