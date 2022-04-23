@@ -11,10 +11,10 @@ async function getLogInfo()
 
 	if ( loggedIn && loggedIn.userRole !== 'superadmin' ) new ProductList();
 
-	if ( loggedIn && loggedIn.userRole === "user" )
-		document.myOrdersList = new MyOrdersList();
-	else
-		document.myOrdersList = null;
+	// if ( loggedIn && loggedIn.userRole === "user" )
+	// 	document.myOrdersList = new MyOrdersList();
+	// else
+	// 	document.myOrdersList = null;
 
 	if ( !loggedIn || loggedIn.error )
 	{
@@ -48,7 +48,21 @@ document.querySelector('body').addEventListener
 			let lFirstLink = document.querySelector( '.register-and-login-links a' );
 			lFirstLink.outerHTML = '<a href="/">Home</a>';
 
-			grabEl( "main" ).innerHTML = document.myOrdersList.render();
+			//let html = await ( new MyOrdersList() ).fetchRender();
+			//console.log ( html );
+			( new MyOrdersList() ).fetchRender()
+			.then
+			(
+				( lRes ) =>
+				{
+					grabEl( 'main' ).innerHTML = lRes
+				}
+			)
+		}
+
+		if ( event.target.closest( 'a[href="/"]' ) )
+		{
+			event.preventDefault();
 		}
 
 		if ( !event.target.closest( 'a[href="/logout"]' ) ) { return; }

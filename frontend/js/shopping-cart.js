@@ -135,6 +135,8 @@ class ShoppingCart {
 			.then(response => response.json())
 			.then(data => {
 				console.log('Success:', data);
+				document.myOrdersList.readDataFromDb();
+
 				//alert('YOU DID IT');
 			})
 			.catch((error) => {
