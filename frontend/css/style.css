@@ -46,8 +46,30 @@ div.container
 	padding-left: 5px;
 	padding-right: 5px;
 	background-color: white;
-	display: flex;
+	/*display: block; *//*flex;*/
 	align-items: center;
+	float: right;
+}
+
+.register-and-login-links {
+	/*position: absolute;*/
+	right: 20px;
+	/*top: 20px;*/
+}
+
+.register-and-login-links a {
+	color: rgb(20, 166, 182);
+}
+
+.nav-links
+{
+	position: absolute;
+	right: 20px;
+}
+
+.nav-links a
+{
+	color: rgb(20, 166, 182);
 }
 
 table {
@@ -121,16 +143,6 @@ input[type="submit"] {
 	z-index: 2;
 }
 
-.register-and-login-links {
-	position: absolute;
-	right: 20px;
-	/*top: 20px;*/
-}
-
-.register-and-login-links a {
-	color: rgb(20, 166, 182);
-}
-
 .hidden {
 	display: none;
 }
@@ -181,10 +193,18 @@ p
 
 .backButton {
 	cursor: pointer;
-	/*border-radius: 5px;*/
 	padding: 10px 20px;
-	background-color: rgb(42, 135, 65);
-	color: white;
+}
+
+.back-button-orders
+ {
+	cursor: pointer;
+	padding: 10px 20px;
+}
+
+.orderlist-row
+{
+	cursor: pointer;
 }
 
 .product .price {

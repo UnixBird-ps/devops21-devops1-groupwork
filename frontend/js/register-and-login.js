@@ -26,8 +26,13 @@ async function getLogInfo()
 	else
 	{
 		div.innerHTML = `Logged in as ${loggedIn.firstName} ${loggedIn.lastName}`;
-		if ( loggedIn.userRole === "user" ) div.innerHTML += ' <a href="/my-orders">My orders</a>';
 		div.innerHTML += ' <a href="/logout">Logout</a>';
+
+		if ( loggedIn.userRole === "user" )
+		{
+			let lNavLinksDiv = document.querySelector( '.nav-links' );
+			lNavLinksDiv.innerHTML = ' <a href="/my-orders">My orders</a>';
+		}
 
 		start( loggedIn?.userRole );
 	}
@@ -45,24 +50,27 @@ document.querySelector('body').addEventListener
 		{
 			event.preventDefault();
 
-			let lFirstLink = document.querySelector( '.register-and-login-links a' );
-			lFirstLink.outerHTML = '<a href="/">Home</a>';
+			let lNavLinksDiv = document.querySelector( '.nav-links' );
+			lNavLinksDiv.innerHTML = '<a href="/home">Home</a>';
 
-			//let html = await ( new MyOrdersList() ).fetchRender();
-			//console.log ( html );
 			( new MyOrdersList() ).fetchRender()
 			.then
 			(
 				( lRes ) =>
 				{
-					grabEl( 'main' ).innerHTML = lRes
+					grabEl( 'main' ).innerHTML = lRes;
 				}
 			)
 		}
 
-		if ( event.target.closest( 'a[href="/"]' ) )
+		if ( event.target.closest( 'a[href="/home"]' ) )
 		{
 			event.preventDefault();
+
+			await ( ( new ProductList() ).readDataFromDb() );
+
+			let lNavLinksDiv = document.querySelector( '.nav-links' );
+			lNavLinksDiv.innerHTML = ' <a href="/my-orders">My orders</a>';
 		}
 
 		if ( !event.target.closest( 'a[href="/logout"]' ) ) { return; }

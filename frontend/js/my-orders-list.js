@@ -6,6 +6,9 @@ class MyOrdersList
 		// create a new property called mMyOrders
 		this.mMyOrders = [];
 
+		let lNavLinksDiv = document.querySelector( '.nav-links' );
+		lNavLinksDiv.innerHTML = ' <a href="/home">Home</a>';
+
 		if ( !MyOrdersList.eventListenersAdded )
 		{
 			this.addEventListeners();
@@ -98,8 +101,11 @@ class MyOrdersList
 				// by using the array method find
 				let lOrder = this.mMyOrders.find( o => o.id === id );
 
-				grabEl( 'main' ).innerHTML = "<button class='backButton'>Back to My orders</button>" + ( await ( new MyOrderDetails( lOrder.id ) ).fetchRender() );
+				grabEl( 'main' ).innerHTML = "<button class='back-button-orders'>Back to My orders</button>" + ( await ( new MyOrderDetails( lOrder.id ) ).fetchRender() );
 
+				let lNavLinksDiv = document.querySelector( '.nav-links' );
+				//lNavLinksDiv.innerHTML = ' <a href="/my-orders">My orders</a>';
+				lNavLinksDiv.innerHTML = ' <a href="/home">Home</a>';
 			}
 		);
 
@@ -107,11 +113,14 @@ class MyOrdersList
 		listen
 		(
 			'click',
-			'.backButton',
+			'.back-button-orders',
 			() =>
 			{
 				// replace the contents of main with the product list
 				grabEl( 'main' ).innerHTML = this.render();
+
+				let lNavLinksDiv = document.querySelector( '.nav-links' );
+				lNavLinksDiv.innerHTML = ' <a href="/home">Home</a>';
 			}
 		);
 
