@@ -25,7 +25,8 @@ async function getLogInfo()
 	}
 	else
 	{
-		div.innerHTML = `Logged in as ${loggedIn.firstName} ${loggedIn.lastName}`;
+		let lLogonInfoContainer = document.querySelector( '.logon-info' );
+		lLogonInfoContainer.innerHTML = `Logged in as ${loggedIn.firstName} ${loggedIn.lastName}`;
 		div.innerHTML += ' <a href="/logout">Logout</a>';
 
 		if ( loggedIn.userRole === "user" )

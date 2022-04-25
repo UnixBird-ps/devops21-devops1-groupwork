@@ -74,13 +74,17 @@ describe(
 				// Removing any leading and trailing new-lines, removing any indentation
 				let lExpectedHTML = `
 				<div class="productInList" id="i9999">
+				<div class="product-img">
 				<img src="">
+				</div>
+				<div class="product-info">
 				<h3>The brick</h3>
 				<p class="price">Price: 14.95 kr</p>
 				<form>
 				<input type="number" value="1" class="quantity" min="1" max="100">
 				<button type="submit" class="buyButton">Buy</button>
 				</form>
+				</div>
 				</div>
 				`.trim().split( "\n" ).map( s => s.trim() ).join( "\n" );
 

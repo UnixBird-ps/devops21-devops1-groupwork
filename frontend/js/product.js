@@ -48,13 +48,17 @@ class Product {
 	renderInList() {
 		return `
 		<div class="productInList" id="i${this.id}">
+			<div class="product-img">
 				<img src="${this.image}">
+			</div>
+			<div class="product-info">
 				<h3>${this.name}</h3>
 				<p class="price">Price: ${this.price} kr</p>
 				<form>
 					<input type="number" value="1" class="quantity" min="1" max="100">
 					<button type="submit" class="buyButton">Buy</button>
 				</form>
+			</div>
 		</div>
 		`;
 	}

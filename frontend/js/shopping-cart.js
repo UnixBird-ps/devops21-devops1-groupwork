@@ -30,8 +30,6 @@ class ShoppingCart {
 		});
 	}
 
-    console.log(this.orderRows);
-
     // for now render the shopping cart to the footer
     document.querySelector('footer').innerHTML =
       this.render();

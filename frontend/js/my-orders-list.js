@@ -6,8 +6,8 @@ class MyOrdersList
 		// create a new property called mMyOrders
 		this.mMyOrders = [];
 
-		let lNavLinksDiv = document.querySelector( '.nav-links' );
-		lNavLinksDiv.innerHTML = ' <a href="/home">Home</a>';
+		let lNavLinksContainer = document.querySelector( '.nav-links' );
+		lNavLinksContainer.innerHTML = ' <a href="/home">Home</a>';
 
 		if ( !MyOrdersList.eventListenersAdded )
 		{
@@ -103,9 +103,8 @@ class MyOrdersList
 
 				grabEl( 'main' ).innerHTML = "<button class='back-button-orders'>Back to My orders</button>" + ( await ( new MyOrderDetails( lOrder.id ) ).fetchRender() );
 
-				let lNavLinksDiv = document.querySelector( '.nav-links' );
-				//lNavLinksDiv.innerHTML = ' <a href="/my-orders">My orders</a>';
-				lNavLinksDiv.innerHTML = ' <a href="/home">Home</a>';
+				let lNavLinksContainer = document.querySelector( '.nav-links' );
+				lNavLinksContainer.innerHTML = ' <a href="/home">Home</a>';
 			}
 		);
 
@@ -119,8 +118,8 @@ class MyOrdersList
 				// replace the contents of main with the product list
 				grabEl( 'main' ).innerHTML = this.render();
 
-				let lNavLinksDiv = document.querySelector( '.nav-links' );
-				lNavLinksDiv.innerHTML = ' <a href="/home">Home</a>';
+				let lNavLinksContainer = document.querySelector( '.nav-links' );
+				lNavLinksContainer.innerHTML = ' <a href="/home">Home</a>';
 			}
 		);
 

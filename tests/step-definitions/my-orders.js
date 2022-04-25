@@ -1,5 +1,5 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
-const pauseTime = 1000;
+const pauseTime = 0;
 const timeOut = 5000;
 
 // Empty templates at the end
@@ -35,7 +35,8 @@ Given(
 		await lSubmitBtn.waitForClickable();
 		await lSubmitBtn.click();
 
-		await lLinksContainer.waitUntil
+		let lLogonInfoContainer = await $( 'div.logon-info' );
+		await lLogonInfoContainer.waitUntil
 		(
 			async function ()
 			{
@@ -45,7 +46,7 @@ Given(
 			},
 			{
 				timeout : timeOut,
-				timeoutMsg: `Reached a ${ timeOut } ms timeout waiting for the div element 'register-and-login' to contain the string 'Logged in as'`
+				timeoutMsg: `Reached a ${ timeOut } ms timeout waiting for the div element 'div.logon-info' to contain the string 'Logged in as'`
 			}
 		);
 
@@ -70,7 +71,7 @@ When(
 	async () =>
 	{
 		let lMyOrdersLink;
-		let lLinksContainer = await $( '.register-and-login-links' );
+		let lLinksContainer = await $( '.nav-links' );
 		await lLinksContainer.waitUntil
 		(
 			async function ()
