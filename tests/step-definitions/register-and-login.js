@@ -2,7 +2,28 @@ const { Given, When, Then } = require( '@wdio/cucumber-framework' );
 const pauseTime = 0;
 const timeOut = 5000;
 
-// Empty templates at the end
+
+/*
+// Empty templates
+Given(
+	"",
+	async () =>
+	{
+	}
+);
+When(
+	"",
+	async () =>
+	{
+	}
+);
+Then(
+	"",
+	async () =>
+	{
+	}
+);
+*/
 
 
 Given(
@@ -182,7 +203,7 @@ When(
 		await expect( foundSubmitBtn ).toBeTruthy();
 		await foundSubmitBtn.waitForClickable();
 		await foundSubmitBtn.click();
-		await $( "div.navbar div.login" ).waitForDisplayed( { reverse : true } );
+		await $( "div.login" ).waitForDisplayed( { reverse : true } );
 
 		await browser.pause( pauseTime );
 	}
@@ -194,23 +215,23 @@ Then(
 	"the page should inform me that the login was successful",
 	async () =>
 	{
-		let secondAuthLink;
-		let authLinksContainer = await $( '.register-and-login-links' );
+		let firstAuthLink;
+		let authLinksContainer = await $( 'div.register-and-login-links' );
 		await authLinksContainer.waitUntil
 		(
 			async function ()
 			{
-				secondAuthLink = await this.$$( "a" )[ 1 ];
-				return ( await secondAuthLink.getAttribute( "href" ) === "/logout" );
+				firstAuthLink = await this.$( "a" );
+				return ( await firstAuthLink.getAttribute( "href" ) === "/logout" );
 			},
 			{
 				timeout: timeOut,
 				timeoutMsg: "Reached timeout when waiting for element"
 			}
 		);
-		await secondAuthLink.waitForClickable();
+		await firstAuthLink.waitForClickable();
 
-		let foundLoggedInAsElm = await $( "div.register-and-login-links" );
+		let foundLoggedInAsElm = await $( "div.logon-info" );
 		await expect( foundLoggedInAsElm ).toBeTruthy();
 		await expect( await foundLoggedInAsElm.getHTML( false ) ).toContain( "Logged in as Tester" );
 
@@ -223,7 +244,7 @@ Given(
 	"that I'm currently signed in and on the main page",
 	async () =>
 	{
-		let foundLoggedInAsElm = await $( "div.register-and-login-links" );
+		let foundLoggedInAsElm = await $( "div.logon-info" );
 		await expect( foundLoggedInAsElm ).toBeTruthy();
 		await expect( await foundLoggedInAsElm.getText() ).toContain( "Logged in as Tester" );
 	}
@@ -234,19 +255,19 @@ When(
 	"I click on the 'Logout' link",
 	async () =>
 	{
-		let secondAuthLink;
-		let authLinksContainer = await $( '.register-and-login-links' );
+		let firstAuthLink;
+		let authLinksContainer = await $( 'div.register-and-login-links' );
 		await authLinksContainer.waitUntil
 		(
 			async function ()
 			{
-				secondAuthLink = await this.$$( "a" )[ 1 ];
-				return ( await secondAuthLink.getAttribute( "href" ) === "/logout" );
+				firstAuthLink = await this.$( "a" );
+				return ( firstAuthLink && await firstAuthLink.getAttribute( "href" ) === "/logout" );
 			}
 		);
 
-		await secondAuthLink.waitForClickable();
-		await secondAuthLink.click();
+		await firstAuthLink.waitForClickable();
+		await firstAuthLink.click();
 
 		await browser.pause( pauseTime );
 	}
@@ -257,44 +278,21 @@ Then(
 	"the page should inform me that I was signed off",
 	async () =>
 	{
-		// let authLinkElms = await $$( '.register-and-login-links a' );
-
-		// await expect( authLinkElms[ 0 ] ).toHaveHref( '/register' );
-		// await expect( authLinkElms[ 1 ] ).toHaveHref( '/login' );
-
-		let lLinksContainer = await $( 'div.register-and-login-links' );
-		await lLinksContainer.waitUntil
+		//let firstAuthLink;
+		let authLinksContainer = await $( 'div.register-and-login-links' );
+		await authLinksContainer.waitUntil
 		(
 			async function ()
 			{
-				let lSecondAuthLink = await this.$$( "a" )[ 1 ];
-				return ( lSecondAuthLink && await lSecondAuthLink.getAttribute( "href" ) === "/login" );
+				let authLinkElms = await $$( 'div.register-and-login-links a' );
+				firstAuthLink = await this.$( "a" );
+				return ( authLinkElms[ 0 ] && authLinkElms[ 1 ] );
 			}
 		);
+
+		await expect( authLinksContainer.$$( "a" )[ 0 ] ).toHaveLink( "/register" );
+		await expect( authLinksContainer.$$( "a" )[ 1 ] ).toHaveLink( "/login" );
 
 		await browser.pause( pauseTime );
 	}
 );
-
-
-/*
-// Templates
-Given(
-	"",
-	async () =>
-	{
-	}
-);
-When(
-	"",
-	async () =>
-	{
-	}
-);
-Then(
-	"",
-	async () =>
-	{
-	}
-);
-*/
