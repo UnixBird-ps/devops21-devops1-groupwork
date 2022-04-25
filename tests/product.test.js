@@ -47,7 +47,9 @@ describe(
 				// Removing any leading and trailing new-lines, removing any indentation
 				let lExpectedHTML = `
 				<div class="product" id="i9999">
+				<div class="image">
 				<img src="">
+				</div>
 				<h3>The brick</h3>
 				<div><p>A very useful tool</p></div>
 				<p class="price">Price: 14.95 kr</p>
@@ -74,7 +76,7 @@ describe(
 				// Removing any leading and trailing new-lines, removing any indentation
 				let lExpectedHTML = `
 				<div class="productInList" id="i9999">
-				<div class="product-img">
+				<div class="image">
 				<img src="">
 				</div>
 				<div class="product-info">
