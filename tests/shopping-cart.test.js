@@ -1,6 +1,7 @@
 
 require( './fakedom.js' );
 global.listen = require( '../frontend/js/helpers.js' ).listen;
+global.formatSEK = require( '../frontend/js/helpers.js' ).formatSEK;
 const { test, expect } = require( '@jest/globals' );
 
 
