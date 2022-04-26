@@ -1,7 +1,7 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
 const debugMsg = require( '../../backend/debug-funcs.js' ).debugMsg;
-const pauseTime = 2000;
-const timeOut = 5000;
+const pauseTime = 1500;
+const timeOut = 3000;
 
 
 /*
@@ -28,16 +28,18 @@ Then(
 
 
 Given(
-	"that I'm logged in as customer",
+	"that I'm logged in as customer and can see the main page containing the product list",
 	async () =>
 	{
 		await browser.url( '/' );
-		await browser.pause( pauseTime );
 
-		let lFirstAuthLink = await $( ".register-and-login-links a" );
+		let lFirstAuthLink = await $( "div.register-and-login-links a" );
+		await lFirstAuthLink.waitForExist( { timeout: timeOut } );
 		let lFirstAuthLinkURL = await lFirstAuthLink.getAttribute( "href" );
-		if ( lFirstAuthLinkURL != "/logout" )
+
+		if ( lFirstAuthLinkURL != "/logout"  )
 		{
+
 			let lSecondAuthLink;
 			let lLinksContainer = await $( 'div.register-and-login-links' );
 			await lLinksContainer.waitUntil
@@ -53,7 +55,7 @@ Given(
 			await lSecondAuthLink.click();
 			await browser.pause( pauseTime );
 
-			await $( "form[name='login']" ).waitForDisplayed();
+			await ( await $( "form[name='login']" ) ).waitForDisplayed();
 			await $( 'form[name="login"] input[name="email"]' ).setValue( 'tester@testare.test' );
 			await $( 'form[name="login"] input[name="password"]' ).setValue( '12345678' );
 			let lSubmitBtn = await $( 'form[name="login"] input[type="submit"]' );
@@ -76,16 +78,9 @@ Given(
 				}
 			);
 		}
-	}
-);
 
-
-Given(
-	"that I can see the main page containing the product list",
-	async () =>
-	{
-		await $( 'div.productInList' ).waitForDisplayed();
-
+		await expect( await $( "div.register-and-login-links a" ) ).toHaveLink( "/logout" );
+		await expect( await $( "div.productInList div.product-info" ) ).toExist();
 		await browser.pause( pauseTime );
 	}
 );
@@ -114,10 +109,10 @@ When(
 
 
 Then(
-	"the product list should be replaced by a list containing my order history",
+	"my order history should be displayed",
 	async () =>
 	{
-		await expect( await $( 'table[name="my-orders"]' ) ).toBePresent();
+		await expect( await $( 'table[name="my-orders"]' ) ).toExist();
 		await browser.pause( pauseTime );
 	}
 );
@@ -127,12 +122,9 @@ Given(
 	"that I can see my order history",
 	async () =>
 	{
-		let lMyOrdersLink = await $( '.nav-links a[href="/my-orders"]' );
-		await lMyOrdersLink.waitForClickable();
-		await lMyOrdersLink.click();
-
 		let lOrdersTableElm = await $( 'table[name="my-orders"]' );
 		await lOrdersTableElm.waitForDisplayed();
+		await expect( await $( 'table[name="my-orders"]' ) ).toExist();
 		await browser.pause( pauseTime );
 	}
 );
@@ -151,11 +143,55 @@ When(
 
 
 Then(
-	"the orders list should be replaced by a page showing total cost and products ordered",
+	"the orders list should be replaced by a page showing total cost and products ordered for a order",
 	async () =>
 	{
-		let lFirstOrderDetailRow = await $( 'table[name="order-details"] tbody tr.detail-row' );
-		await lFirstOrderDetailRow.waitForDisplayed();
+		let lSelector = "table[name='order-details']";
+		await expect( await $( lSelector ) ).toExist();
+		await ( await $( lSelector ) ).waitForDisplayed();
+	}
+);
+
+
+Given(
+	"that I can see an order's details",
+	async () =>
+	{
+		await expect( await $( 'table[name="order-details"]' ) ).toExist();
+		await browser.pause( pauseTime );
+	}
+);
+
+
+When(
+	"I click on the button 'Back to My orders'",
+	async () =>
+	{
+		let lBackButton = await $( "button.back-button-orders" );
+		await lBackButton.waitForClickable();
+		await lBackButton.click();
+		await browser.pause( pauseTime );
+	}
+);
+
+
+When(
+	"I click on the link 'Home' in the top right corner",
+	async () =>
+	{
+		let lSelector = "div.nav-links a[href='/home']";
+		await expect( await $( lSelector ) ).toExist();
+		await ( await $( lSelector ) ).click();
+		await browser.pause( pauseTime );
+	}
+);
+
+
+Then(
+	"the product list should be displayed",
+	async () =>
+	{
+		await expect( await $( "div.productInList div.product-info" ) ).toExist();
 		await browser.pause( pauseTime );
 	}
 );
