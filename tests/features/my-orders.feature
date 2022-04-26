@@ -10,10 +10,10 @@ Feature: My orders list
 		When I click on the link 'My orders' in the top right corner
 		Then the product list should be replaced by a list containing my order history
 
-	# Scenario: Checking out an old order to see the details
-	# 	Given that I can see my order history
-	# 	When I click on one of the rows in the list containing my old orders
-	# 	Then the orders list should be replaced by a page showing total cost and products ordered
+	Scenario: Checking out an old order to see the details
+		Given that I can see my order history
+		When I click on one of the rows in the list containing my old orders
+		Then the orders list should be replaced by a page showing total cost and products ordered
 
 	# Scenario: Going back to 'My orders' page
 	# 	Given that I can see an order's details

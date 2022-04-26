@@ -1,5 +1,5 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
-const pauseTime = 0;
+const pauseTime = 500;
 const timeOut = 5000;
 
 
@@ -40,19 +40,19 @@ When(
 	"I click on the 'Register' link",
 	async () =>
 	{
-		let firstAuthLink;
-		let authLinksContainer = await $( '.register-and-login-links' );
-		await authLinksContainer.waitUntil
+		let lFirstAuthLink;
+		let lAuthLinksContainer = await $( '.register-and-login-links' );
+		await lAuthLinksContainer.waitUntil
 		(
 			async function ()
 			{
-				firstAuthLink = await this.$$( "a" )[ 0 ];
-				return ( firstAuthLink && await firstAuthLink.getAttribute( "href" ) === "/register" );
+				lFirstAuthLink = ( await this.$$( "a" ) )[ 0 ];
+				return ( lFirstAuthLink && await lFirstAuthLink.getAttribute( "href" ) === "/register" );
 			}
 		);
 
-		await firstAuthLink.waitForClickable();
-		await firstAuthLink.click();
+		await lFirstAuthLink.waitForClickable();
+		await lFirstAuthLink.click();
 	}
 );
 
@@ -71,14 +71,14 @@ When(
 	"I click on the 'Login' link",
 	async () =>
 	{
-		let secondAuthLink;
-		let authLinksContainer = await $( '.register-and-login-links' );
-		await authLinksContainer.waitUntil
+		let lSecondAuthLink;
+		let lAuthLinksContainer = await $( '.register-and-login-links' );
+		await lAuthLinksContainer.waitUntil
 		(
 			async function ()
 			{
-				secondAuthLink = await this.$$( "a" )[ 1 ];
-				return ( secondAuthLink && await secondAuthLink.getAttribute( "href" ) === "/login" );
+				lSecondAuthLink = ( await this.$$( "a" ) )[ 1 ];
+				return ( lSecondAuthLink && await lSecondAuthLink.getAttribute( "href" ) === "/login" );
 			},
 			{
 				timeout: timeOut,
@@ -86,8 +86,8 @@ When(
 			}
 		);
 
-		await secondAuthLink.waitForClickable();
-		await secondAuthLink.click();
+		await lSecondAuthLink.waitForClickable();
+		await lSecondAuthLink.click();
 	}
 );
 
@@ -109,21 +109,21 @@ Given(
 		await browser.url( '/' );
 		await $( '.register-and-login-links' ).waitForDisplayed();
 
-		let firstAuthLink;
+		let lFirstAuthLink;
 
-		let authLinksContainer = await $( '.register-and-login-links' );
-		await authLinksContainer.waitUntil
+		let lAuthLinksContainer = await $( '.register-and-login-links' );
+		await lAuthLinksContainer.waitUntil
 		(
 			async function ()
 			{
-				firstAuthLink = await this.$$( "a" )[ 0 ];
-				return ( firstAuthLink && await firstAuthLink.getAttribute( "href" ) === "/register" );
+				lFirstAuthLink = ( await this.$$( "a" ) )[ 0 ];
+				return ( lFirstAuthLink && await lFirstAuthLink.getAttribute( "href" ) === "/register" );
 			}
 		);
 
-		expect( firstAuthLink ).toBeTruthy();
-		await firstAuthLink.waitForClickable();
-		await firstAuthLink.click();
+		expect( lFirstAuthLink ).toBeTruthy();
+		await lFirstAuthLink.waitForClickable();
+		await lFirstAuthLink.click();
 
 		await $( "form[name='registration']" ).waitForDisplayed();
 
@@ -141,11 +141,11 @@ When(
 		await $( 'form[name="registration"] input[name="email"]' ).setValue( 'tester2@testare2.test' );
 		await $( 'form[name="registration"] input[name="password"]' ).setValue( '12345678' );
 		await $( 'form[name="registration"] input[name="passwordRepeated"]' ).setValue( '12345678' );
-		let foundSubmitBtn = await $( 'form[name="registration"] input[type="submit"]' );
+		let lFoundSubmitBtn = await $( 'form[name="registration"] input[type="submit"]' );
 
-		await expect( foundSubmitBtn ).toBeTruthy();
-		await foundSubmitBtn.waitForClickable();
-		await foundSubmitBtn.click();
+		await expect( lFoundSubmitBtn ).toBeTruthy();
+		await lFoundSubmitBtn.waitForClickable();
+		await lFoundSubmitBtn.click();
 
 		await browser.pause( pauseTime );
 	}
@@ -156,12 +156,12 @@ Then(
 	"the page should inform me that the registration was successful",
 	async () =>
 	{
-		let foundWelcomeMsgElm = await $( "div.register h3" );
-		await expect( foundWelcomeMsgElm ).toBeTruthy();
-		await expect( await foundWelcomeMsgElm.getText() ).toContain( "Welcome as a member!" );
-		let foundSuccessMsgElm = await $( "div.register p" );
-		await expect( foundSuccessMsgElm ).toBeTruthy();
-		await expect( await foundSuccessMsgElm.getText() ).toContain( "You are now successfully registrered as a member!" );
+		let lFoundWelcomeMsgElm = await $( "div.register h3" );
+		await expect( lFoundWelcomeMsgElm ).toBeTruthy();
+		await expect( await lFoundWelcomeMsgElm.getText() ).toContain( "Welcome as a member!" );
+		let lFoundSuccessMsgElm = await $( "div.register p" );
+		await expect( lFoundSuccessMsgElm ).toBeTruthy();
+		await expect( await lFoundSuccessMsgElm.getText() ).toContain( "You are now successfully registrered as a member!" );
 	}
 );
 
@@ -173,19 +173,19 @@ Given(
 		await browser.url( '/' );
 		await $( '.register-and-login-links' ).waitForDisplayed();
 
-		let secondAuthLink;
-		let authLinksContainer = await $( '.register-and-login-links' );
-		await authLinksContainer.waitUntil
+		let lSecondAuthLink;
+		let lAuthLinksContainer = await $( '.register-and-login-links' );
+		await lAuthLinksContainer.waitUntil
 		(
 			async function ()
 			{
-				secondAuthLink = await this.$$( "a" )[ 1 ];
-				return ( secondAuthLink && await secondAuthLink.getAttribute( "href" ) === "/login" );
+				lSecondAuthLink = ( await this.$$( "a" ) )[ 1 ];
+				return ( lSecondAuthLink && await lSecondAuthLink.getAttribute( "href" ) === "/login" );
 			}
 		);
 
-		await secondAuthLink.waitForClickable();
-		await secondAuthLink.click();
+		await lSecondAuthLink.waitForClickable();
+		await lSecondAuthLink.click();
 
 		await $( "form[name='login']" ).waitForDisplayed();
 	}
@@ -198,11 +198,11 @@ When(
 	{
 		await $( 'form[name="login"] input[name="email"]' ).setValue( 'tester@testare.test' );
 		await $( 'form[name="login"] input[name="password"]' ).setValue( '12345678' );
-		let foundSubmitBtn = await $( 'form[name="login"] input[type="submit"]' );
+		let lFoundSubmitBtn = await $( 'form[name="login"] input[type="submit"]' );
 
-		await expect( foundSubmitBtn ).toBeTruthy();
-		await foundSubmitBtn.waitForClickable();
-		await foundSubmitBtn.click();
+		await expect( lFoundSubmitBtn ).toBeTruthy();
+		await lFoundSubmitBtn.waitForClickable();
+		await lFoundSubmitBtn.click();
 		await $( "div.login" ).waitForDisplayed( { reverse : true } );
 
 		await browser.pause( pauseTime );
@@ -215,25 +215,25 @@ Then(
 	"the page should inform me that the login was successful",
 	async () =>
 	{
-		let firstAuthLink;
-		let authLinksContainer = await $( 'div.register-and-login-links' );
-		await authLinksContainer.waitUntil
+		let lFirstAuthLink;
+		let lAuthLinksContainer = await $( 'div.register-and-login-links' );
+		await lAuthLinksContainer.waitUntil
 		(
 			async function ()
 			{
-				firstAuthLink = await this.$( "a" );
-				return ( await firstAuthLink.getAttribute( "href" ) === "/logout" );
+				lFirstAuthLink = await this.$( "a" );
+				return ( await lFirstAuthLink.getAttribute( "href" ) === "/logout" );
 			},
 			{
 				timeout: timeOut,
 				timeoutMsg: "Reached timeout when waiting for element"
 			}
 		);
-		await firstAuthLink.waitForClickable();
+		await lFirstAuthLink.waitForClickable();
 
-		let foundLoggedInAsElm = await $( "div.logon-info" );
-		await expect( foundLoggedInAsElm ).toBeTruthy();
-		await expect( await foundLoggedInAsElm.getHTML( false ) ).toContain( "Logged in as Tester" );
+		let lFoundLoggedInAsElm = await $( "div.logon-info" );
+		await expect( lFoundLoggedInAsElm ).toBeTruthy();
+		await expect( await lFoundLoggedInAsElm.getHTML( false ) ).toContain( "Logged in as Tester" );
 
 		await browser.pause( pauseTime );
 	}
@@ -244,9 +244,9 @@ Given(
 	"that I'm currently signed in and on the main page",
 	async () =>
 	{
-		let foundLoggedInAsElm = await $( "div.logon-info" );
-		await expect( foundLoggedInAsElm ).toBeTruthy();
-		await expect( await foundLoggedInAsElm.getText() ).toContain( "Logged in as Tester" );
+		let lFoundLoggedInAsElm = await $( "div.logon-info" );
+		await expect( lFoundLoggedInAsElm ).toBeTruthy();
+		await expect( await lFoundLoggedInAsElm.getText() ).toContain( "Logged in as Tester" );
 	}
 );
 
@@ -255,19 +255,19 @@ When(
 	"I click on the 'Logout' link",
 	async () =>
 	{
-		let firstAuthLink;
-		let authLinksContainer = await $( 'div.register-and-login-links' );
-		await authLinksContainer.waitUntil
+		let lFirstAuthLink;
+		let lAuthLinksContainer = await $( 'div.register-and-login-links' );
+		await lAuthLinksContainer.waitUntil
 		(
 			async function ()
 			{
-				firstAuthLink = await this.$( "a" );
-				return ( firstAuthLink && await firstAuthLink.getAttribute( "href" ) === "/logout" );
+				lFirstAuthLink = await this.$( "a" );
+				return ( lFirstAuthLink && await lFirstAuthLink.getAttribute( "href" ) === "/logout" );
 			}
 		);
 
-		await firstAuthLink.waitForClickable();
-		await firstAuthLink.click();
+		await lFirstAuthLink.waitForClickable();
+		await lFirstAuthLink.click();
 
 		await browser.pause( pauseTime );
 	}
@@ -278,20 +278,21 @@ Then(
 	"the page should inform me that I was signed off",
 	async () =>
 	{
-		//let firstAuthLink;
-		let authLinksContainer = await $( 'div.register-and-login-links' );
-		await authLinksContainer.waitUntil
+		let lAuthLinksContainer = await $( 'div.register-and-login-links' );
+		await lAuthLinksContainer.waitForExist();
+
+		await lAuthLinksContainer.waitUntil
 		(
 			async function ()
 			{
-				let authLinkElms = await $$( 'div.register-and-login-links a' );
-				firstAuthLink = await this.$( "a" );
-				return ( authLinkElms[ 0 ] && authLinkElms[ 1 ] );
+				let lAuthLink = ( await this.$$( "a" ) )[ 1 ];
+				await lAuthLink.waitForExist();
+				return ( lAuthLink );
 			}
 		);
 
-		await expect( authLinksContainer.$$( "a" )[ 0 ] ).toHaveLink( "/register" );
-		await expect( authLinksContainer.$$( "a" )[ 1 ] ).toHaveLink( "/login" );
+		await expect( lAuthLinksContainer.$$( "a" )[ 0 ] ).toHaveLink( "/register" );
+		await expect( lAuthLinksContainer.$$( "a" )[ 1 ] ).toHaveLink( "/login" );
 
 		await browser.pause( pauseTime );
 	}
