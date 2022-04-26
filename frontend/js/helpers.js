@@ -1,3 +1,13 @@
+
+/**
+Returns a price in the format '*#.## kr'
+*/
+function formatSEK( number )
+{
+	return new Intl.NumberFormat( 'sv-SE', { style: 'currency', currency: 'SEK' } ).format( number );
+}
+
+
 // grabEl = grabElement
 function grabEl(cssSelector) {
   return document.querySelector(cssSelector);
@@ -33,5 +43,5 @@ function listen(eventType, cssSelector, func) {
 // For Jest - check if we are in a Node.js environment
 // if so export the class for Jest
 if (typeof module === 'object' && module.exports) {
-  module.exports = { grabEl, grabEls, listen };
+  module.exports = { grabEl, grabEls, listen, formatSEK };
 }
