@@ -3,12 +3,14 @@ class MyOrdersList
 {
 	constructor()
 	{
-		// create a new property called mMyOrders
-		this.mMyOrders = [];
+		// Create a static property
+		MyOrdersList.mMyOrders = [];
 
+		// Change URL for first nav link
 		let lNavLinksContainer = document.querySelector( '.nav-links' );
 		lNavLinksContainer.innerHTML = ' <a href="/home">Home</a>';
 
+		// Call only once
 		if ( !MyOrdersList.eventListenersAdded )
 		{
 			this.addEventListeners();
@@ -16,21 +18,16 @@ class MyOrdersList
 	}
 
 
-
-	formatSEK( number )
-	{
-		return new Intl.NumberFormat( 'sv-SE', { style: 'currency', currency: 'SEK' } ).format( number );
-	}
-
-
-	// Render list of orders
+	/**
+	Returns HTML containing a table with the orders
+	*/
 	render()
 	{
-		let lLabels = [ "Order#", "Date", "Total" ];
+		let lLabels = [ "Order#", "Date", "Order total" ];
 
 		let html = "";
 		html += "<table name='my-orders'>";
-		if ( this.mMyOrders.length > 0 )
+		if ( MyOrdersList.mMyOrders.length > 0 )
 			html += "<caption>My Orders</caption>";
 		else
 			html += "<caption>Your order history is empty</caption>";
@@ -41,12 +38,12 @@ class MyOrdersList
 		html +="</tr>";
 		html += "</thead>";
 		html += "<tbody>";
-		for ( let iOrderRow of this.mMyOrders )
+		for ( let iOrderRow of MyOrdersList.mMyOrders )
 		{
 			html += `<tr class='orderlist-row' id='i${ iOrderRow.id }'>`;
 			html += "<td>" + iOrderRow.id + "</td>";
 			html += "<td>" + iOrderRow.date + "</td>";
-			html += "<td>" + this.formatSEK( iOrderRow.grandTotal ) + "</td>";
+			html += "<td>" + formatSEK( iOrderRow.grandTotal ) + "</td>";
 			html +="</tr>";
 		}
 		html += "</tbody>";
@@ -57,28 +54,19 @@ class MyOrdersList
 	}
 
 
+	/**
+	Updates the list of orders from DB and returns HTML
+	*/
 	async fetchRender()
 	{
-		let result = fetch( '/api/my-orders' )
-		.then
-		(
-			( lRes ) => lRes.json()
-		)
-		.then
-		(
-			( lRes ) =>
-			{
-				// create a new property called mMyOrders
-				this.mMyOrders.length = 0;
-
-				// Loop through the data we fetched and populate our list
-				for ( let lOrder of lRes ) this.mMyOrders.push( lOrder );
-
-				return this.render();
-			}
-		);
-
-		return await result;
+		// Retrieve data from DB and convert it to easy readable form, in our case an iterable object
+		let lRes = await ( await fetch( '/api/my-orders' ) ).json();
+		// Start from an empty list
+		MyOrdersList.mMyOrders.length = 0;
+		// Loop through the data we fetched and populate our list
+		for ( let lOrder of lRes ) MyOrdersList.mMyOrders.push( lOrder );
+		// Return HTML
+		return this.render();
 	}
 
 
@@ -99,9 +87,19 @@ class MyOrdersList
 
 				// find the product we clicked on in this.products
 				// by using the array method find
-				let lOrder = this.mMyOrders.find( o => o.id === id );
+				let lOrder = MyOrdersList.mMyOrders.find( o => { console.log( o.id ); return o.id == id } );
+				debugMsg( "lOrder: ", lOrder );
 
-				grabEl( 'main' ).innerHTML = "<button class='back-button-orders'>Back to My orders</button>" + ( await ( new MyOrderDetails( lOrder.id ) ).fetchRender() );
+				let html = "";
+				html += `<button class="back-button-orders">Back to My orders</button>`;
+				html += `<div class="order-caption">`;
+				html += `<span>Order details</span>`;
+				html += `</div>`;
+				html += `<div class="order-caption">`;
+				html += `<span>Order ID: ${ lOrder.id }</span><span>Total order cost: ${ formatSEK( lOrder.grandTotal ) }</span>`;
+				html += `</div>`;
+				html += await ( await ( new MyOrderDetails( lOrder.id ) ) ).fetchRender();
+				grabEl( 'main' ).innerHTML = html;
 
 				let lNavLinksContainer = document.querySelector( '.nav-links' );
 				lNavLinksContainer.innerHTML = ' <a href="/home">Home</a>';

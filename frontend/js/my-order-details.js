@@ -3,28 +3,24 @@ class MyOrderDetails
 {
 	constructor( pOrderId )
 	{
+		// Save the order ID
 		this.mOrderId = pOrderId;
 
+		// Keep track during life time
 		this.mOrderDetails = [];
 	}
 
 
-	formatSEK( number )
-	{
-		return new Intl.NumberFormat( 'sv-SE', { style: 'currency', currency: 'SEK' } ).format( number );
-	}
-
-
-	// Render list of orders
+	/**
+	Returns HTML containing a table with the order details
+	*/
 	render()
 	{
-		let lLabels = [ "Name", "Price", "Quantity", "Total" ];
+		let lLabels = [ "Name", "Price", "Quantity", "Row Total" ];
 
 		let html = "";
 		html += "<table name='order-details'>";
-		if ( this.mOrderDetails.length > 0 )
-			html += "<caption>Order details</caption>";
-		else
+		if ( this.mOrderDetails.length <= 0 )
 			html += "<caption>Could't find any item for this order</caption>";
 
 		html += "<thead>";
@@ -39,7 +35,7 @@ class MyOrderDetails
 			html += "<td>" + iDetailRow.name + "</td>";
 			html += "<td>" + iDetailRow.price + "</td>";
 			html += "<td>" + iDetailRow.quantity + "</td>";
-			html += "<td>" + this.formatSEK( iDetailRow.total ) + "</td>";
+			html += "<td>" + formatSEK( iDetailRow.total ) + "</td>";
 			html +="</tr>";
 		}
 		html += "</tbody>";
@@ -50,27 +46,19 @@ class MyOrderDetails
 	}
 
 
+	/**
+	Updates the list of orders from DB and returns HTML
+	*/
 	async fetchRender()
 	{
-		let result = fetch( '/api/my-order-details/' + this.mOrderId )
-		.then
-		(
-			( lRes ) => lRes.json()
-		).then
-		(
-			( lRes ) =>
-			{
-				// create a new property called mMyOrders
-				this.mOrderDetails.length = 0;
-
-				// Loop through the data we fetched and populate our list
-				for ( let lOrderDetail of Object.values( lRes ) ) this.mOrderDetails.push( lOrderDetail );
-
-				return this.render();
-			}
-		);
-
-		return await result;
+		// Retrieve data from DB and convert it to easy readable form, in our case an iterable object
+		let lRes = await ( await fetch( '/api/my-order-details/' + this.mOrderId ) ).json();
+		// Start from an empty list
+		this.mOrderDetails.length = 0;
+		// Loop through the data we fetched and populate our list
+		for ( let lOrderDetail of Object.values( lRes ) ) this.mOrderDetails.push( lOrderDetail );
+		// Return HTML
+		return this.render();
 	}
 
 }

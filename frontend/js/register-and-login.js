@@ -49,26 +49,22 @@ document.querySelector('body').addEventListener
 	{
 		if ( event.target.closest( 'a[href="/my-orders"]' ) )
 		{
+			// Prevent browser from reloading the page
 			event.preventDefault();
 
+			// Change URL of the first nav link
 			let lNavLinksDiv = document.querySelector( '.nav-links' );
 			lNavLinksDiv.innerHTML = '<a href="/home">Home</a>';
 
-			( new MyOrdersList() ).fetchRender()
-			.then
-			(
-				( lRes ) =>
-				{
-					grabEl( 'main' ).innerHTML = lRes;
-				}
-			)
+			let html = await ( new MyOrdersList ).fetchRender();
+			grabEl( 'main' ).innerHTML = html;
 		}
 
 		if ( event.target.closest( 'a[href="/home"]' ) )
 		{
 			event.preventDefault();
 
-			await ( ( new ProductList() ).readDataFromDb() );
+			await ( new ProductList() ).readDataFromDb();
 
 			let lNavLinksDiv = document.querySelector( '.nav-links' );
 			lNavLinksDiv.innerHTML = ' <a href="/my-orders">My orders</a>';
@@ -80,7 +76,7 @@ document.querySelector('body').addEventListener
 
 		let result;
 		try {
-			result = await (await fetch('/api/login', { method: 'DELETE' })).json();
+			result = await ( await fetch('/api/login', { method: 'DELETE' } ) ).json();
 		}
 		catch (ignore) { }
 
