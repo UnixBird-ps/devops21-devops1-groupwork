@@ -68,4 +68,4 @@ jobs:
         rsync -vaR -e 'ssh' package.json backend/*.js backend/*.json frontend/* dev:~/our-webshop/app/
         rsync -vaR -e 'ssh' --ignore-existing backend/database/webshop.db dev:~/our-webshop/app/
     - name: Install dependencies and start the app
-      run: ssh dev 'cd ~/our-webshop/app && npm install && { pm2 start backend --name our-webshop --log ../log/app.log --time || pm2 restart our-webshop; }'
+      run: ssh dev 'cd ~/our-webshop/app && npm install && { pm2 restart our-webshop || pm2 start backend --name our-webshop --log ../log/app.log --time; }'
