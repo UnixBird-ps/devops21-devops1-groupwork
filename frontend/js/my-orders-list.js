@@ -25,29 +25,27 @@ class MyOrdersList
 	{
 		let lLabels = [ "Order#", "Date", "Order total" ];
 
-		let html = "";
-		html += "<table name='my-orders'>";
-		if ( MyOrdersList.mMyOrders.length > 0 )
-			html += "<caption>My Orders</caption>";
-		else
-			html += "<caption>Your order history is empty</caption>";
-
-		html += "<thead>";
-		html += "<tr>";
-		for ( let lLabel of lLabels ) html += "<td>" + lLabel + "</td>";
-		html +="</tr>";
-		html += "</thead>";
-		html += "<tbody>";
+		let html = `
+		<table name="my-orders">
+		${ MyOrdersList.mMyOrders.length > 0 ? "<caption>My Orders</caption>" : "<caption>Your order history is empty</caption>" }
+		<thead>
+		<tr>
+		${ ( () => { let s = ""; for ( let lLabel of lLabels ) { s += "<td>" + lLabel + "</td>" }; return s; })() }
+		</tr>
+		</thead>
+		<tbody>`;
 		for ( let iOrderRow of MyOrdersList.mMyOrders )
 		{
-			html += `<tr class='orderlist-row' id='i${ iOrderRow.id }'>`;
-			html += "<td>" + iOrderRow.id + "</td>";
-			html += "<td>" + iOrderRow.date + "</td>";
-			html += "<td>" + formatSEK( iOrderRow.grandTotal ) + "</td>";
-			html +="</tr>";
+			html += `
+			<tr class="orderlist-row" id="i${ iOrderRow.id }">
+			<td>${ iOrderRow.id }</td>
+			<td>${ iOrderRow.date }</td>
+			<td>${ formatSEK( iOrderRow.grandTotal ) }</td>
+			</tr>`;
 		}
-		html += "</tbody>";
-		html += "</table>";
+		html += `
+		</tbody>
+		</table>`;
 
 		// Return html for all the products
 		return html;
