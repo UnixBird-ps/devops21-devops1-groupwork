@@ -3,9 +3,9 @@ name: CICD - Test and deploy
 
 on:
   push:
-    branches: [ main, dev, ps-feature*, feature* ]
+    branches: [ main, dev, feature*, ps-feature*, ps-test* ]
   pull_request:
-    branches: [ main, dev, ps-feature*, feature* ]
+    branches: [ main, dev, feature*, ps-feature*, ps-test* ]
 
 jobs:
   test:
@@ -22,12 +22,8 @@ jobs:
         cache: 'npm'
     - name: Install test dependencies
       run: |
-        npm install
+        npm ci
         npm install -g pm2
-    - name: Install Chrome
-      run: |
-        wget --no-verbose https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        sudo apt install ./google-chrome-stable_current_amd64.deb
     - name: Daemonize node app
       run: pm2 start ./backend/index.js --name our-webshop
     - name: Run REST API tests
