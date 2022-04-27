@@ -3,9 +3,9 @@ name: CICD - Test and deploy
 
 on:
   push:
-    branches: [ main, dev, ps-feature*, feature* ]
+    branches: [ main, dev, feature*, ps-feature*, ps-test* ]
   pull_request:
-    branches: [ main, dev, ps-feature*, feature* ]
+    branches: [ main, dev, feature*, ps-feature*, ps-test* ]
 
 jobs:
   test:
