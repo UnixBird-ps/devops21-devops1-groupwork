@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d0c85a82-067d-47dc-b105-e5fbc7a1c993",
+		"_postman_id": "4e5b3399-0aa5-4c46-a453-111bc3dabcfc",
 		"name": "rest-api-test",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -424,99 +424,6 @@
 			"response": []
 		},
 		{
-			"name": "Fail get of customer as visitor",
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"exec": [
-							"// Get external data from previous test\r",
-							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
-							"let counter = pm.variables.get( \"counter\" );\r",
-							"let iterations = 1;\r",
-							"\r",
-							"// Set a var to be used in the URL\r",
-							"let { id } = mockDataCustomers[ counter ];\r",
-							"pm.variables.set( \"id\", id );\r",
-							"\r",
-							"pm.variables.set( \"iterations\", iterations );\r",
-							"console.log( `${ 1 + counter } of ${ iterations }` );\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// Get local vars\r",
-							"let mockDataCustomers = pm.variables.get( \"mockDataCustomers\" );\r",
-							"let counter = pm.variables.get( \"counter\" );\r",
-							"let iterations = pm.variables.get( \"iterations\" );\r",
-							"\r",
-							"let responseJSON = pm.response.json();\r",
-							"\r",
-							"\r",
-							"// The tests\r",
-							"\r",
-							"pm.test(\r",
-							"\t\"Check that the response error code is 405\",\r",
-							"\tfunction()\r",
-							"\t{\r",
-							"\t\tpm.expect( pm.response.code ).to.equal( 405 );\r",
-							"\t}\r",
-							");\r",
-							"\r",
-							"\r",
-							"pm.test(\r",
-							"\t\"Check that the response JSON has an error with value 'Not allowed!'\",\r",
-							"\tfunction()\r",
-							"\t{\r",
-							"\t\tpm.expect( responseJSON.error ).to.equal( 'Not allowed!' );\r",
-							"\t}\r",
-							");\r",
-							"\r",
-							"\r",
-							"// Prep for next iteration\r",
-							"\r",
-							"counter++;\r",
-							"pm.variables.set( \"counter\", counter );\r",
-							"\r",
-							"if ( counter < iterations && mockDataCustomers[ counter ] )\r",
-							"{\r",
-							"\tpostman.setNextRequest( pm.info.requestName );\r",
-							"}\r",
-							"else\r",
-							"{\r",
-							"\tpm.variables.set( \"counter\", 0 );\r",
-							"}\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/api/customers/{{id}}",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"api",
-						"customers",
-						"{{id}}"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Fail get of all customers as visitor",
 			"event": [
 				{
@@ -779,7 +686,8 @@
 							"\t\"Check that the order was confirmed in the JSON of the response\",\r",
 							"\tfunction()\r",
 							"\t{\r",
-							"\t\tpm.expect( responseJSON.status ).to.equal( \"Was accepted\" );\r",
+							"\t\tpm.expect( responseJSON ).to.have.property( \"status\" );\r",
+							"\t\tpm.expect( responseJSON.status ).to.include( \" was accepted\" );\r",
 							"\t}\r",
 							");\r",
 							""
@@ -795,7 +703,7 @@
 							"// Create mock data if not exist\r",
 							"let mockOrder =\r",
 							"[\r",
-							"\t{ productId : 20, quantity : 2 },\r",
+							"\t{ productId : 20, quantity : 1 },\r",
 							"\t{ productId :  1, quantity : 3 }\r",
 							"];\r",
 							"\r",
@@ -837,7 +745,7 @@
 			"response": []
 		},
 		{
-			"name": "Succeed get own orders as registered user",
+			"name": "Succeed get order as registered user",
 			"event": [
 				{
 					"listen": "prerequest",
@@ -845,6 +753,8 @@
 						"exec": [
 							"\r",
 							"console.log( '1 of 1' );\r",
+							"\r",
+							"if ( !pm.variables.get( \"lastOrderId\" ) ) pm.variables.set( \"lastOrderId\", 20 );\r",
 							""
 						],
 						"type": "text/javascript"
@@ -854,18 +764,11 @@
 					"listen": "test",
 					"script": {
 						"exec": [
-							"// Get local vars\r",
-							"let lastOrderId = pm.variables.get( \"lastOrderId\" );\r",
-							"\r",
 							"let responseJSON = pm.response.json();\r",
-							"\r",
-							"responseJSON2 = responseJSON.filter( x => x.orderId == lastOrderId );\r",
-							"\r",
-							"let lTotalItems = 0;\r",
-							"for ( x of responseJSON2 ) { lTotalItems += x.quantity; }\r",
 							"\r",
 							"\r",
 							"// The tests\r",
+							"\r",
 							"\r",
 							"pm.test(\r",
 							"\t\"Check that the response code is 200\",\r",
@@ -877,20 +780,11 @@
 							"\r",
 							"\r",
 							"pm.test(\r",
-							"\t\"Check that an order's length is 2\",\r",
+							"\t\"Check that first order has expected keys\",\r",
 							"\tfunction()\r",
 							"\t{\r",
-							"\t\tpm.expect( responseJSON2 ).to.be.an( 'array' );\r",
-							"\t\tpm.expect( responseJSON2 ).to.have.lengthOf( 2 );\r",
-							"\t}\r",
-							");\r",
-							"\r",
-							"\r",
-							"pm.test(\r",
-							"\t`Check that an order's total size is 5 }`,\r",
-							"\tfunction()\r",
-							"\t{\r",
-							"\t\tpm.expect( lTotalItems ).to.equal( 5 );\r",
+							"\t\tpm.expect( responseJSON ).to.be.an( \"array\" );\r",
+							"\t\tpm.expect( responseJSON[ 0 ] ).to.have.all.keys( \"id\", \"date\", \"grandTotal\" );\r",
 							"\t}\r",
 							");\r",
 							""
@@ -912,6 +806,97 @@
 					"path": [
 						"api",
 						"my-orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Succeed get order details as registered user",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"console.log( '1 of 1' );\r",
+							"\r",
+							"if ( !pm.variables.get( \"lastOrderId\" ) ) pm.variables.set( \"lastOrderId\", 36 );\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Get local vars\r",
+							"let lastOrderId = pm.variables.get( \"lastOrderId\" );\r",
+							"\r",
+							"let responseJSON = pm.response.json();\r",
+							"\r",
+							"let lTotalItems = 0;\r",
+							"for ( x of responseJSON ) { lTotalItems += x.quantity; }\r",
+							"\r",
+							"\r",
+							"// The tests\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that the response code is 200\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.response.to.have.status( 200 );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that first order detail row has expected keys\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( responseJSON ).to.be.an( 'array' );\r",
+							"\t\tpm.expect( responseJSON[ 0 ] ).to.have.all.keys( \"id\", \"name\", \"price\", \"quantity\", \"total\" );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"\r",
+							"pm.test(\r",
+							"\t\"Check that an order's length is 2\",\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( responseJSON ).to.have.lengthOf( 2 );\r",
+							"\t}\r",
+							");\r",
+							"\r",
+							"\r",
+							"pm.test(\r",
+							"\t`Check that an order's total size is 4 }`,\r",
+							"\tfunction()\r",
+							"\t{\r",
+							"\t\tpm.expect( lTotalItems ).to.equal( 4 );\r",
+							"\t}\r",
+							");\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/my-order-details/{{lastOrderId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"my-order-details",
+						"{{lastOrderId}}"
 					]
 				}
 			},
