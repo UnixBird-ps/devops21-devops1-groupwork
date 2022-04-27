@@ -1,6 +1,5 @@
 const passwordEncryptor = require('./passwordEncryptor');
 const acl = require('./acl');
-const debugMsg = require( './debug-funcs.js' ).debugMsg;
 
 module.exports = function (app, runQuery, db)
 {
@@ -23,9 +22,8 @@ module.exports = function (app, runQuery, db)
 		( req, res ) =>
 		{
 			let userId = req.session.user?.id;
-			debugMsg( "{ customerId: userId, ...req.params }:", { customerId: userId, ...req.params } );
 			runQuery( 'my-order-details', req, res, { customerId: userId, ...req.params },
-				`SELECT name, price, quantity, total FROM orderDetails WHERE customerId = :customerId AND id = :id`
+				`SELECT id, name, price, quantity, total FROM orderDetails WHERE customerId = :customerId AND id = :id`
 			);
 		}
 	);
@@ -51,16 +49,6 @@ module.exports = function (app, runQuery, db)
 				return;
 			}
 
-			// let lValues = [];
-			// for ( let i = 0; i < req.body.length; i++ )
-			// {
-			// 	let r = req.body[ i ];
-			// 	// Construct ( productId, quantity ) for every row,
-			// 	// adding a comma at the end of every but the last row
-			// 	lValues.push( Object.values( r ) );
-			// }
-			// debugMsg( "lValues:", lValues );
-
 			// Get user id from session
 			let userId = req.session.user?.id;
 			let lOrderId = -1;
@@ -68,13 +56,6 @@ module.exports = function (app, runQuery, db)
 
 			try
 			{
-				// // Prep time string
-				// let lTimeStr = new Date().toISOString();
-				// // replace 'T' with a space
-				// lTimeStr = lTimeStr.split( "T" ).join( " " );
-				// // remove miliseconds part and time zone abbreviation character
-				// lTimeStr = lTimeStr.split( "." )[ 0 ];
-
 				// Add single order row to db
 				let lSql = "";
 				lSql += "INSERT INTO orders ( customerId )";//, date
@@ -82,18 +63,6 @@ module.exports = function (app, runQuery, db)
 				const lPrepped1 = db.prepare( lSql );
 
 				lSql = "";
-				// lSql += `INSERT INTO ordersXproducts ( orderId, ${ Object.keys( req.body[ 0 ] ) } )`;
-				// // Add product rows for same order to db
-				// // use result.lastInsertRowid from the last db query
-				// let values = "";
-				// for ( let i = 0; i < req.body.length; i++ )
-				// {
-				// 	let r = req.body[ i ];
-				// 	// Construct ( productId, quantity ) for every row,
-				// 	// adding a comma at the end of every but the last row
-				// 	values += `( :orderId,${ Object.values( r ).map( x => " '" + x + "'" ) } )${ i < req.body.length - 1 ? ",\n" : "" }`;
-				// }
-				// lSql += ` VALUES\n${ values }`;
 				lSql += `INSERT INTO ordersXproducts ( orderId, ${ Object.keys( req.body[ 0 ] ) }, price )`;
 				lSql += " VALUES\n( :orderId, :productId, :quantity, ( SELECT price FROM products WHERE id = :productId ) )";
 				const lPrepped2 = db.prepare( lSql );

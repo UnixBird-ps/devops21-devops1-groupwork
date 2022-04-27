@@ -1,6 +1,5 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
 const allureReporter = require('@wdio/allure-reporter').default;
-
 const pauseTime = 1000;
 
 
@@ -28,7 +27,8 @@ When(
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
-		await foundProduct.scrollIntoView( true );
+		//await foundProduct.scrollIntoView( { block : "nearest" } );
+		await browser.pause( pauseTime );
 		let titleEl = await foundProduct.$( 'h3' );
 		await titleEl.click();
 	}
@@ -60,7 +60,7 @@ Given(
 		await $( '.productInList h3' ).waitForClickable();
 
 		let firstProduct = await $( '.productInList' );
-		await firstProduct.scrollIntoView( true );
+		//await firstProduct.scrollIntoView( true );
 
 		// Load a detailed product page
 		let lTitleEl = await $( '.productInList h3' );
@@ -77,7 +77,7 @@ When(
 	async () =>
 	{
 		let lBackBtn = await $( 'main .backButton' );
-		await lBackBtn.scrollIntoView( true );
+		//await lBackBtn.scrollIntoView( true );
 		await lBackBtn.click();
 		await browser.pause( pauseTime );
 	}

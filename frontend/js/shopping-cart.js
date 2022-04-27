@@ -1,11 +1,16 @@
 
 class ShoppingCart {
 
-  constructor() {
-    this.addOrderButtonEvent();
-  }
+	constructor()
+	{
+		this.orderRows = [];
 
-  orderRows = [];
+		// Call only once
+		if ( !ShoppingCart.eventListenersAdded )
+		{
+			this.addEventListeners();
+		}
+	}
 
   add(quantity, product) {
 
@@ -28,34 +33,28 @@ class ShoppingCart {
 		});
 	}
 
-    console.log(this.orderRows);
-
     // for now render the shopping cart to the footer
     document.querySelector('footer').innerHTML =
       this.render();
   }
 
 
-	formatSEK(number)
-	{
-		return new Intl.NumberFormat( 'sv-SE', { style: 'currency', currency: 'SEK' } ).format( number );
-	}
-
-
 	render()
 	{
 		// create a html table where we display
 		// the order rows of the shopping cart
-		let html = '<table class="shoppingCart">';
+		let html = '<div class="cartContainer">'
+		html += '<table class="shoppingCart">';
 		let totalSum = 0;
 		for (let orderRow of this.orderRows) {
 			let rowSum = orderRow.quantity * orderRow.product.price;
 			html += `
-			<tr>
+			<tr class="tableRow" id="${orderRow.product.id}">
+				<td><button class="delCartWare">X</button></td>
 				<td>${ orderRow.quantity }</td>
 				<td>${ orderRow.product.name }</td>
-				<td>${ this.formatSEK( orderRow.product.price ) }</td>
-				<td>${ this.formatSEK( rowSum ) }</td>
+				<td>${ formatSEK( orderRow.product.price ) }</td>
+				<td>${ formatSEK( rowSum ) }</td>
 			</tr>
 			`;
 			totalSum += rowSum;
@@ -63,22 +62,16 @@ class ShoppingCart {
 		// add the totalSum
 		html += `<tr>
 			<td colspan="3">Total:</td>
-			<td>${  this.formatSEK( totalSum ) }</td>
-			<td><button class="orderButton">Order</button></td>
+			<td>${formatSEK(totalSum)}</td>
 		</tr>`;
 		html += '</table>';
+		html += `<div class="cartButtons"><button class="cancelButton">Cancel</button>
+		<button class="orderButton">Order</button></div>`;
+		html += '</div>';
 		return html;
 	}
 
-	addOrderButtonEvent() {
-		listen('click', '.orderButton', () => {
-		  	let shoppingCart = grabEl('.shoppingCart')
-			this.addOrders();
-			console.log(shoppingCart);
-			return;
-		});
-	}
-	
+
 	addOrders() {
 		let data = this.orderRows; 
 		let nProducts = [];
@@ -98,14 +91,54 @@ class ShoppingCart {
 		})
 			.then(response => response.json())
 			.then(data => {
-				console.log('Success:', data);
-				//alert('YOU DID IT');
+				debugMsg( 'Success:', data );
+				if ( data?.error?.toLowerCase().includes( "not allowed" ) ) alert( "Please login to place order" );
 			})
 			.catch((error) => {
 				console.error('Error:', error);
-				//alert('FAILURE');
 			});
+			this.orderRows = [];
 	}
+
+
+	addEventListeners()
+	{
+		listen('click', '.delCartWare', event =>{
+			let rowElement = event.target.closest('.tableRow, .product');
+			let rowId = +rowElement.getAttribute('id');
+			let index = 0;
+			for(let nOrder in this.orderRows){
+				if(rowId === this.orderRows[nOrder].product.id){
+					this.orderRows.splice(index, 1);
+				}
+				index ++;
+			}
+			if(this.orderRows.length === 0){
+				grabEl('.cartContainer').style.display = 'none';
+			}else{
+				document.querySelector('footer').innerHTML = this.render();
+			}
+			return;
+		});
+
+
+		listen('click', '.orderButton', () => {
+		  	let shoppingCart = grabEl('.shoppingCart')
+			this.addOrders();
+			grabEl('.cartContainer').style.display = 'none';
+			return;
+		});
+
+
+		listen('click', '.cancelButton',()=>{
+			this.orderRows = [];
+			grabEl('.cartContainer').style.display = 'none';
+			return;
+		});
+
+		ShoppingCart.eventListenersAdded = true;
+	}
+
 }
 
 

@@ -11,10 +11,10 @@ async function getLogInfo()
 
 	if ( loggedIn && loggedIn.userRole !== 'superadmin' ) new ProductList();
 
-	if ( loggedIn && loggedIn.userRole === "user" )
-		document.myOrdersList = new MyOrdersList();
-	else
-		document.myOrdersList = null;
+	// if ( loggedIn && loggedIn.userRole === "user" )
+	// 	document.myOrdersList = new MyOrdersList();
+	// else
+	// 	document.myOrdersList = null;
 
 	if ( !loggedIn || loggedIn.error )
 	{
@@ -25,9 +25,15 @@ async function getLogInfo()
 	}
 	else
 	{
-		div.innerHTML = `Logged in as ${loggedIn.firstName} ${loggedIn.lastName}`;
-		if ( loggedIn.userRole === "user" ) div.innerHTML += ' <a href="/my-orders">My orders</a>';
+		let lLogonInfoContainer = document.querySelector( '.logon-info' );
+		lLogonInfoContainer.innerHTML = `Logged in as ${loggedIn.firstName} ${loggedIn.lastName}`;
 		div.innerHTML += ' <a href="/logout">Logout</a>';
+
+		if ( loggedIn.userRole === "user" )
+		{
+			let lNavLinksDiv = document.querySelector( '.nav-links' );
+			lNavLinksDiv.innerHTML = ' <a href="/my-orders">My orders</a>';
+		}
 
 		start( loggedIn?.userRole );
 	}
@@ -43,12 +49,25 @@ document.querySelector('body').addEventListener
 	{
 		if ( event.target.closest( 'a[href="/my-orders"]' ) )
 		{
+			// Prevent browser from reloading the page
 			event.preventDefault();
 
-			let lFirstLink = document.querySelector( '.register-and-login-links a' );
-			lFirstLink.outerHTML = '<a href="/">Home</a>';
+			// Change URL of the first nav link
+			let lNavLinksDiv = document.querySelector( '.nav-links' );
+			lNavLinksDiv.innerHTML = '<a href="/home">Home</a>';
 
-			grabEl( "main" ).innerHTML = document.myOrdersList.render();
+			let html = await ( new MyOrdersList ).fetchRender();
+			grabEl( 'main' ).innerHTML = html;
+		}
+
+		if ( event.target.closest( 'a[href="/home"]' ) )
+		{
+			event.preventDefault();
+
+			await ( new ProductList() ).readDataFromDb();
+
+			let lNavLinksDiv = document.querySelector( '.nav-links' );
+			lNavLinksDiv.innerHTML = ' <a href="/my-orders">My orders</a>';
 		}
 
 		if ( !event.target.closest( 'a[href="/logout"]' ) ) { return; }
@@ -57,7 +76,7 @@ document.querySelector('body').addEventListener
 
 		let result;
 		try {
-			result = await (await fetch('/api/login', { method: 'DELETE' })).json();
+			result = await ( await fetch('/api/login', { method: 'DELETE' } ) ).json();
 		}
 		catch (ignore) { }
 
