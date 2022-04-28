@@ -25,29 +25,27 @@ class MyOrdersList
 	{
 		let lLabels = [ "Order#", "Date", "Order total" ];
 
-		let html = "";
-		html += "<table name='my-orders'>";
-		if ( MyOrdersList.mMyOrders.length > 0 )
-			html += "<caption>My Orders</caption>";
-		else
-			html += "<caption>Your order history is empty</caption>";
-
-		html += "<thead>";
-		html += "<tr>";
-		for ( let lLabel of lLabels ) html += "<td>" + lLabel + "</td>";
-		html +="</tr>";
-		html += "</thead>";
-		html += "<tbody>";
+		let html = `
+		<table name="my-orders">
+		${ MyOrdersList.mMyOrders.length > 0 ? "<caption>My Orders</caption>" : "<caption>Your order history is empty</caption>" }
+		<thead>
+		<tr>
+		${ ( () => { let s = ""; for ( let lLabel of lLabels ) { s += "<td>" + lLabel + "</td>" }; return s; })() }
+		</tr>
+		</thead>
+		<tbody>`;
 		for ( let iOrderRow of MyOrdersList.mMyOrders )
 		{
-			html += `<tr class='orderlist-row' id='i${ iOrderRow.id }'>`;
-			html += "<td>" + iOrderRow.id + "</td>";
-			html += "<td>" + iOrderRow.date + "</td>";
-			html += "<td>" + formatSEK( iOrderRow.grandTotal ) + "</td>";
-			html +="</tr>";
+			html += `
+			<tr class="orderlist-row" id="i${ iOrderRow.id }">
+			<td>${ iOrderRow.id }</td>
+			<td>${ iOrderRow.date }</td>
+			<td>${ formatSEK( iOrderRow.grandTotal ) }</td>
+			</tr>`;
 		}
-		html += "</tbody>";
-		html += "</table>";
+		html += `
+		</tbody>
+		</table>`;
 
 		// Return html for all the products
 		return html;
@@ -87,16 +85,17 @@ class MyOrdersList
 
 				// find the product we clicked on in this.products
 				// by using the array method find
-				let lOrder = MyOrdersList.mMyOrders.find( o => { console.log( o.id ); return o.id == id } );
-				debugMsg( "lOrder: ", lOrder );
+				let lOrder = MyOrdersList.mMyOrders.find( o => o.id == id );
 
 				let html = "";
 				html += `<button class="back-button-orders">Back to My orders</button>`;
+				html += `<div class="order-caption-group">`;
 				html += `<div class="order-caption">`;
 				html += `<span>Order details</span>`;
 				html += `</div>`;
 				html += `<div class="order-caption">`;
-				html += `<span>Order ID: ${ lOrder.id }</span><span>Total order cost: ${ formatSEK( lOrder.grandTotal ) }</span>`;
+				html += `<span>Order ID: ${ lOrder.id }</span><span>Date: ${ lOrder.date }</span><span>Total order cost: ${ formatSEK( lOrder.grandTotal ) }</span>`;
+				html += `</div>`;
 				html += `</div>`;
 				html += await ( await ( new MyOrderDetails( lOrder.id ) ) ).fetchRender();
 				grabEl( 'main' ).innerHTML = html;
