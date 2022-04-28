@@ -78,7 +78,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Check if production server is defined
       env:
-        DEV_SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
+        PROD_SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
       if: "${{ env.PROD_SSH_HOST == '' }}"
       run: exit 1
     - name: Setup SSH
