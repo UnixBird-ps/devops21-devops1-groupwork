@@ -91,8 +91,10 @@ class ShoppingCart {
 		})
 			.then(response => response.json())
 			.then(data => {
-				debugMsg( 'Success:', data );
-				if ( data?.error?.toLowerCase().includes( "not allowed" ) ) alert( "Please login to place order" );
+				if ( data?.error?.toLowerCase().includes( "not allowed" ) )
+					alert( "Please login to place order" );
+				else
+					alert( "Order was sent. Thank you for your order." );
 			})
 			.catch((error) => {
 				console.error('Error:', error);
