@@ -85,16 +85,17 @@ class MyOrdersList
 
 				// find the product we clicked on in this.products
 				// by using the array method find
-				let lOrder = MyOrdersList.mMyOrders.find( o => { console.log( o.id ); return o.id == id } );
-				debugMsg( "lOrder: ", lOrder );
+				let lOrder = MyOrdersList.mMyOrders.find( o => o.id == id );
 
 				let html = "";
 				html += `<button class="back-button-orders">Back to My orders</button>`;
+				html += `<div class="order-caption-group">`;
 				html += `<div class="order-caption">`;
 				html += `<span>Order details</span>`;
 				html += `</div>`;
 				html += `<div class="order-caption">`;
-				html += `<span>Order ID: ${ lOrder.id }</span><span>Total order cost: ${ formatSEK( lOrder.grandTotal ) }</span>`;
+				html += `<span>Order ID: ${ lOrder.id }</span><span>Date: ${ lOrder.date }</span><span>Total order cost: ${ formatSEK( lOrder.grandTotal ) }</span>`;
+				html += `</div>`;
 				html += `</div>`;
 				html += await ( await ( new MyOrderDetails( lOrder.id ) ) ).fetchRender();
 				grabEl( 'main' ).innerHTML = html;
