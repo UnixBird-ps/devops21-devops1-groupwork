@@ -66,7 +66,7 @@ jobs:
       run: |
         ssh dev 'mkdir -p ~/our-webshop/{app,log}'
         rsync -vaR -e 'ssh' package.json backend/*.js backend/*.json frontend/* dev:~/our-webshop/app/
-        rsync -vaR -e 'ssh' --ignore-existing backend/database/webshop.db dev:~/our-webshop/app/
+        rsync -vaR -e 'ssh' --ignore-existing backend/database/webshop_static.db dev:~/our-webshop/app/
     - name: Install dependencies and start the app
       run: ssh dev 'cd ~/our-webshop/app && npm clean-install && { pm2 restart our-webshop || pm2 start backend --name our-webshop --log ../log/app.log --time; }'
   deploy_prod:
@@ -74,7 +74,7 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    environment: "Configure Deploy branch 'main' to production server"
+    environment: "Deploy branch 'main' to production server"
     steps:
     - uses: actions/checkout@v2
     - name: Check if production server is defined
@@ -104,6 +104,5 @@ jobs:
       run: |
         ssh prod 'mkdir -p ~/our-webshop/{app,log}'
         rsync -vaR -e 'ssh' package.json backend/*.js backend/*.json frontend/* prod:~/our-webshop/app/
-        rsync -vaR -e 'ssh' --ignore-existing backend/database/webshop.db prod:~/our-webshop/app/
     - name: Install dependencies and start the app
       run: ssh prod 'cd ~/our-webshop/app && npm install && { pm2 restart our-webshop || pm2 start backend --name our-webshop --log ../log/app.log --time; }'
