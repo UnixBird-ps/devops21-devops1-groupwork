@@ -7,16 +7,16 @@ const debugMsg = require( "../backend/debug-funcs.js" ).debugMsg;
 
 
 describe(
-	'Unit tests for the class Product',
+	"Unit tests for the class 'Product'",
 	() =>
 	{
 		let lFakeProductData =
 		{
 			id : 9999,
-			name : 'The brick',
+			name : "The brick",
 			price : 14.95,
 			description : 'A very useful tool',
-			image: ''
+			image: ""
 		}
 
 		let lTestProduct = new Product(
@@ -29,18 +29,22 @@ describe(
 		);
 
 
-		test( 'Creation of a product',
+		test
+		(
+			"Creation of a product",
 			() =>
 			{
 				expect( lTestProduct.id ).toBe( 9999 );
-				expect( lTestProduct.name ).toBe( 'The brick' );
+				expect( lTestProduct.name ).toBe( "The brick" );
 				expect( lTestProduct.price ).toBe( 14.95 );
-				expect( lTestProduct.description ).toBe( 'A very useful tool' );
+				expect( lTestProduct.description ).toBe( "A very useful tool" );
 			}
 		);
 
 
-		test( 'Rendering of a product',
+		test
+		(
+			"Rendering of a product",
 			() =>
 			{
 				// Prep a string that will be compared with the received string from renderer
@@ -69,7 +73,9 @@ describe(
 		);
 
 
-		test( 'Rendering of a product in list',
+		test
+		(
+			"Rendering of a product in list",
 			() =>
 			{
 				// Prep a string that will be compared with the received string from renderer
