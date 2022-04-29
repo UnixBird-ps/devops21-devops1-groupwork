@@ -34,3 +34,5 @@ We use a workflow file to run several tests on push and pull requests. *All test
 - All REST API tests are in the file /tests/rest-api-test.postman_collection.json.
 - Config for WebdriverIO is in the file /tests/wdio.conf.js.  
 - Config for Jest is in the file /tests/jest.config.js.
+
+test
