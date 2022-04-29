@@ -74,6 +74,7 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    environment: "Configure Deploy branch 'main' to production server"
     steps:
     - uses: actions/checkout@v2
     - name: Check if production server is defined
