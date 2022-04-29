@@ -22,7 +22,7 @@ jobs:
         cache: 'npm'
     - name: Install test dependencies
       run: |
-        npm ci
+        npm clean-install
         npm install -g pm2
     - name: Daemonize node app
       run: pm2 start ./backend/index.js --name our-webshop
@@ -64,11 +64,10 @@ jobs:
         _EOF_
     - name: Prepare app dirs
       run: |
-        ssh dev 'mkdir -p ~/our-webshop/{app,log}'
-        rsync -vaR -e 'ssh' package.json backend/*.js backend/*.json frontend/* dev:~/our-webshop/app/
-        rsync -vaR -e 'ssh' --ignore-existing backend/database/webshop_static.db dev:~/our-webshop/app/
+        rsync -vaR -e "ssh" --rsync-path "mkdir -p ~/our-webshop/app; rsync" package.json backend/*.js backend/*.json frontend/* dev:~/our-webshop/app/
+        rsync -vaR -e "ssh" --ignore-existing backend/database/webshop_static.db dev:~/our-webshop/app/
     - name: Install dependencies and start the app
-      run: ssh dev 'cd ~/our-webshop/app && npm clean-install && { pm2 restart our-webshop || pm2 start backend --name our-webshop --log ../log/app.log --time; }'
+      run: ssh dev "mkdir -p ~/our-webshop/log && cd ~/our-webshop/app && npm install && { pm2 restart our-webshop || pm2 start backend --name our-webshop --log ../log/app.log --time; }"
   deploy_prod:
     name: Deploy to production server
     needs: test
@@ -101,8 +100,6 @@ jobs:
           StrictHostKeyChecking no
         _EOF_
     - name: Prepare app dirs
-      run: |
-        ssh prod 'mkdir -p ~/our-webshop/{app,log}'
-        rsync -vaR -e 'ssh' package.json backend/*.js backend/*.json frontend/* prod:~/our-webshop/app/
+      run: rsync -vaR -e "ssh" --rsync-path "mkdir -p ~/our-webshop/app; rsync" package.json backend/*.js backend/*.json frontend/* prod:~/our-webshop/app/
     - name: Install dependencies and start the app
-      run: ssh prod 'cd ~/our-webshop/app && npm install && { pm2 restart our-webshop || pm2 start backend --name our-webshop --log ../log/app.log --time; }'
+      run: ssh prod "mkdir -p ~/our-webshop/log && cd ~/our-webshop/app && npm install && { pm2 restart our-webshop || pm2 start backend --name our-webshop --log ../log/app.log --time; }"
