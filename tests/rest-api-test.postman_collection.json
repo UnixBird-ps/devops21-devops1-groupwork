@@ -1850,7 +1850,7 @@
 			"response": []
 		},
 		{
-			"name": "Fail get customer after admin uneauth",
+			"name": "Fail get customer after admin unauth",
 			"event": [
 				{
 					"listen": "prerequest",
