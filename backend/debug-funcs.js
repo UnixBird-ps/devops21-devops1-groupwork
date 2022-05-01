@@ -13,7 +13,11 @@ function debugMsg( ...pMsg )
 {
 	console.log( "DEBUG at:", ( new Error().stack.split( "at " )[ 2 ] ).trim() );
 	let lMsg = "";
-	for ( s of [ ...pMsg ] ) lMsg += s;
+
+	for ( let s of [ ...pMsg ] )
+	{
+		lMsg += typeof s == "string" ? s : JSON.stringify( s, null, 3 );
+	}
 	console.log( lMsg );
 }
 

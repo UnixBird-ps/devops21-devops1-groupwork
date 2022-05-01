@@ -1,5 +1,5 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
-const pauseTime = 1000;
+const pauseTime = 0;
 
 
 Given(
@@ -23,7 +23,6 @@ When(
 			if ( ( await product.getText() ).includes( productName ) )
 			{
 				foundProduct = product;
-				console.log( 'Found product: ', productName );
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
@@ -45,7 +44,6 @@ Then(
 			if ( ( await product.getText() ).includes( productName ) )
 			{
 				foundProduct = product;
-				console.log( 'Found product: ', productName );
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
@@ -66,7 +64,6 @@ Given(
 			if ( ( await product.getText() ).includes( productName ) )
 			{
 				foundProduct = product;
-				console.log( 'Found product: ', productName );
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
@@ -88,7 +85,6 @@ When(
 			if ( ( await product.getText() ).includes( productName ) )
 			{
 				foundProduct = product;
-				console.log( 'Found product: ', productName );
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
@@ -110,7 +106,6 @@ Then(
 			if ( ( await product.getText() ).includes( productName ) )
 			{
 				foundProduct = product;
-				console.log( 'Found product: ', productName );
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
@@ -132,7 +127,6 @@ Given(
 			if ( ( await product.getText() ).includes( productName ) )
 			{
 				foundProduct = product;
-				console.log( 'Found product: ', productName );
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
@@ -153,7 +147,6 @@ When(
 			if ( ( await product.getText() ).includes( productName ) )
 			{
 				foundProduct = product;
-				console.log( 'Found product: ', productName );
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
@@ -174,7 +167,6 @@ Then(
 			if ( ( await product.getText() ).includes( productName ) )
 			{
 				foundProduct = product;
-				console.log( 'Found product: ', productName );
 			}
 		}
 		expect( foundProduct ).toBeTruthy();

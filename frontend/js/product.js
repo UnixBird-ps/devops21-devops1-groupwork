@@ -26,35 +26,42 @@ class Product {
     this.myProductList = myProductList;
   }
 
-  // A method that shows info about the product as html
-  render() {
-    let htmlDescription = '<p>' +
-      this.description.replaceAll('\n\n', '</p><p>') + '</p>';
-    // (why not just the number as id? because the id attribute
-    // in html should start with a-z or A-Z according to specs)
-    return `<div class="product" id="i${this.id}">
-        <img src="${this.image}">
-        <h3>${this.name}</h3>
-        <div>${htmlDescription}</div>
-        <p class="price">Price: ${this.price} kr</p>
-        <form>
-          <input type="number" value="1" class="quantity" min="1" max="100">
-          <button type="submit" class="buyButton">Buy</button>
-        </form>
-      </div>`;
-  }
+	// A method that shows info about the product as html
+	render()
+	{
+		let htmlDescription = '<p>' +
+		this.description.replaceAll('\n\n', '</p><p>') + '</p>';
+		// (why not just the number as id? because the id attribute
+		// in html should start with a-z or A-Z according to specs)
+		return `<div class="product" id="i${this.id}">
+			<div class="image">
+				<img src="${this.image}">
+			</div>
+			<h3>${this.name}</h3>
+			<div>${htmlDescription}</div>
+			<p class="price">Price: ${this.price} kr</p>
+			<form>
+				<input type="number" value="1" class="quantity" min="1" max="100">
+				<button type="submit" class="buyButton">Buy</button>
+			</form>
+		</div>`;
+	}
 
 	// A method that shows compact info about the product (in a list)
 	renderInList() {
 		return `
 		<div class="productInList" id="i${this.id}">
+			<div class="image">
 				<img src="${this.image}">
+			</div>
+			<div class="product-info">
 				<h3>${this.name}</h3>
 				<p class="price">Price: ${this.price} kr</p>
 				<form>
 					<input type="number" value="1" class="quantity" min="1" max="100">
 					<button type="submit" class="buyButton">Buy</button>
 				</form>
+			</div>
 		</div>
 		`;
 	}
