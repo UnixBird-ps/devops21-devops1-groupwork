@@ -32,8 +32,9 @@ class ProductList {
       // create an instance of Products based on a generic object
       // from the son data
       // (note: this = this Productlist)
+		let lImgSrc = element.img_url.indexOf( "http" ) < 0 ? "./images/" + element.img_url : element.img_url;
       let aProduct = new Product(element.id, element.name,
-        element.price, element.description, './images/' + element.img_url, this);
+        element.price, element.description, lImgSrc, this);
       // add the product to the products array
       this.products.push(aProduct);
     }
