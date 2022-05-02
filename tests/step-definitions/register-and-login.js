@@ -1,5 +1,5 @@
-const { Given, When, Then } = require( "@wdio/cucumber-framework" );
-const pauseTime = 1500;
+const { Given, When, Then } = require( '@wdio/cucumber-framework' );
+const pauseTime = 500;
 const timeOut = 5000;
 
 
@@ -27,20 +27,11 @@ Then(
 
 
 Given(
-	"that I'm on the main page and not signed in",
+	"that I'm on the main page",
 	async () =>
 	{
-		let lSelector = ".register-and-login-links a";
-		await browser.url( "/" );
-
-		// await $( lSelector ).waitForExist();
-		// await expect( await $( lSelector ) ).toHaveHref( "/register" );
-		// await expect( await $( lSelector ) ).toBeClickable();
-
-		let lFirstAuthLink = await $( lSelector );
-		await lFirstAuthLink.waitForExist();
-		await expect( lFirstAuthLink ).toHaveHref( "/register" );
-		await expect( lFirstAuthLink ).toBeClickable();
+		await browser.url( '/' );
+		await $( '.register-and-login-links a' ).waitForClickable();
 	}
 );
 
@@ -49,69 +40,92 @@ When(
 	"I click on the 'Register' link",
 	async () =>
 	{
-		let lRegisterLink;
+		let lFirstAuthLink;
+		let lAuthLinksContainer = await $( '.register-and-login-links' );
+		await lAuthLinksContainer.waitUntil
+		(
+			async function ()
+			{
+				lFirstAuthLink = ( await this.$$( "a" ) )[ 0 ];
+				return ( lFirstAuthLink && await lFirstAuthLink.getAttribute( "href" ) === "/register" );
+			}
+		);
 
-		// let lAuthLinksContainer = await $( ".register-and-login-links" );
-		// await lAuthLinksContainer.waitUntil
-		// (
-		// 	async function ()
-		// 	{
-		// 		lRegiterLink = ( await this.$$( "a" ) )[ 0 ];
-		// 		return ( lRegiterLink && await lRegiterLink.getAttribute( "href" ) === "/register" );
-		// 	}
-		// );
-
-		lRegisterLink = await $( ".register-and-login-links a[href='/register']" );
-		await lRegisterLink.waitForClickable( { timeout : 5000 } )
-		await lRegisterLink.click();
+		await lFirstAuthLink.waitForClickable();
+		await lFirstAuthLink.click();
 	}
 );
 
 
 Then(
-	"a registration form should appear on the page",
+	'a dialog with a registration form should appear on the page',
 	async () =>
 	{
-		await $( "form[name='registration']" ).waitForDisplayed();
+		await $( 'form[name="registration"]' ).waitForDisplayed();
+		await browser.pause( pauseTime );
+	}
+);
+
+
+When(
+	"I click on the 'Login' link",
+	async () =>
+	{
+		let lSecondAuthLink;
+		let lAuthLinksContainer = await $( '.register-and-login-links' );
+		await lAuthLinksContainer.waitUntil
+		(
+			async function ()
+			{
+				lSecondAuthLink = ( await this.$$( "a" ) )[ 1 ];
+				return ( lSecondAuthLink && await lSecondAuthLink.getAttribute( "href" ) === "/login" );
+			},
+			{
+				timeout: timeOut,
+				timeoutMsg: "Reached timeout when wating for element"
+			}
+		);
+
+		await lSecondAuthLink.waitForClickable();
+		await lSecondAuthLink.click();
+	}
+);
+
+
+Then(
+	'a dialog with a login form should appear on the page',
+	async () =>
+	{
+		await $( 'form[name="login"]' ).waitForDisplayed( { timeout : 5000 } );
+		await browser.pause( pauseTime );
 	}
 );
 
 
 Given(
-	"that I can see the registration form",
+	"that I see the registration form",
 	async () =>
 	{
-		let lSelector = "form[name='registration']";
-		let lRegForm = await $( lSelector );
+		await browser.url( '/' );
+		await $( '.register-and-login-links' ).waitForDisplayed();
 
-		// let lSelector = ".register-and-login-links a";
-		// let lRegiterLink = await $( lSelector );
+		let lFirstAuthLink;
 
-		// await $( lSelector ).waitForExist();
-		// await expect( await $( lSelector ) ).toHaveHref( "/register" );
-		// await expect( await $( lSelector ) ).toBeClickable();
+		let lAuthLinksContainer = await $( '.register-and-login-links' );
+		await lAuthLinksContainer.waitUntil
+		(
+			async function ()
+			{
+				lFirstAuthLink = ( await this.$$( "a" ) )[ 0 ];
+				return ( lFirstAuthLink && await lFirstAuthLink.getAttribute( "href" ) === "/register" );
+			}
+		);
 
-		let lRegiterLink;
+		expect( lFirstAuthLink ).toBeTruthy();
+		await lFirstAuthLink.waitForClickable();
+		await lFirstAuthLink.click();
 
-		// let lAuthLinksContainer = await $( ".register-and-login-links" );
-		// await lAuthLinksContainer.waitUntil
-		// (
-		// 	async function ()
-		// 	{
-		// 		lRegiterLink = ( await this.$$( "a" ) )[ 0 ];
-		// 		return ( lRegiterLink && await lRegiterLink.getAttribute( "href" ) === "/register" );
-		// 	}
-		// );
-
-		// expect( lFirstAuthLink ).toBeTruthy();
-		// await lFirstAuthLink.waitForClickable();
-
-		// lRegiterLink = await $( ".register-and-login-links a[href='/register']" );
-		// await lRegiterLink.waitForClickable( { timeout : 5000 } )
-		// await lRegiterLink.click();
-
-		await expect( lRegForm ).toExist();
-		await lRegForm.waitForDisplayed();
+		await $( "form[name='registration']" ).waitForDisplayed();
 
 		await browser.pause( pauseTime );
 	}
@@ -122,16 +136,18 @@ When(
 	"I enter my registration info and click on the submit button",
 	async () =>
 	{
-		await $( "form[name='registration'] input[name='firstName']" ).setValue( "Tester2" );
-		await $( "form[name='registration'] input[name='lastName']" ).setValue( "Testare2" );
-		await $( "form[name='registration'] input[name='email']" ).setValue( "tester2@testare2.test" );
-		await $( "form[name='registration'] input[name='password']" ).setValue( "12345678" );
-		await $( "form[name='registration'] input[name='passwordRepeated']" ).setValue( "12345678" );
-		let lFoundSubmitBtn = await $( "form[name='registration'] input[type='submit']" );
+		await $( 'form[name="registration"] input[name="firstName"]' ).setValue( 'Tester2' );
+		await $( 'form[name="registration"] input[name="lastName"]' ).setValue( 'Testare2' );
+		await $( 'form[name="registration"] input[name="email"]' ).setValue( 'tester2@testare2.test' );
+		await $( 'form[name="registration"] input[name="password"]' ).setValue( '12345678' );
+		await $( 'form[name="registration"] input[name="passwordRepeated"]' ).setValue( '12345678' );
+		let lFoundSubmitBtn = await $( 'form[name="registration"] input[type="submit"]' );
 
 		await expect( lFoundSubmitBtn ).toBeTruthy();
 		await lFoundSubmitBtn.waitForClickable();
 		await lFoundSubmitBtn.click();
+
+		await browser.pause( pauseTime );
 	}
 );
 
@@ -146,76 +162,32 @@ Then(
 		let lFoundSuccessMsgElm = await $( "div.register p" );
 		await expect( lFoundSuccessMsgElm ).toBeTruthy();
 		await expect( await lFoundSuccessMsgElm.getText() ).toContain( "You are now successfully registrered as a member!" );
-		await browser.pause( pauseTime );
-	}
-);
-
-
-When(
-	"I click on the 'Login' link",
-	async () =>
-	{
-		let lLoginLink;
-
-		// let lAuthLinksContainer = await $( '.register-and-login-links' );
-		// await lAuthLinksContainer.waitUntil
-		// (
-		// 	async function ()
-		// 	{
-		// 		lLoginLink = ( await this.$$( "a" ) )[ 1 ];
-		// 		return ( lLoginLink && await lLoginLink.getAttribute( "href" ) === "/login" );
-		// 	},
-		// 	{
-		// 		timeout: timeOut,
-		// 		timeoutMsg: "Reached timeout when wating for element"
-		// 	}
-		// );
-
-		lLoginLink = await $( ".register-and-login-links a[href='/login']" );
-		await lLoginLink.waitForClickable( { timeout : 5000 } )
-		await lLoginLink.click();
-	}
-);
-
-
-Then(
-	"a login form should appear on the page",
-	async () =>
-	{
-		await $( "form[name='login']" ).waitForDisplayed( { timeout : timeOut } );
-		await browser.pause( pauseTime );
 	}
 );
 
 
 Given(
-	"that I can see the login form",
+	"that I see the login form",
 	async () =>
 	{
-		let lSelector = "form[name='login']";
-		let lLoginForm = await $( lSelector );
+		await browser.url( '/' );
+		await $( '.register-and-login-links' ).waitForDisplayed();
 
-		// await browser.url( '/' );
-		// await $( ".register-and-login-links" ).waitForDisplayed();
+		let lSecondAuthLink;
+		let lAuthLinksContainer = await $( '.register-and-login-links' );
+		await lAuthLinksContainer.waitUntil
+		(
+			async function ()
+			{
+				lSecondAuthLink = ( await this.$$( "a" ) )[ 1 ];
+				return ( lSecondAuthLink && await lSecondAuthLink.getAttribute( "href" ) === "/login" );
+			}
+		);
 
-		// let lSecondAuthLink;
-		// let lAuthLinksContainer = await $( '.register-and-login-links' );
-		// await lAuthLinksContainer.waitUntil
-		// (
-		// 	async function ()
-		// 	{
-		// 		lSecondAuthLink = ( await this.$$( "a" ) )[ 1 ];
-		// 		return ( lSecondAuthLink && await lSecondAuthLink.getAttribute( "href" ) === "/login" );
-		// 	}
-		// );
+		await lSecondAuthLink.waitForClickable();
+		await lSecondAuthLink.click();
 
-		// await lSecondAuthLink.waitForClickable();
-		// await lSecondAuthLink.click();
-		// await $( "form[name='login']" ).waitForDisplayed();
-
-		await expect( lLoginForm ).toExist();
-		await lLoginForm.waitForDisplayed();
-
+		await $( "form[name='login']" ).waitForDisplayed();
 	}
 );
 
@@ -224,9 +196,9 @@ When(
 	"I enter my login info and click on the submit button",
 	async () =>
 	{
-		await $( "form[name='login'] input[name='email']" ).setValue( "tester@testare.test" );
-		await $( "form[name='login'] input[name='password']" ).setValue( "12345678" );
-		let lFoundSubmitBtn = await $( "form[name='login'] input[type='submit']" );
+		await $( 'form[name="login"] input[name="email"]' ).setValue( 'tester@testare.test' );
+		await $( 'form[name="login"] input[name="password"]' ).setValue( '12345678' );
+		let lFoundSubmitBtn = await $( 'form[name="login"] input[type="submit"]' );
 
 		await expect( lFoundSubmitBtn ).toBeTruthy();
 		await lFoundSubmitBtn.waitForClickable();
