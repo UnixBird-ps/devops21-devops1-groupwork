@@ -137,18 +137,18 @@ When(
 		let lFirstOrderRow = await $( 'table[name="my-orders"] tbody tr.orderlist-row' );
 		await lFirstOrderRow.waitForClickable();
 		await lFirstOrderRow.click();
-		await browser.pause( pauseTime );
 	}
 );
 
 
 Then(
-	"the orders list should be replaced by a page showing total cost and products ordered for a order",
+	"the orders list should be replaced by a page showing total cost and products ordered for an order",
 	async () =>
 	{
 		let lSelector = "table[name='order-details']";
 		await expect( await $( lSelector ) ).toExist();
 		await ( await $( lSelector ) ).waitForDisplayed();
+		await browser.pause( pauseTime );
 	}
 );
 
@@ -170,7 +170,6 @@ When(
 		let lBackButton = await $( "button.back-button-orders" );
 		await lBackButton.waitForClickable();
 		await lBackButton.click();
-		await browser.pause( pauseTime );
 	}
 );
 
