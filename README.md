@@ -21,7 +21,8 @@ We use a workflow file to run several tests on push and pull requests. *All test
 **There are two deployment servers:**
 - Development
 - Production
-We deploy to these using the workflow file. Deployment happens automatically if all tests succeed but deployment to production server requires approvement.
+
+We deploy to these servers using the workflow file. Deployment happens automatically if all tests succeed but deployment to production server requires approvement.
 
 **Following frameworks are used for tests:**
 - Jest for unit tests.
