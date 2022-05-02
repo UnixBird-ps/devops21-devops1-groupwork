@@ -10,7 +10,7 @@ Feature: My orders list
 	Scenario: Checking out an old order to see the details
 		Given that I can see my order history
 		When I click on one of the rows in the list containing my old orders
-		Then the orders list should be replaced by a page showing total cost and products ordered for a order
+		Then the orders list should be replaced by a page showing total cost and products ordered for an order
 
 	Scenario: Going back to 'My orders' page
 		Given that I can see an order's details
