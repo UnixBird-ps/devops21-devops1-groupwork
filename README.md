@@ -18,7 +18,10 @@ If changes to the dev branch are ready for production it will then get merged in
 
 We use a workflow file to run several tests on push and pull requests. *All tests must succeed for merges into dev or main branch.*
 
-(We will be adding a deployment step to our workflow file as soon as we have two servers available for the dev and main branches.)
+**There are two deployment servers:**
+- Development
+- Production
+We deploy to these using the workflow file. Deployment happens automatically if all tests succeed but deployment to production server requires approvement.
 
 **Following frameworks are used for tests:**
 - Jest for unit tests.
