@@ -3,6 +3,7 @@ require( "./fakedom.js" );
 global.listen = require( "../frontend/js/helpers.js" ).listen;
 global.formatSEK = require( "../frontend/js/helpers.js" ).formatSEK;
 const MyOrdersList = require( "../frontend/js/my-orders-list.js");
+const debugMsg = require( "../backend/debug-funcs.js" ).debugMsg;
 
 
 describe(
@@ -58,12 +59,13 @@ describe(
 						</tr>
 					</tbody>
 				</table>
-				`.trim().replace( /^\s*/gm, "" ).split( "\n" ).map( s => s.trim() ).join( "\n" );
+				`.trim().replace( /^\s*$/, "" ).split( /\n/ ).map( s => s.trim() ).join( "\n" );
 
-				let lRenderedHTML = lOrdersList.render().replace( /^\s*/gm, "" ).trim().split( "\n" ).map( s => s.trim() ).join( "\n" );
+				// Get the rendering string
+				// Removing any leading and trailing new-lines, removing any indentation
+				let lRenderedHTML = lOrdersList.render().trim().replace( /^\s*$/, "" ).split( /\n/ ).map( s => s.trim() ).join( "\n" );
 
 				expect( lRenderedHTML ).toBe( lExpectedHTML );
-
 			}
 		)
 	}

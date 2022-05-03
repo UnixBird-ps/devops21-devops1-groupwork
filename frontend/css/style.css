@@ -9,7 +9,7 @@ body {
 	color: black;
 	margin-top: 0px;
 	margin-left: 0px;
-	margin-right: 0px;
+	margin-right: 5px;
 	padding-top: 0px;
 	padding-left: 0px;
 	padding-right: 0px;
@@ -21,10 +21,10 @@ body {
 	width: 100%;
 	height: 45px;
 	margin-top: 0px;
-	margin-left: 0px;
-	margin-right: 0px;
+	margin-left: 5px;
+	margin-right: 5px;
 	padding-top: 0px;
-	padding-left: 5px;
+	padding-left: 0px;
 	padding-right: 0px;
 	background-color: white;
 	display: flex;
@@ -35,7 +35,6 @@ body {
 
 .nav-container
 {
-	margin-right: 5px;
 	display: flex;
 	align-items: center;
 }
@@ -280,7 +279,6 @@ p
 }
 
 .cartContainer{
-	background-color: whitesmoke;
 	position: fixed;
 	right: 5px;
 	top: 30px;
