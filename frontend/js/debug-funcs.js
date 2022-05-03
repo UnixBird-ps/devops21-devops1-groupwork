@@ -21,5 +21,5 @@ function debugMsg( ...pMsg )
 // if so export the class for Jest
 if ( typeof module === 'object' && module.exports )
 {
-  module.exports = debugMsg;
+  module.exports = { debugMsg };
 }
