@@ -5,11 +5,11 @@
     "main": "./backend/index.js",
     "scripts": {
         "start": "node ./backend/index.js",
-        "test": "echo Run tests by executing 'npm run test-...' with one of the following scripts: test-unit, test-rest, test-bdd or test-all && exit 1",
+        "test": "echo Run tests by executing 'npm run test-...' with one of the following scripts: test-unit, test-bdd, test-rest or test-all && exit 1",
         "test-unit": "jest --config tests/jest.config.js || exit 1",
-        "test-rest": "newman run tests/rest-api-test.postman_collection.json || exit 1",
         "test-bdd": "wdio run tests/wdio.conf.js || exit 1",
-        "test-all": "npm run test-unit && npm run test-rest && npm run test-bdd || exit 1"
+        "test-rest": "newman run tests/rest-api-test.postman_collection.json || exit 1",
+        "test-all": "npm run test-unit && npm run test-bdd && npm run test-rest || exit 1"
     },
     "author": "Albin, Mauro, Pawel",
     "license": "ISC",
@@ -30,6 +30,7 @@
         "jest": "^27.5.1",
         "jsdom": "^19.0.0",
         "newman": "^5.3.2",
+        "node-fetch": "^3.2.4",
         "wdio-chromedriver-service": "^7.3.2"
     }
 }
