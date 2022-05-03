@@ -170,6 +170,7 @@ Then(
 			}
 		}
 		expect( foundProduct ).toBeTruthy();
-		await expect($('footer')).toHaveTextContaining('2');
+
+		await expect( ( await $$( 'div.cartContainer table[ class="shoppingCart" ] tr.tableRow td' ) )[ 1 ] ).toHaveTextContaining('2');
 	}
 );
