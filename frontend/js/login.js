@@ -1,4 +1,57 @@
 
+async function renderNavContainer()
+{
+	let lResultHTML = "";
+
+	let loggedIn;
+	try
+	{
+		loggedIn = await ( await fetch( '/api/login' ) ).json();
+	}
+	catch ( ignore ) { }
+
+	if ( !loggedIn || loggedIn.error )
+	{
+		lResultHTML = `
+			<div class="logon-info"></div>
+			<div class="nav-links"></div>
+			<div class="register-and-login-links">
+			<a href="/register">Register</a>
+			<a href="/login">Login</a>
+			</div>
+		`;
+	}
+	else
+	{
+		lResultHTML += `
+			<div class='logon-info'>
+			Logged in as ${loggedIn.firstName} ${loggedIn.lastName}
+			</div>
+		`;
+
+		if ( loggedIn.userRole === "user" )
+		{
+			lResultHTML += `
+				<div class='nav-links'>
+					<a href='/my-orders'>My orders</a>
+				</div>
+			`;
+		}
+
+		if ( loggedIn.userRole !== "visitor" )
+		{
+			lResultHTML += `
+				<div class="register-and-login-links">
+					<a href="/logout">Logout</a>
+				</div>
+			`;
+		}
+	}
+
+	return lResultHTML;
+}
+
+
 function renderLoginForm( retry = false )
 {
 	return `
@@ -56,7 +109,24 @@ document.querySelector( 'body' ).addEventListener(
 			return;
 		}
 
-		location.reload();
+		// Hide the form and modal
+		let lElmsToEmpty = document.querySelectorAll( "div.register, div.login" );
+		for ( el of lElmsToEmpty )
+		{
+			el.innerHTML = "";
+		}
+
+		let elementsToHide = document.querySelectorAll( '.register, .login, .modal-hider' );
+
+		for ( element of elementsToHide )
+		{
+			element.classList.add( 'hidden' );
+		}
+
+		getLogInfo();
+		grabEl( "main" ).innerHTML = window.productList.render();
+
+		//location.reload();
 	}
 );
 

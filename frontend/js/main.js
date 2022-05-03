@@ -52,8 +52,9 @@ async function reactOnUserSelectChoices( event )
 
 async function start( userRole )
 {
-	document.querySelector( 'main' ).innerHTML =
-		userRole === 'user' ? '<h1>You are logged in...</h1>' : '<h1>Admin view</h1>';
+	// document.querySelector( 'main' ).innerHTML =
+	// 	userRole === 'user' ? '<h1>You are logged in...</h1>' : '<h1>Admin view</h1>';
+
 	if ( userRole === 'user' )
 	{
 		return;

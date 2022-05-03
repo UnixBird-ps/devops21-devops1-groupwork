@@ -1,7 +1,6 @@
 
 async function getLogInfo()
 {
-	let div = document.querySelector( '.register-and-login-links' );
 	let loggedIn;
 	try
 	{
@@ -9,34 +8,13 @@ async function getLogInfo()
 	}
 	catch ( ignore ) { }
 
-	if ( loggedIn && loggedIn.userRole !== 'superadmin' ) new ProductList();
+	if ( loggedIn && loggedIn.userRole !== 'superadmin' && !window.productList)
+		window.productList = await( new ProductList() );
 
-	// if ( loggedIn && loggedIn.userRole === "user" )
-	// 	document.myOrdersList = new MyOrdersList();
-	// else
-	// 	document.myOrdersList = null;
+	let lNavContainer = document.querySelector( "div.nav-container" );
+	lNavContainer.innerHTML = await renderNavContainer();
 
-	if ( !loggedIn || loggedIn.error )
-	{
-		div.innerHTML = `
-			<a href="/register">Register</a>
-			<a href="/login">Login</a>
-		`
-	}
-	else
-	{
-		let lLogonInfoContainer = document.querySelector( '.logon-info' );
-		lLogonInfoContainer.innerHTML = `Logged in as ${loggedIn.firstName} ${loggedIn.lastName}`;
-		div.innerHTML += ' <a href="/logout">Logout</a>';
-
-		if ( loggedIn.userRole === "user" )
-		{
-			let lNavLinksDiv = document.querySelector( '.nav-links' );
-			lNavLinksDiv.innerHTML = ' <a href="/my-orders">My orders</a>';
-		}
-
-		start( loggedIn?.userRole );
-	}
+	if ( loggedIn && !loggedIn.error ) start( loggedIn?.userRole );
 }
 
 getLogInfo();
@@ -80,6 +58,11 @@ document.querySelector('body').addEventListener
 		}
 		catch (ignore) { }
 
-		location.reload();
+		let lNavContainer = document.querySelector( "div.nav-container" );
+		lNavContainer.innerHTML = await renderNavContainer();
+
+		grabEl( "main" ).innerHTML = window.productList.render();
+
+		//location.reload();
 	}
 );
