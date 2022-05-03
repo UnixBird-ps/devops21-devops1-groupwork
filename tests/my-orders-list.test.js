@@ -30,8 +30,8 @@ describe(
 			{
 				let lMockOrders =
 				[
-					{ id : 9998, date : "1970-01-01 23:59:58", grandTotal : 1199 },
-					{ id : 9999, date : "1970-01-01 23:59:59", grandTotal : 1299 }
+					{ id : 9998, date : "1970-01-01 00:59:58", grandTotal : 1199 },
+					{ id : 9999, date : "1970-01-01 00:59:59", grandTotal : 1299 }
 				];
 
 				MyOrdersList.mMyOrders = lMockOrders;
@@ -49,12 +49,12 @@ describe(
 					<tbody>
 						<tr class="orderlist-row" id="i9998">
 							<td>9998</td>
-							<td>1970-01-01 23:59:58</td>
+							<td>${ ( new Date( "1970-01-01 00:59:58".split( " " ).join( "T" ) + ".000Z" ) ).toLocaleString( "sv-SE" ) }</td>
 							<td>1 199,00 kr</td>
 						</tr>
 						<tr class="orderlist-row" id="i9999">
 							<td>9999</td>
-							<td>1970-01-01 23:59:59</td>
+							<td>${ ( new Date( "1970-01-01 00:59:59".split( " " ).join( "T" ) + ".000Z" ) ).toLocaleString( "sv-SE" ) }</td>
 							<td>1 299,00 kr</td>
 						</tr>
 					</tbody>

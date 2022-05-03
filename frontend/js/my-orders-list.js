@@ -39,10 +39,13 @@ class MyOrdersList
 			html += `
 			<tr class="orderlist-row" id="i${ iOrderRow.id }">
 			<td>${ iOrderRow.id }</td>
-			<td>${ iOrderRow.date }</td>
+			<td>${ ( new Date( iOrderRow.date.split( " " ).join( "T" ) + ".000Z" ) ).toLocaleString( "sv-SE" ) }</td>
 			<td>${ formatSEK( iOrderRow.grandTotal ) }</td>
 			</tr>`;
 		}
+		//<td>${ iOrderRow.date }</td>
+		//<td>${ iOrderRow.date.toLocaleString( "sv-SE" ) }</td>
+
 		html += `
 		</tbody>
 		</table>`;
@@ -94,7 +97,7 @@ class MyOrdersList
 				html += `<span>Order details</span>`;
 				html += `</div>`;
 				html += `<div class="order-caption">`;
-				html += `<span>Order ID: ${ lOrder.id }</span><span>Date: ${ lOrder.date }</span><span>Total order cost: ${ formatSEK( lOrder.grandTotal ) }</span>`;
+				html += `<span>Order ID: ${ lOrder.id }</span><span>Date: ${ ( new Date( lOrder.date.split( " " ).join( "T" ) + ".000Z" ) ).toLocaleString( "sv-SE" ) }</span><span>Total order cost: ${ formatSEK( lOrder.grandTotal ) }</span>`;
 				html += `</div>`;
 				html += `</div>`;
 				html += await ( await ( new MyOrderDetails( lOrder.id ) ) ).fetchRender();

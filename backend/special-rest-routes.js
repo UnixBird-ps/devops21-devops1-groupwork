@@ -10,7 +10,7 @@ module.exports = function (app, runQuery, db)
 		{
 			let userId = req.session.user?.id;
 			runQuery( 'my-orders', req, res, { customerId: userId },
-				`SELECT id, datetime( date, 'localtime' ) as date, grandTotal FROM orderGrandTotals WHERE customerId = :customerId`
+				`SELECT id, date, grandTotal FROM orderGrandTotals WHERE customerId = :customerId`
 			);
 		}
 	);
