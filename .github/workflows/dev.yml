@@ -26,12 +26,12 @@ jobs:
         npm install -g pm2
     - name: Daemonize node app
       run: pm2 start ./backend/index.js --name our-webshop
-    - name: Run REST API tests
-      run: npm run test-rest
-    - name: Run BDD tests
-      run: HEADLESS_CHROME=yes WDIO_LOG_LEVEL=warn npm run test-bdd
     - name: Run unit tests
       run: npm run test-unit
+    - name: Run BDD tests
+      run: npm run test-bdd
+    - name: Run REST API tests
+      run: npm run test-rest
   deploy_dev:
     name: Deploy to development server
     needs: test
