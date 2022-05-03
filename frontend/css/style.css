@@ -15,15 +15,6 @@ body {
 	padding-right: 0px;
 }
 
-/*
-.shop-name-h1
-{
-	margin-left: 5px;
-	margin-right: 5px;
-	padding-top: 5px;
-}
-*/
-
 .navbar
 {
 	position: fixed;
@@ -40,9 +31,6 @@ body {
 	justify-content: space-between;
 	align-items: center;
 	z-index: 1;
-	/*float: right;*/
-	/*opacity: 1;*/
-	/*display: flex;*/
 }
 
 .nav-container
@@ -58,24 +46,10 @@ body {
 	padding-right: 10px;
 }
 
-/*.register-and-login-links {*/
-	/*position: absolute;*/
-	/*display: inline-block;*/
-	/*right: 20px;*/
-	/*top: 20px;*/
-/*}*/
-
 .register-and-login-links a {
 	color: rgb(20, 166, 182);
 	padding-right: 10px;
 }
-
-/*.nav-links
-{*/
-	/*position: absolute;*/
-	/*right: 20px;*/
-	/*display: inline-block;*/
-/*}*/
 
 .nav-links a
 {
@@ -114,7 +88,6 @@ div.inner
 .productInList {
 	display: flex;
 	position: relative;
-	/*border-radius: 10px;*/
 	margin-top: 5px;
 	margin-bottom: 5px;
 	padding-left: 5px;
@@ -122,7 +95,6 @@ div.inner
 	padding-top: 5px;
 	padding-bottom: 0px;
 	background-color: rgb(208, 236, 208);
-	/*z-index: -3;*/
 }
 
 .productInList h3 {
@@ -139,15 +111,8 @@ div.inner
 
 .productInList .image {
 	display: inline-block;
-	/*float: right;*/
-	/*width: 20%;*/
-	/*position: relative;*/
-	/*right: -160px;*/
 	width: 160px !important;
 	height: 160px !important;
-	/*position: relative;*/
-	/*right: -20px;*/
-	/*bottom: 10px;*/
 	border:1px solid black;
 	justify-content: center;
 }
@@ -163,12 +128,9 @@ div.inner
 .product .image
 {
 	display: inline-block;
-	/*float: right;*/
-	/*width: 30%;*/
 	width: 520px !important;
 	height: 520px !important;
 	border:1px solid black;
-	/*margin: 0 20px 40px 20px;*/
 	justify-content: center;
 }
 
@@ -193,6 +155,12 @@ div.inner
 	cursor: pointer;
 }
 
+.order-caption-group
+{
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
 .order-caption
 {
 	margin-top: 10px;
@@ -205,18 +173,11 @@ div.inner
 	margin-right: 15px;
 }
 
-
-/*.product .price {*/
-	/*float: right;*/
-	/*margin-top: -10px;*/
-/*}*/
-
 .buyButton {
 	cursor: pointer;
 }
 
 table {
-	/* remove the cell-spacing between cells*/
 	border-collapse: collapse;
 }
 
@@ -247,9 +208,7 @@ th.number, td.number {
 }
 
 form {
-	/*margin-bottom: 10px;*/
 	max-width: 500px;
-	/*z-index: 1;*/
 }
 
 input[type="text"], input[type="password"], input[type="email"] {
@@ -296,7 +255,6 @@ a {
 
 p
 {
-	/*padding: 0px;*/
 	margin: 5px;
 }
 

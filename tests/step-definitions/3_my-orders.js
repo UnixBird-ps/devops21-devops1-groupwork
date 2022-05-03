@@ -1,7 +1,7 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
 const allureReporter = require('@wdio/allure-reporter').default;
 const debugMsg = require( '../../backend/debug-funcs.js' ).debugMsg;
-const pauseTime = 1500;
+const pauseTime = 0;
 const timeOut = 3000;
 
 
@@ -40,21 +40,21 @@ Given(
 
 		if ( lFirstAuthLinkURL != "/logout"  )
 		{
+			let lLoginLink;
+			// let lLinksContainer = await $( 'div.register-and-login-links' );
+			// await lLinksContainer.waitUntil
+			// (
+			// 	async function ()
+			// 	{
+			// 		lSecondAuthLink = ( await this.$$( "a" ) )[ 1 ];
+			// 		return ( lSecondAuthLink && await lSecondAuthLink.getAttribute( "href" ) == "/login" );
+			// 	}
+			// );
 
-			let lSecondAuthLink;
-			let lLinksContainer = await $( 'div.register-and-login-links' );
-			await lLinksContainer.waitUntil
-			(
-				async function ()
-				{
-					lSecondAuthLink = ( await this.$$( "a" ) )[ 1 ];
-					return ( lSecondAuthLink && await lSecondAuthLink.getAttribute( "href" ) == "/login" );
-				}
-			);
-
-			await lSecondAuthLink.waitForClickable();
-			await lSecondAuthLink.click();
-			await browser.pause( pauseTime );
+			lLoginLink = await $( ".register-and-login-links a[href='/login']" );
+			await expect( lLoginLink ).toExist();
+			await lLoginLink.waitForClickable();
+			await lLoginLink.click();
 
 			await ( await $( "form[name='login']" ) ).waitForDisplayed();
 			await $( 'form[name="login"] input[name="email"]' ).setValue( 'tester@testare.test' );
@@ -70,7 +70,6 @@ Given(
 				async function ()
 				{
 					let lHTML = await this.getHTML( false );
-					console.log( lHTML );
 					return lHTML.includes( "Logged in as " );
 				},
 				{
@@ -91,20 +90,21 @@ When(
 	"I click on the link 'My orders' in the top right corner",
 	async () =>
 	{
-		let lMyOrdersLink;
-		let lLinksContainer = await $( '.nav-links' );
-		await lLinksContainer.waitUntil
-		(
-			async function ()
-			{
-				lMyOrdersLink = ( await this.$$( "a" ) )[ 0 ];
-				return ( lMyOrdersLink && await lMyOrdersLink.getAttribute( "href" ) === "/my-orders" );
-			}
-		);
+		let lMyOrdersLink = await $( ".nav-links a[href='/my-orders']" );
+
+		// let lLinksContainer = await $( '.nav-links' );
+		// await lLinksContainer.waitUntil
+		// (
+		// 	async function ()
+		// 	{
+		// 		lMyOrdersLink = ( await this.$$( "a" ) )[ 0 ];
+		// 		return ( lMyOrdersLink && await lMyOrdersLink.getAttribute( "href" ) === "/my-orders" );
+		// 	}
+		// );
 
 		await lMyOrdersLink.waitForClickable();
 		await lMyOrdersLink.click();
-		await $( 'table[name="my-orders"]' ).waitForDisplayed();
+		await $( "table[name='my-orders']" ).waitForDisplayed();
 	}
 );
 
@@ -123,9 +123,10 @@ Given(
 	"that I can see my order history",
 	async () =>
 	{
-		let lOrdersTableElm = await $( 'table[name="my-orders"]' );
+		let lSelector = "table[name='my-orders']";
+		let lOrdersTableElm = await $( lSelector );
+		await expect( lOrdersTableElm ).toExist();
 		await lOrdersTableElm.waitForDisplayed();
-		await expect( await $( 'table[name="my-orders"]' ) ).toExist();
 		await browser.pause( pauseTime );
 	}
 );
@@ -138,18 +139,18 @@ When(
 		let lFirstOrderRow = await $( 'table[name="my-orders"] tbody tr.orderlist-row' );
 		await lFirstOrderRow.waitForClickable();
 		await lFirstOrderRow.click();
-		await browser.pause( pauseTime );
 	}
 );
 
 
 Then(
-	"the orders list should be replaced by a page showing total cost and products ordered for a order",
+	"the orders list should be replaced by a page showing total cost and products ordered for an order",
 	async () =>
 	{
 		let lSelector = "table[name='order-details']";
 		await expect( await $( lSelector ) ).toExist();
 		await ( await $( lSelector ) ).waitForDisplayed();
+		await browser.pause( pauseTime );
 	}
 );
 
@@ -169,9 +170,9 @@ When(
 	async () =>
 	{
 		let lBackButton = await $( "button.back-button-orders" );
+		await expect( lBackButton ).toExist();
 		await lBackButton.waitForClickable();
 		await lBackButton.click();
-		await browser.pause( pauseTime );
 	}
 );
 

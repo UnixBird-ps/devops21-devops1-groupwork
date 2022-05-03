@@ -3,9 +3,9 @@ name: CICD - Test and deploy
 
 on:
   push:
-    branches: [ main, dev, feature*, ps-feature*, ps-test* ]
+    branches: [ main, dev, feature-*, hotfix-*, ps-* ]
   pull_request:
-    branches: [ main, dev, feature*, ps-feature*, ps-test* ]
+    branches: [ main, dev, feature-*, hotfix-*, ps-* ]
 
 jobs:
   test:
@@ -22,7 +22,7 @@ jobs:
         cache: 'npm'
     - name: Install test dependencies
       run: |
-        npm ci
+        npm clean-install
         npm install -g pm2
     - name: Daemonize node app
       run: pm2 start ./backend/index.js --name our-webshop
@@ -64,8 +64,42 @@ jobs:
         _EOF_
     - name: Prepare app dirs
       run: |
-        ssh dev 'mkdir -p ~/our-webshop/{app,log}'
-        rsync -vaR -e 'ssh' package.json backend/*.js backend/*.json frontend/* dev:~/our-webshop/app/
-        rsync -vaR -e 'ssh' --ignore-existing backend/database/webshop.db dev:~/our-webshop/app/
+        rsync -vaR -e "ssh" --rsync-path "mkdir -p ~/our-webshop/app; rsync" package.json backend/*.js backend/*.json frontend/* dev:~/our-webshop/app/
+        rsync -vaR -e "ssh" --ignore-existing backend/database/webshop_static.db dev:~/our-webshop/app/
     - name: Install dependencies and start the app
-      run: ssh dev 'cd ~/our-webshop/app && npm install && { pm2 restart our-webshop || pm2 start backend --name our-webshop --log ../log/app.log --time; }'
+      run: ssh dev "mkdir -p ~/our-webshop/log && cd ~/our-webshop/app && npm install && { pm2 restart our-webshop || pm2 start backend --name our-webshop --log ../log/app.log --time; }"
+  deploy_prod:
+    name: Deploy to production server
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: "Deploy branch 'main' to production server"
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check if production server is defined
+      env:
+        PROD_SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
+      if: "${{ env.PROD_SSH_HOST == '' }}"
+      run: exit 1
+    - name: Setup SSH
+      env:
+        PROD_SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
+        PROD_SSH_USER: ${{ secrets.PROD_SSH_USER }}
+        PROD_SSH_PORT: ${{ secrets.PROD_SSH_PORT }}
+        PROD_SSH_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
+      run: |
+        mkdir -p ~/.ssh/
+        echo "$PROD_SSH_KEY" > ~/.ssh/prod.key
+        chmod 600 ~/.ssh/prod.key
+        cat >>~/.ssh/config <<_EOF_
+        Host prod
+          HostName $PROD_SSH_HOST
+          User $PROD_SSH_USER
+          Port $PROD_SSH_PORT
+          IdentityFile ~/.ssh/prod.key
+          StrictHostKeyChecking no
+        _EOF_
+    - name: Prepare app dirs
+      run: rsync -vaR -e "ssh" --rsync-path "mkdir -p ~/our-webshop/app; rsync" package.json backend/*.js backend/*.json frontend/* prod:~/our-webshop/app/
+    - name: Install dependencies and start the app
+      run: ssh prod "mkdir -p ~/our-webshop/log && cd ~/our-webshop/app && npm install && { pm2 restart our-webshop || pm2 start backend --name our-webshop --log ../log/app.log --time; }"
