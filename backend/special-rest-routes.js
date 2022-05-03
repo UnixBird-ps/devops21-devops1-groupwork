@@ -10,7 +10,7 @@ module.exports = function (app, runQuery, db)
 		{
 			let userId = req.session.user?.id;
 			runQuery( 'my-orders', req, res, { customerId: userId },
-				`SELECT id, date, grandTotal FROM orderGrandTotals WHERE customerId = :customerId`
+				`SELECT id, datetime( date, 'localtime' ) as date, grandTotal FROM orderGrandTotals WHERE customerId = :customerId`
 			);
 		}
 	);
@@ -56,29 +56,33 @@ module.exports = function (app, runQuery, db)
 
 			try
 			{
+				// Prepare two SQL statements to be used in the transation
 				// Add single order row to db
 				let lSql = "";
 				lSql += "INSERT INTO orders ( customerId )";//, date
 				lSql += " VALUES ( :customerId )";// ${ customerId }, '${ lTimeStr }'
 				const lPrepped1 = db.prepare( lSql );
 
+				// Add single order row to db
 				lSql = "";
 				lSql += `INSERT INTO ordersXproducts ( orderId, ${ Object.keys( req.body[ 0 ] ) }, price )`;
 				lSql += " VALUES\n( :orderId, :productId, :quantity, ( SELECT price FROM products WHERE id = :productId ) )";
 				const lPrepped2 = db.prepare( lSql );
 
+				// Start the transaction
 				db.prepare( "BEGIN" ).run();
 
+				// Run first prepared statement
 				result = lPrepped1.run( { customerId : userId } );
 				lOrderId = result.lastInsertRowid;
 
-				//result = lPrepped2.run( { id : lOrderId, values : req.body } );
+				// Run second prepared statement in a loop for multiple products
 				for ( let r of req.body )
 				{
 					let lOrderDetailsRow = { orderId : lOrderId, ...r };
 					result = lPrepped2.run( lOrderDetailsRow );
 				}
-
+				// Commit all
 				result = db.prepare( "COMMIT" ).run();
 			}
 			catch ( e )
