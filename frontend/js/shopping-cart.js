@@ -3,7 +3,7 @@ class ShoppingCart {
 
 	constructor()
 	{
-		this.orderRows = [];
+		this.orderRows = ShoppingCart.orderRows = [];
 
 		// Call only once
 		if ( !ShoppingCart.eventListenersAdded )
@@ -16,7 +16,7 @@ class ShoppingCart {
 
 	// check if the product alread is in the cart
     let found = false;
-    for (let orderRow of this.orderRows) {
+    for (let orderRow of ShoppingCart.orderRows) {
       if (orderRow.product === product) {
         // add quantity
         orderRow.quantity += quantity;
@@ -27,15 +27,14 @@ class ShoppingCart {
 	// if the product wasn't in the cart already
     if (!found) {
 		// Add a new order row
-		this.orderRows.push({
+		ShoppingCart.orderRows.push({
 		  quantity,
 		  product
 		});
 	}
 
     // for now render the shopping cart to the footer
-    document.querySelector('footer').innerHTML =
-      this.render();
+    document.querySelector( ".cartContainer" ).innerHTML = this.render();
   }
 
 
@@ -43,10 +42,10 @@ class ShoppingCart {
 	{
 		// create a html table where we display
 		// the order rows of the shopping cart
-		let html = '<div class="cartContainer">'
+		let html = "";//'<div class="cartContainer">'
 		html += '<table class="shoppingCart">';
 		let totalSum = 0;
-		for (let orderRow of this.orderRows) {
+		for (let orderRow of ShoppingCart.orderRows) {
 			let rowSum = orderRow.quantity * orderRow.product.price;
 			html += `
 			<tr class="tableRow" id="${orderRow.product.id}">
@@ -67,13 +66,13 @@ class ShoppingCart {
 		html += '</table>';
 		html += `<div class="cartButtons"><button class="cancelButton">Cancel</button>
 		<button class="orderButton">Order</button></div>`;
-		html += '</div>';
+		//html += '</div>';
 		return html;
 	}
 
 
 	addOrders() {
-		let data = this.orderRows; 
+		let data = ShoppingCart.orderRows; 
 		let nProducts = [];
 		for(let nOrder in data){
 			let nLib = {};
@@ -94,12 +93,15 @@ class ShoppingCart {
 				if ( data?.error?.toLowerCase().includes( "not allowed" ) )
 					alert( "Please login to place order" );
 				else
+				{
+					ShoppingCart.orderRows = [];
+					grabEl('.cartContainer').innerHTML = "";//style.display = 'none';
 					alert( "Order was sent. Thank you for your order." );
+				}
 			})
 			.catch((error) => {
 				console.error('Error:', error);
 			});
-			this.orderRows = [];
 	}
 
 
@@ -109,32 +111,32 @@ class ShoppingCart {
 			let rowElement = event.target.closest('.tableRow, .product');
 			let rowId = +rowElement.getAttribute('id');
 			let index = 0;
-			for(let nOrder in this.orderRows){
-				if(rowId === this.orderRows[nOrder].product.id){
-					this.orderRows.splice(index, 1);
+			for(let nOrder in ShoppingCart.orderRows){
+				if(rowId === ShoppingCart.orderRows[nOrder].product.id){
+					ShoppingCart.orderRows.splice(index, 1);
 				}
 				index ++;
 			}
-			if(this.orderRows.length === 0){
-				grabEl('.cartContainer').style.display = 'none';
+			if(ShoppingCart.orderRows.length === 0){
+				grabEl('.cartContainer').innerHTML = ""; //.style.display = 'none';
 			}else{
-				document.querySelector('footer').innerHTML = this.render();
+				//document.querySelector('footer').innerHTML = this.render();
+				document.querySelector( ".cartContainer" ).innerHTML = this.render();
 			}
 			return;
 		});
 
 
 		listen('click', '.orderButton', () => {
-		  	let shoppingCart = grabEl('.shoppingCart')
+		  	//let shoppingCart = grabEl('.shoppingCart')
 			this.addOrders();
-			grabEl('.cartContainer').style.display = 'none';
 			return;
 		});
 
 
 		listen('click', '.cancelButton',()=>{
-			this.orderRows = [];
-			grabEl('.cartContainer').style.display = 'none';
+			ShoppingCart.orderRows = [];
+			grabEl('.cartContainer').innerHTML = "";//style.display = 'none';
 			return;
 		});
 

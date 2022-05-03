@@ -3,6 +3,7 @@ require( "./fakedom.js" );
 global.listen = require( "../frontend/js/helpers.js" ).listen;
 global.formatSEK = require( "../frontend/js/helpers.js" ).formatSEK;
 const MyOrdersList = require( "../frontend/js/my-orders-list.js");
+const debugMsg = require( "../backend/debug-funcs.js" ).debugMsg;
 
 
 describe(
@@ -29,8 +30,8 @@ describe(
 			{
 				let lMockOrders =
 				[
-					{ id : 9998, date : "1970-01-01 23:59:58", grandTotal : 1199 },
-					{ id : 9999, date : "1970-01-01 23:59:59", grandTotal : 1299 }
+					{ id : 9998, date : "1970-01-01 00:59:58", grandTotal : 1199 },
+					{ id : 9999, date : "1970-01-01 00:59:59", grandTotal : 1299 }
 				];
 
 				MyOrdersList.mMyOrders = lMockOrders;
@@ -48,22 +49,23 @@ describe(
 					<tbody>
 						<tr class="orderlist-row" id="i9998">
 							<td>9998</td>
-							<td>1970-01-01 23:59:58</td>
+							<td>${ ( new Date( "1970-01-01 00:59:58".split( " " ).join( "T" ) + ".000Z" ) ).toLocaleString( "sv-SE" ) }</td>
 							<td>1 199,00 kr</td>
 						</tr>
 						<tr class="orderlist-row" id="i9999">
 							<td>9999</td>
-							<td>1970-01-01 23:59:59</td>
+							<td>${ ( new Date( "1970-01-01 00:59:59".split( " " ).join( "T" ) + ".000Z" ) ).toLocaleString( "sv-SE" ) }</td>
 							<td>1 299,00 kr</td>
 						</tr>
 					</tbody>
 				</table>
-				`.trim().replace( /^\s*/gm, "" ).split( "\n" ).map( s => s.trim() ).join( "\n" );
+				`.trim().replace( /^\s*$/, "" ).split( /\n/ ).map( s => s.trim() ).join( "\n" );
 
-				let lRenderedHTML = lOrdersList.render().replace( /^\s*/gm, "" ).trim().split( "\n" ).map( s => s.trim() ).join( "\n" );
+				// Get the rendering string
+				// Removing any leading and trailing new-lines, removing any indentation
+				let lRenderedHTML = lOrdersList.render().trim().replace( /^\s*$/, "" ).split( /\n/ ).map( s => s.trim() ).join( "\n" );
 
 				expect( lRenderedHTML ).toBe( lExpectedHTML );
-
 			}
 		)
 	}

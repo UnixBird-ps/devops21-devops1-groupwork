@@ -1,4 +1,5 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
+const allureReporter = require('@wdio/allure-reporter').default;
 const debugMsg = require( '../../backend/debug-funcs.js' ).debugMsg;
 const pauseTime = 0;
 const timeOut = 3000;
