@@ -1,4 +1,4 @@
-./backend/database/webshop.db
+backend/database/webshop.db
 
 ./allure-results
 ./allure-report
@@ -74,7 +74,6 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
 .env.test
 
 # parcel-bundler cache (https://parceljs.org/)
