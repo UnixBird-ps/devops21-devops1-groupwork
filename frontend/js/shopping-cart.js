@@ -49,7 +49,11 @@ class ShoppingCart {
 			let rowSum = orderRow.quantity * orderRow.product.price;
 			html += `
 			<tr class="tableRow" id="${orderRow.product.id}">
-				<td><button class="delCartWare">X</button></td>
+				<td>
+					<button type="button" class="close delCartWare" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</td>
 				<td>${ orderRow.quantity }</td>
 				<td>${ orderRow.product.name }</td>
 				<td>${ formatSEK( orderRow.product.price ) }</td>
@@ -64,8 +68,9 @@ class ShoppingCart {
 			<td>${formatSEK(totalSum)}</td>
 		</tr>`;
 		html += '</table>';
-		html += `<div class="cartButtons"><button class="cancelButton">Cancel</button>
-		<button class="orderButton">Order</button></div>`;
+		html += `<div class="cartButtons">
+		<button class="btn btn-outline-dark cancelButton">Cancel</button>
+		<button class="btn btn-outline-dark orderButton">Order</button></div>`;
 		//html += '</div>';
 		return html;
 	}
