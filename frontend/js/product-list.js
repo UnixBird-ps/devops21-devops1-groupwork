@@ -47,6 +47,9 @@ class ProductList {
 	// Render a list of products
 	render()
 	{
+
+		console.log( this.products );
+
 		// Create the variable html - an empty string
 		let html = "";
 		html += "<p>Click on a product name to see product details.</p>";
