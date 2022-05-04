@@ -26,8 +26,12 @@ class MyOrdersList
 		let lLabels = [ "Order#", "Date", "Order total" ];
 
 		let html = `
+		<div class="order-caption-group">
+		<div class="order-caption">
+		<span>${ MyOrdersList.mMyOrders.length > 0 ? "My Orders" : "Your order history is empty" }</span>
+		</div>
+		</div>
 		<table name="my-orders">
-		${ MyOrdersList.mMyOrders.length > 0 ? "<caption>My Orders</caption>" : "<caption>Your order history is empty</caption>" }
 		<thead>
 		<tr>
 		${ ( () => { let s = ""; for ( let lLabel of lLabels ) { s += "<td>" + lLabel + "</td>" }; return s; })() }
@@ -43,8 +47,6 @@ class MyOrdersList
 			<td>${ formatSEK( iOrderRow.grandTotal ) }</td>
 			</tr>`;
 		}
-		//<td>${ iOrderRow.date }</td>
-		//<td>${ iOrderRow.date.toLocaleString( "sv-SE" ) }</td>
 
 		html += `
 		</tbody>
