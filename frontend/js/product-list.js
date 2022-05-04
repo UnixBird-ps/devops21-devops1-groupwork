@@ -41,12 +41,14 @@ class ProductList {
 
     // Render the product list and replace the contents
     // of the main-tag in our html with the product list
-    grabEl('main').innerHTML = this.render();
+    //grabEl('main').innerHTML = this.render();
   }
 
 	// Render a list of products
-	render()
+	async render()
 	{
+		if ( !this.products ) await this.readDataFromDb();
+
 		// Create the variable html - an empty string
 		let html = "";
 		html += "<p>Click on a product name to see product details.</p>";
@@ -83,9 +85,9 @@ class ProductList {
     });
 
     // Add an event listener for the back button
-    listen('click', '.backButton', () => {
+    listen('click', '.backButton', async () => {
       // replace the contents of main with the product list
-      grabEl('main').innerHTML = this.render();
+      grabEl('main').innerHTML = await this.render();
     });
 
   }
