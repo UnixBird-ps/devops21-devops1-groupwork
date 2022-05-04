@@ -33,7 +33,8 @@ class Product {
 		this.description.replaceAll('\n\n', '</p><p>') + '</p>';
 		// (why not just the number as id? because the id attribute
 		// in html should start with a-z or A-Z according to specs)
-		return `<div class="product" id="i${this.id}">
+		return `
+		<div class="product" id="i${this.id}">
 			<div class="image">
 				<img src="${this.image}">
 			</div>
@@ -42,27 +43,34 @@ class Product {
 			<p class="price">Price: ${this.price} kr</p>
 			<form>
 				<input type="number" value="1" class="quantity" min="1" max="100">
-				<button type="submit" class="buyButton">Buy</button>
+				<button type="submit" class="btn btn-light btn-sm buyButton">
+					Add to <span class="material-icons">shopping_cart</span>
+				</button>
 			</form>
-		</div>`;
+		</div>
+		`;
 	}
 
 	// A method that shows compact info about the product (in a list)
 	renderInList() {
 		return `
-		<div class="productInList" id="i${this.id}">
-			<div class="image">
-				<img src="${this.image}">
+		<li class="list-group-item">
+			<div class="productInList" id="i${this.id}">
+				<div class="image">
+					<img src="${this.image}">
+				</div>
+				<div class="product-info">
+					<h3>${this.name}</h3>
+					<p class="price">Price: ${this.price} kr</p>
+					<form>
+						<input type="number" value="1" class="quantity" min="1" max="100">
+						<button type="submit" class="btn btn-light btn-sm buyButton">
+							Add to <span class="material-icons">shopping_cart</span>
+						</button>
+					</form>
+				</div>
 			</div>
-			<div class="product-info">
-				<h3>${this.name}</h3>
-				<p class="price">Price: ${this.price} kr</p>
-				<form>
-					<input type="number" value="1" class="quantity" min="1" max="100">
-					<button type="submit" class="buyButton">Buy</button>
-				</form>
-			</div>
-		</div>
+		</li>
 		`;
 	}
 
