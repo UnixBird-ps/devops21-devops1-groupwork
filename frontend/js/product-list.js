@@ -85,9 +85,9 @@ class ProductList {
     });
 
     // Add an event listener for the back button
-    listen('click', '.backButton', () => {
+    listen('click', '.backButton', async () => {
       // replace the contents of main with the product list
-      grabEl('main').innerHTML = this.render();
+      grabEl('main').innerHTML = await this.render();
     });
 
   }
