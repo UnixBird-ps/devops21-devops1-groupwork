@@ -54,9 +54,12 @@ class ProductList {
 		html += "<p>Click on a product name to see product details.</p>";
 		// Loop through all products and add the html
 		// for each product to the html variable
+		html += "<ul class='list-group list-group-flush' id='products'>";
 		for (let product of this.products) {
 		html += product.renderInList();
 		}
+		html += "</ul>";
+
 		// Return html for all the products
 		return html;
 	}

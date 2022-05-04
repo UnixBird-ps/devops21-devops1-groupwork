@@ -39,8 +39,12 @@ describe(
 				expect( MyOrdersList.mMyOrders ).not.toHaveLength( 0 );
 
 				let lExpectedHTML = `
+				<div class="order-caption-group">
+					<div class="order-caption">
+						<span>My Orders</span>
+					</div>
+				</div>
 				<table name="my-orders">
-					<caption>My Orders</caption>
 					<thead>
 						<tr>
 							<td>Order#</td><td>Date</td><td>Order total</td>
