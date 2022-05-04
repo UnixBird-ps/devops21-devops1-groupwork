@@ -28,26 +28,37 @@
 		crossorigin="anonymous"
 		referrerpolicy="no-referrer"
 	/>
+	<!-- Load our CSS -->
+	<link rel="stylesheet" href="/css/style.css">
+	<!-- Load Google's icon CSS -->
 	<link
 		rel="stylesheet"
 		href="https://fonts.googleapis.com/icon?family=Material+Icons"
 	/>
-	<!-- Load our CSS -->
-	<link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-		<div class="navbar">
+	<div class="row navbar">
+		<div class="col-auto mr-auto">
 			<h1 class="shop-name-h1">Our shop v0.9</h1>
 			<div class="shopping-cart">
 				<div class="cartContainer"></div>
 			</div>
-			<div class="nav-container">
+		</div>
+		<div class="row col-auto">
+			<div class="col-auto" >
+				<button type="button" class="btn btn-light hidden">
+					<span class="material-icons">shopping_cart</span>
+					<span class="badge badge-dark">2</span>
+				</button>
+			</div>
+			<div class="col-auto nav-container">
 				<div class="logon-info"></div>
 				<div class="nav-links"></div>
 				<div class="register-and-login-links"></div>
 			</div>
 		</div>
+	</div>
 	<div class="modal-hider hidden"></div>
 	<div class="login hidden"></div>
 	<div class="register hidden"></div>
