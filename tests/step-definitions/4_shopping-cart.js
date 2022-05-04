@@ -27,7 +27,7 @@ When(
 		}
 		expect( foundProduct ).toBeTruthy();
 		await foundProduct.scrollIntoView( true );
-		let buyButton = await foundProduct.$( '[class="buyButton"]' );
+		let buyButton = await foundProduct.$( '.buyButton' );
 		await buyButton.click();
 	}
 );
@@ -68,7 +68,7 @@ Given(
 		}
 		expect( foundProduct ).toBeTruthy();
 		await foundProduct.scrollIntoView( true );
-		let buyButton = await foundProduct.$( '[class="buyButton"]' );
+		let buyButton = await foundProduct.$( '.buyButton' );
 		await buyButton.click();
 	}
 );
@@ -89,7 +89,7 @@ When(
 		}
 		expect( foundProduct ).toBeTruthy();
 		await foundProduct.scrollIntoView( true );
-		let buyButton = await foundProduct.$( '[class="buyButton"]' );
+		let buyButton = await foundProduct.$( '.buyButton' );
 		await buyButton.click();
 	}
 );
@@ -131,7 +131,7 @@ Given(
 		}
 		expect( foundProduct ).toBeTruthy();
 		await foundProduct.scrollIntoView( true );
-		let buyButton = await foundProduct.$( '[class="buyButton"]' );
+		let buyButton = await foundProduct.$( '.buyButton' );
 		await buyButton.click();
 	}
 );
@@ -151,7 +151,7 @@ When(
 		}
 		expect( foundProduct ).toBeTruthy();
 		await foundProduct.scrollIntoView( true );
-		let buyButton = await foundProduct.$( '[class="buyButton"]' );
+		let buyButton = await foundProduct.$( '.buyButton' );
 		await buyButton.click();
 	}
 );
@@ -171,6 +171,6 @@ Then(
 		}
 		expect( foundProduct ).toBeTruthy();
 
-		await expect( ( await $$( 'div.cartContainer table[ class="shoppingCart" ] tr.tableRow td' ) )[ 1 ] ).toHaveTextContaining('2');
+		await expect( ( await $$( 'div.cartContainer table.shoppingCart tr.tableRow td' ) )[ 1 ] ).toHaveTextContaining('2');
 	}
 );

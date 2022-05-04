@@ -59,7 +59,9 @@ describe(
 					<p class="price">Price: 14.95 kr</p>
 					<form>
 						<input type="number" value="1" class="quantity" min="1" max="100">
-						<button type="submit" class="buyButton">Buy</button>
+						<button type="submit" class="btn btn-light btn-sm buyButton">
+							Add to <span class="material-icons">shopping_cart</span>
+						</button>
 					</form>
 				</div>
 				`.trim().split( "\n" ).map( s => s.trim() ).join( "\n" );
@@ -91,7 +93,9 @@ describe(
 							<p class="price">Price: 14.95 kr</p>
 							<form>
 								<input type="number" value="1" class="quantity" min="1" max="100">
-								<button type="submit" class="buyButton">Buy</button>
+								<button type="submit" class="btn btn-light btn-sm buyButton">
+									Add to <span class="material-icons">shopping_cart</span>
+								</button>
 							</form>
 						</div>
 					</div>
