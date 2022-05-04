@@ -69,8 +69,8 @@ class ShoppingCart {
 		</tr>`;
 		html += '</table>';
 		html += `<div class="cartButtons">
-		<button class="btn btn-outline-dark cancelButton">Cancel</button>
-		<button class="btn btn-outline-dark orderButton">Order</button></div>`;
+		<button class="btn btn-sm btn-outline-dark cancelButton">Cancel</button>
+		<button class="btn btn-sm btn-outline-dark orderButton">Order</button></div>`;
 		//html += '</div>';
 		return html;
 	}
