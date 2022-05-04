@@ -43,7 +43,9 @@ class Product {
 			<p class="price">Price: ${this.price} kr</p>
 			<form>
 				<input type="number" value="1" class="quantity" min="1" max="100">
-				<button type="submit" class="buyButton">Buy</button>
+				<button type="submit" class="btn btn-light btn-sm buyButton">
+					Add to <span class="material-icons">shopping_cart</span>
+				</button>
 			</form>
 		</div>
 		`;
@@ -62,7 +64,9 @@ class Product {
 					<p class="price">Price: ${this.price} kr</p>
 					<form>
 						<input type="number" value="1" class="quantity" min="1" max="100">
-						<button type="submit" class="buyButton">Buy</button>
+						<button type="submit" class="btn btn-light btn-sm buyButton">
+							Add to <span class="material-icons">shopping_cart</span>
+						</button>
 					</form>
 				</div>
 			</div>
