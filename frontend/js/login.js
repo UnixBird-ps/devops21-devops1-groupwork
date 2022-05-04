@@ -124,7 +124,11 @@ document.querySelector( 'body' ).addEventListener(
 		}
 
 		getLogInfo();
-		grabEl( "main" ).innerHTML = window.productList.render();
+
+		//debugMsg();
+		//loggedIn && loggedIn.userRole !== 'superadmin'
+
+		//grabEl( "main" ).innerHTML = window.productList.render();
 
 		//location.reload();
 	}

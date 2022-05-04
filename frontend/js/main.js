@@ -55,10 +55,12 @@ async function start( userRole )
 	// document.querySelector( 'main' ).innerHTML =
 	// 	userRole === 'user' ? '<h1>You are logged in...</h1>' : '<h1>Admin view</h1>';
 
-	if ( userRole === 'user' )
+	if ( userRole !== 'superadmin' )
 	{
+		//grabEl( "main" ).innerHTML = window.productList.render();
 		return;
 	}
+
 	let selectData = ( await getData( '/api/tablesAndViews' ) )
 		.map( item => item.type + ': ' + item.name ).sort()
 		.filter( x => x !== 'table: customers' );

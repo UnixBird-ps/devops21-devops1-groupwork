@@ -8,13 +8,20 @@ async function getLogInfo()
 	}
 	catch ( ignore ) { }
 
-	if ( loggedIn && loggedIn.userRole !== 'superadmin' && !window.productList)
-		window.productList = await( new ProductList() );
+	//if ( loggedIn && loggedIn.userRole !== 'superadmin' && !window.productList )
+	if ( !window.productList ) window.productList = await( new ProductList() );
 
 	let lNavContainer = document.querySelector( "div.nav-container" );
 	lNavContainer.innerHTML = await renderNavContainer();
 
-	if ( loggedIn && !loggedIn.error ) start( loggedIn?.userRole );
+	if ( !loggedIn || loggedIn.userRole !== "superadmin" ) grabEl( "main" ).innerHTML = window.productList.render();
+
+	if ( loggedIn && !loggedIn.error )
+	{
+		if ( loggedIn.userRole === "superadmin" ) grabEl( "main" ).innerHTML = "";
+
+		start( loggedIn?.userRole );
+	}
 }
 
 getLogInfo();
@@ -42,7 +49,7 @@ document.querySelector('body').addEventListener
 		{
 			event.preventDefault();
 
-			await ( new ProductList() ).readDataFromDb();
+			grabEl( "main" ).innerHTML = window.productList.render();
 
 			let lNavLinksDiv = document.querySelector( '.nav-links' );
 			lNavLinksDiv.innerHTML = ' <a href="/my-orders">My orders</a>';
@@ -62,6 +69,10 @@ document.querySelector('body').addEventListener
 		lNavContainer.innerHTML = await renderNavContainer();
 
 		grabEl( "main" ).innerHTML = window.productList.render();
+
+		// Empty other elements
+		grabEl( "div.select-holder" ).innerHTML = "";
+		grabEl( "div.data-table" ).innerHTML = "";
 
 		//location.reload();
 	}
