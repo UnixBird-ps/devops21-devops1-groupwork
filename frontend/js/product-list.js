@@ -41,7 +41,7 @@ class ProductList {
 
     // Render the product list and replace the contents
     // of the main-tag in our html with the product list
-    grabEl('main').innerHTML = this.render();
+    //grabEl('main').innerHTML = this.render();
   }
 
 	// Render a list of products
