@@ -9,12 +9,12 @@ async function getLogInfo()
 	catch ( ignore ) { }
 
 	//if ( loggedIn && loggedIn.userRole !== 'superadmin' && !window.productList )
-	if ( !window.productList ) window.productList = await( new ProductList() );
+	if ( !window.productList ) window.productList = await ( new ProductList() );
 
 	let lNavContainer = document.querySelector( "div.nav-container" );
 	lNavContainer.innerHTML = await renderNavContainer();
 
-	if ( !loggedIn || loggedIn.userRole !== "superadmin" ) grabEl( "main" ).innerHTML = window.productList.render();
+	if ( !loggedIn || loggedIn.userRole !== "superadmin" ) grabEl( "main" ).innerHTML = await window.productList.render();
 
 	if ( loggedIn && !loggedIn.error )
 	{
@@ -49,7 +49,7 @@ document.querySelector('body').addEventListener
 		{
 			event.preventDefault();
 
-			grabEl( "main" ).innerHTML = window.productList.render();
+			grabEl( "main" ).innerHTML = await window.productList.render();
 
 			let lNavLinksDiv = document.querySelector( '.nav-links' );
 			lNavLinksDiv.innerHTML = ' <a href="/my-orders">My orders</a>';
@@ -68,7 +68,7 @@ document.querySelector('body').addEventListener
 		let lNavContainer = document.querySelector( "div.nav-container" );
 		lNavContainer.innerHTML = await renderNavContainer();
 
-		grabEl( "main" ).innerHTML = window.productList.render();
+		grabEl( "main" ).innerHTML = await window.productList.render();
 
 		// Empty other elements
 		grabEl( "div.select-holder" ).innerHTML = "";

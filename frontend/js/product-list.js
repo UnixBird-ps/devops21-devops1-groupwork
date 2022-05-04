@@ -45,11 +45,9 @@ class ProductList {
   }
 
 	// Render a list of products
-	render()
+	async render()
 	{
-		debugMsg();
-		console.log( this.products );
-		if ( !this.products ) await readDataFromDb();
+		if ( !this.products ) await this.readDataFromDb();
 
 		// Create the variable html - an empty string
 		let html = "";
