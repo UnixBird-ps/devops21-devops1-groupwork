@@ -18,7 +18,11 @@ async function getLogInfo()
 
 	if ( loggedIn && !loggedIn.error )
 	{
-		if ( loggedIn.userRole === "superadmin" ) grabEl( "main" ).innerHTML = "";
+		if ( loggedIn.userRole === "superadmin" )
+		{
+			grabEl( "main" ).innerHTML = "";
+			window.productList.shoppingCart.empty();
+		}
 
 		start( loggedIn?.userRole );
 	}
