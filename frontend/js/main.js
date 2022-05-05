@@ -52,6 +52,9 @@ async function reactOnUserSelectChoices( event )
 
 async function start( userRole )
 {
+	debugMsg();
+	console.log( userRole );
+
 	if ( userRole !== 'superadmin' )
 	{
 		return;
