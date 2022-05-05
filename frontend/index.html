@@ -39,17 +39,22 @@
 
 <body>
 	<div class="row navbar">
-		<div class="col-auto mr-auto">
-			<h1 class="shop-name-h1">Our shop v0.9</h1>
-			<div class="shopping-cart">
+		<div class="row col-auto">
+			<div class="col-auto">
+				<h1 class="shop-name-h1">Our shop</h1>
+			</div>
+			<div class="col-auto">
+				<span> v0.9.1</span>
+			</div>
+			<div class="col-auto shopping-cart">
 				<div class="cartContainer"></div>
 			</div>
 		</div>
 		<div class="row col-auto">
 			<div class="col-auto" >
-				<button type="button" class="btn btn-light hidden">
+				<button type="button" class="btn btn-sm btn-outline-white position-relative">
 					<span class="material-icons">shopping_cart</span>
-					<span class="badge badge-dark">2</span>
+					<span class="position-absolute top-50 start-100 translate-middle badge rounded-pill bg-primary" id="cart-items">?</span>
 				</button>
 			</div>
 			<div class="col-auto nav-container">
