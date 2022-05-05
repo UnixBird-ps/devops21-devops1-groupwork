@@ -76,6 +76,13 @@ class ShoppingCart {
 	}
 
 
+	empty()
+	{
+		ShoppingCart.orderRows = [];
+		grabEl( "div.cartContainer" ).innerHTML = "";
+	}
+
+
 	addOrders() {
 		let data = ShoppingCart.orderRows; 
 		let nProducts = [];
@@ -99,8 +106,7 @@ class ShoppingCart {
 					alert( "Please login to place order" );
 				else
 				{
-					ShoppingCart.orderRows = [];
-					grabEl('.cartContainer').innerHTML = "";//style.display = 'none';
+					this.empty();
 					alert( "Order was sent. Thank you for your order." );
 				}
 			})
@@ -139,11 +145,15 @@ class ShoppingCart {
 		});
 
 
-		listen('click', '.cancelButton',()=>{
-			ShoppingCart.orderRows = [];
-			grabEl('.cartContainer').innerHTML = "";//style.display = 'none';
-			return;
-		});
+		listen(
+			'click',
+			'.cancelButton',
+			() =>
+			{
+				this.empty();
+				return;
+			}
+		);
 
 		ShoppingCart.eventListenersAdded = true;
 	}

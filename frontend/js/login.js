@@ -124,13 +124,6 @@ document.querySelector( 'body' ).addEventListener(
 		}
 
 		getLogInfo();
-
-		//debugMsg();
-		//loggedIn && loggedIn.userRole !== 'superadmin'
-
-		//grabEl( "main" ).innerHTML = window.productList.render();
-
-		//location.reload();
 	}
 );
 
