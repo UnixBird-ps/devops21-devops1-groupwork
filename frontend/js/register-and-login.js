@@ -14,14 +14,19 @@ async function getLogInfo()
 	let lNavContainer = document.querySelector( "div.nav-container" );
 	lNavContainer.innerHTML = await renderNavContainer();
 
-	if ( !loggedIn || loggedIn.userRole !== "superadmin" ) grabEl( "main" ).innerHTML = await window.productList.render();
+	if ( !loggedIn || loggedIn.userRole !== "superadmin" )
+	{
+		document.querySelector( "main" ).innerHTML = await window.productList.render();
+		document.querySelector( "#cart-icon" ).classList.remove( "hidden" );
+	}
 
 	if ( loggedIn && !loggedIn.error )
 	{
 		if ( loggedIn.userRole === "superadmin" )
 		{
-			grabEl( "main" ).innerHTML = "";
+			document.querySelector( "#cart-icon" ).classList.add( "hidden" );
 			window.productList.shoppingCart.empty();
+			document.querySelector( "main" ).innerHTML = "";
 		}
 
 		start( loggedIn?.userRole );
@@ -72,7 +77,8 @@ document.querySelector('body').addEventListener
 		let lNavContainer = document.querySelector( "div.nav-container" );
 		lNavContainer.innerHTML = await renderNavContainer();
 
-		grabEl( "main" ).innerHTML = await window.productList.render();
+		document.querySelector( "main" ).innerHTML = await window.productList.render();
+		document.querySelector( "#cart-icon" ).classList.remove( "hidden" );
 
 		// Empty other elements
 		grabEl( "div.select-holder" ).innerHTML = "";
