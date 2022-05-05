@@ -10,32 +10,55 @@ class ShoppingCart {
 		{
 			this.addEventListeners();
 		}
+
+		document.querySelector( "span#cart-items" ).innerHTML = "";
 	}
 
-  add(quantity, product) {
 
-	// check if the product alread is in the cart
-    let found = false;
-    for (let orderRow of ShoppingCart.orderRows) {
-      if (orderRow.product === product) {
-        // add quantity
-        orderRow.quantity += quantity;
-        found = true;
-      }
-    }
-
-	// if the product wasn't in the cart already
-    if (!found) {
-		// Add a new order row
-		ShoppingCart.orderRows.push({
-		  quantity,
-		  product
-		});
+	empty()
+	{
+		ShoppingCart.orderRows = [];
+		document.querySelector( "div.cartContainer" ).innerHTML = "";
+		document.querySelector( "span#cart-items" ).innerHTML = "";
 	}
 
-    // for now render the shopping cart to the footer
-    document.querySelector( ".cartContainer" ).innerHTML = this.render();
-  }
+
+	countCartItems()
+	{
+		let lItemsInCart = 0;
+		for ( let orderRow of ShoppingCart.orderRows )
+		{
+			lItemsInCart += orderRow.quantity;
+		}
+		return lItemsInCart;
+	}
+
+
+	add(quantity, product)
+	{
+		// check if the product alread is in the cart
+		let found = false;
+		for ( let orderRow of ShoppingCart.orderRows )
+		{
+			if ( orderRow.product === product )
+			{
+				// add quantity
+				orderRow.quantity += quantity;
+				found = true;
+			}
+		}
+
+		// if the product wasn't in the cart already
+		if ( !found )
+		{
+			// Add a new order row
+			ShoppingCart.orderRows.push( { quantity, product } );
+		}
+
+		// for now render the shopping cart to the footer
+		document.querySelector( ".cartContainer" ).innerHTML = this.render();
+		document.querySelector( "span#cart-items" ).innerHTML = this.countCartItems();
+	}
 
 
 	render()
@@ -50,8 +73,8 @@ class ShoppingCart {
 			html += `
 			<tr class="tableRow" id="${orderRow.product.id}">
 				<td>
-					<button type="button" class="close delCartWare" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
+					<!--button type="button" class="close delCartWare" aria-label="Close"-->
+					<button type="button" class="btn-close delCartWare" aria-label="Close">
 					</button>
 				</td>
 				<td>${ orderRow.quantity }</td>
@@ -73,13 +96,6 @@ class ShoppingCart {
 		<button class="btn btn-sm btn-outline-dark orderButton">Order</button></div>`;
 		//html += '</div>';
 		return html;
-	}
-
-
-	empty()
-	{
-		ShoppingCart.orderRows = [];
-		grabEl( "div.cartContainer" ).innerHTML = "";
 	}
 
 
@@ -129,10 +145,11 @@ class ShoppingCart {
 				index ++;
 			}
 			if(ShoppingCart.orderRows.length === 0){
-				grabEl('.cartContainer').innerHTML = ""; //.style.display = 'none';
+				document.querySelector('.cartContainer').innerHTML = "";
+				document.querySelector( "span#cart-items" ).innerHTML = "";
 			}else{
-				//document.querySelector('footer').innerHTML = this.render();
 				document.querySelector( ".cartContainer" ).innerHTML = this.render();
+				document.querySelector( "span#cart-items" ).innerHTML = "";
 			}
 			return;
 		});
