@@ -1,8 +1,8 @@
-# devops21-groupwork-1
+# DevOps21 Methodology 1
 [![Latest push to dev](https://github.com/UnixBird-ps/devops21-metodik1-groupwork/actions/workflows/dev.yml/badge.svg?event=push&branch=dev)]() dev &emsp;
 [![Latest push to main](https://github.com/UnixBird-ps/devops21-metodik1-groupwork/actions/workflows/dev.yml/badge.svg?event=push&branch=main)]() main
 
-A CI/CD group work for course DevOps Metodik 1 using GitHub Actions.
+A school assignment group work on CI/CD for course DevOps Metodik 1 using GitHub Actions.
 
 
 **There are two branches that are used for deployment:**
