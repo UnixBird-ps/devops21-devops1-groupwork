@@ -1,6 +1,6 @@
 const { Given, When, Then } = require( '@wdio/cucumber-framework' );
 const allureReporter = require('@wdio/allure-reporter').default;
-const pauseTime = 1000;
+const pauseTime = 0;
 
 
 Given(
@@ -8,7 +8,9 @@ Given(
 	async () =>
 	{
 		await browser.url( '/' );
-		await $( '.productInList h3' ).waitForClickable();
+		await expect( await $( "main ul#products" ) ).toExist();
+		//await $( 'div.productInList h3' ).waitForClickable();
+		await expect( await $( 'div.productInList h3' ) ).toBeClickable();
 	}
 );
 
@@ -26,8 +28,7 @@ When(
 				foundProduct = product;
 			}
 		}
-		expect( foundProduct ).toBeTruthy();
-		//await foundProduct.scrollIntoView( { block : "nearest" } );
+		await expect( foundProduct ).toBeTruthy();
 		await browser.pause( pauseTime );
 		let titleEl = await foundProduct.$( 'h3' );
 		await titleEl.click();
@@ -41,33 +42,24 @@ Then(
 	{
 		let lBackBtn = await $( 'main .backButton' );
 		let lBtnInnerHTML = await lBackBtn.getHTML( false );
-		expect( lBtnInnerHTML ).toContain( 'Back to product list' );
+		await expect( lBtnInnerHTML ).toContain( 'Back to product list' );
 
-		let product = await $( 'main .product' );
-		let lTitleEl = await product.$( 'h3' );
-		let lTittleInnerHTML = await lTitleEl.getHTML( false );
-		expect( lTittleInnerHTML ).toEqual( productName );
+		let lTittleInnerHTML = await( await $( "main div.product h3" ) ).getHTML( false );
+		await expect( lTittleInnerHTML ).toEqual( productName );
 	}
 );
 
 
 Given(
-	'that I can see the detailed product page',
-	async () =>
+	/^that I can see the product details page for the product "(.*)"$/,
+	async ( productName ) =>
 	{
-		// Load the main page with products
-		await browser.url( '/' );
-		await $( '.productInList h3' ).waitForClickable();
-
-		let firstProduct = await $( '.productInList' );
-		//await firstProduct.scrollIntoView( true );
-
-		// Load a detailed product page
-		let lTitleEl = await $( '.productInList h3' );
-		expect( lTitleEl ).toBeTruthy();
-		await lTitleEl.click();
-
-		await $( '.product h3' ).waitForClickable();
+		let lTittleInnerHTML = await( await $( "main div.product h3" ) ).getHTML( false );
+		await expect( lTittleInnerHTML ).toEqual( productName );
+		await expect( await $( 'button.backButton' ) ).toExist();
+		await expect( await $( 'button.backButton' ) ).toBeClickable();
+		await expect( await $( 'div.product h3' ) ).toExist();
+		await expect( await $( 'div.product h3' ) ).toBeClickable();
 	}
 );
 
@@ -77,7 +69,7 @@ When(
 	async () =>
 	{
 		let lBackBtn = await $( 'main .backButton' );
-		//await lBackBtn.scrollIntoView( true );
+		await expect( lBackBtn ).toBeTruthy();
 		await lBackBtn.click();
 		await browser.pause( pauseTime );
 	}
@@ -92,10 +84,10 @@ Then(
 		await $( '.productInList h3' ).waitForClickable();
 
 		let lBackBtns = await $$( '.backButton' );
-		expect( lBackBtns ).toBeElementsArrayOfSize( 0 );
+		await expect( lBackBtns ).toBeElementsArrayOfSize( 0 );
 
 		let firstProduct = await $( '.productInList' );
-		expect( firstProduct ).toBeTruthy();
+		await expect( firstProduct ).toBeTruthy();
 
 		await browser.pause( pauseTime );
 	}
