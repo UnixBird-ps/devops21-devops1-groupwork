@@ -9,7 +9,6 @@ Given(
 	{
 		await browser.url( '/' );
 		await expect( await $( "main ul#products" ) ).toExist();
-		//await $( 'div.productInList h3' ).waitForClickable();
 		await expect( await $( 'div.productInList h3' ) ).toBeClickable();
 	}
 );
@@ -71,6 +70,7 @@ When(
 		let lBackBtn = await $( 'main .backButton' );
 		await expect( lBackBtn ).toBeTruthy();
 		await lBackBtn.click();
+
 		await browser.pause( pauseTime );
 	}
 );
@@ -80,14 +80,11 @@ Then(
 	'the page with the list of products should be shown again',
 	async () =>
 	{
-		// Load the main page with products again
-		await $( '.productInList h3' ).waitForClickable();
+		await ( await $( '.productInList h3' ) ).waitForClickable();
 
-		let lBackBtns = await $$( '.backButton' );
-		await expect( lBackBtns ).toBeElementsArrayOfSize( 0 );
+		await expect( await $$( '.backButton' ) ).toBeElementsArrayOfSize( 0 );
 
-		let firstProduct = await $( '.productInList' );
-		await expect( firstProduct ).toBeTruthy();
+		await expect( await $( '.productInList' ) ).toBeTruthy();
 
 		await browser.pause( pauseTime );
 	}
