@@ -33,10 +33,6 @@ Given(
 		let lSelector = ".register-and-login-links a";
 		await browser.url( "/" );
 
-		// await $( lSelector ).waitForExist();
-		// await expect( await $( lSelector ) ).toHaveHref( "/register" );
-		// await expect( await $( lSelector ) ).toBeClickable();
-
 		let lFirstAuthLink = await $( lSelector );
 		await lFirstAuthLink.waitForExist();
 		await expect( lFirstAuthLink ).toHaveHref( "/register" );
@@ -50,16 +46,6 @@ When(
 	async () =>
 	{
 		let lRegisterLink;
-
-		// let lAuthLinksContainer = await $( ".register-and-login-links" );
-		// await lAuthLinksContainer.waitUntil
-		// (
-		// 	async function ()
-		// 	{
-		// 		lRegiterLink = ( await this.$$( "a" ) )[ 0 ];
-		// 		return ( lRegiterLink && await lRegiterLink.getAttribute( "href" ) === "/register" );
-		// 	}
-		// );
 
 		lRegisterLink = await $( ".register-and-login-links a[href='/register']" );
 		await expect( lRegisterLink ).toExist();
@@ -82,34 +68,7 @@ Given(
 	"that I can see the registration form",
 	async () =>
 	{
-		let lSelector = "form[name='registration']";
-		let lRegForm = await $( lSelector );
-
-		// let lSelector = ".register-and-login-links a";
-		// let lRegiterLink = await $( lSelector );
-
-		// await $( lSelector ).waitForExist();
-		// await expect( await $( lSelector ) ).toHaveHref( "/register" );
-		// await expect( await $( lSelector ) ).toBeClickable();
-
-		let lRegiterLink;
-
-		// let lAuthLinksContainer = await $( ".register-and-login-links" );
-		// await lAuthLinksContainer.waitUntil
-		// (
-		// 	async function ()
-		// 	{
-		// 		lRegiterLink = ( await this.$$( "a" ) )[ 0 ];
-		// 		return ( lRegiterLink && await lRegiterLink.getAttribute( "href" ) === "/register" );
-		// 	}
-		// );
-
-		// expect( lFirstAuthLink ).toBeTruthy();
-		// await lFirstAuthLink.waitForClickable();
-
-		// lRegiterLink = await $( ".register-and-login-links a[href='/register']" );
-		// await lRegiterLink.waitForClickable( { timeout : 5000 } )
-		// await lRegiterLink.click();
+		let lRegForm = await $( "form[name='registration']" );
 
 		await expect( lRegForm ).toExist();
 		await lRegForm.waitForDisplayed();
@@ -158,20 +117,6 @@ When(
 	{
 		let lLoginLink;
 
-		// let lAuthLinksContainer = await $( '.register-and-login-links' );
-		// await lAuthLinksContainer.waitUntil
-		// (
-		// 	async function ()
-		// 	{
-		// 		lLoginLink = ( await this.$$( "a" ) )[ 1 ];
-		// 		return ( lLoginLink && await lLoginLink.getAttribute( "href" ) === "/login" );
-		// 	},
-		// 	{
-		// 		timeout: timeOut,
-		// 		timeoutMsg: "Reached timeout when wating for element"
-		// 	}
-		// );
-
 		lLoginLink = await $( ".register-and-login-links a[href='/login']" );
 
 		await lLoginLink.waitForClickable( { timeout : 5000 } )
@@ -184,7 +129,9 @@ Then(
 	"a login form should appear on the page",
 	async () =>
 	{
-		await $( "form[name='login']" ).waitForDisplayed( { timeout : timeOut } );
+		let lLoginForm = await $( "form[name='login']" );
+		await expect( lLoginForm ).toExist();
+		await lLoginForm.waitForDisplayed( { timeout : timeOut } );
 		await browser.pause( pauseTime );
 	}
 );
@@ -194,30 +141,10 @@ Given(
 	"that I can see the login form",
 	async () =>
 	{
-		let lSelector = "form[name='login']";
-		let lLoginForm = await $( lSelector );
-
-		// await browser.url( '/' );
-		// await $( ".register-and-login-links" ).waitForDisplayed();
-
-		// let lSecondAuthLink;
-		// let lAuthLinksContainer = await $( '.register-and-login-links' );
-		// await lAuthLinksContainer.waitUntil
-		// (
-		// 	async function ()
-		// 	{
-		// 		lSecondAuthLink = ( await this.$$( "a" ) )[ 1 ];
-		// 		return ( lSecondAuthLink && await lSecondAuthLink.getAttribute( "href" ) === "/login" );
-		// 	}
-		// );
-
-		// await lSecondAuthLink.waitForClickable();
-		// await lSecondAuthLink.click();
-		// await $( "form[name='login']" ).waitForDisplayed();
+		let lLoginForm = await $( "form[name='login']" );
 
 		await expect( lLoginForm ).toExist();
 		await lLoginForm.waitForDisplayed();
-
 	}
 );
 
