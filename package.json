@@ -7,12 +7,12 @@
         "start": "node ./backend/index.js",
         "test": "echo Run tests by executing 'npm run test-...' with one of the following scripts: test-unit, test-bdd, test-rest or test-all && exit 1",
         "test-unit": "jest --config tests/jest.config.js || exit 1",
-        "test-rest": "newman run tests/rest-api-test.postman_collection.json -r allure --reporter-allure-export tests/allure-results || exit 1",
+        "test-rest": "newman run tests/rest-api-test.postman_collection.json -r cli,allure --reporter-allure-export tests/allure-results || exit 1",
         "test-bdd": "wdio run tests/wdio.conf.js || exit 1",
         "test-all": "npm run test-unit && npm run test-rest && npm run test-bdd || exit 1",
         "allure-generate": "allure generate --clean --output tests/allure-report tests/allure-results",
-        "allure-open": "rm -r tests/allure-results/history && cp -r tests/allure-report/history tests/allure-results/history && allure open tests/allure-report",
-        "allure-open-win": "del /s tests\\allure-results\\history && copy /y tests\\allure-report\\history tests\\allure-results\\history && allure open tests\\allure-report"
+        "allure-open": "cp -r tests/allure-report/history tests/allure-results/history && allure open tests/allure-report && rm -r tests/allure-results/history",
+        "allure-open-win": "xcopy tests\\allure-report\\history tests\\allure-results\\history\\ /e /y & allure open tests\\allure-report & del /s /q tests\\allure-results\\history"
     },
     "author": "Albin, Mauro, Pawel",
     "license": "ISC",
