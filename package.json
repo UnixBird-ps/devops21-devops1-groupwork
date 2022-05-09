@@ -11,8 +11,8 @@
         "test-bdd": "wdio run tests/wdio.conf.js || exit 1",
         "test-all": "npm run test-unit && npm run test-rest && npm run test-bdd || exit 1",
         "allure-generate": "allure generate --clean --output tests/allure-report tests/allure-results",
-        "allure-open": "cp -r tests/allure-report/history tests/allure-results/history && allure open tests/allure-report && rm -r tests/allure-results/history",
-        "allure-open-win": "xcopy tests\\allure-report\\history tests\\allure-results\\history\\ /e /y & allure open tests\\allure-report & del /s /q tests\\allure-results\\history"
+        "allure-open": "rm -r tests/allure-results/history ; cp -r tests/allure-report/history tests/allure-results/history && allure open tests/allure-report",
+        "allure-open-win": "del /s /q tests\\allure-results\\history & xcopy tests\\allure-report\\history tests\\allure-results\\history\\ /e /y & allure open tests\\allure-report"
     },
     "author": "Albin, Mauro, Pawel",
     "license": "ISC",
