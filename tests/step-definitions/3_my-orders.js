@@ -32,6 +32,9 @@ Given(
 	"that I'm logged in as customer and can see the main page containing the product list",
 	async () =>
 	{
+		allureReporter.addFeature( "My orders list" );
+		allureReporter.addSeverity( "critical" );
+
 		await browser.url( '/' );
 
 		let lFirstAuthLink = await $( "div.register-and-login-links a" );
@@ -41,15 +44,6 @@ Given(
 		if ( lFirstAuthLinkURL != "/logout"  )
 		{
 			let lLoginLink;
-			// let lLinksContainer = await $( 'div.register-and-login-links' );
-			// await lLinksContainer.waitUntil
-			// (
-			// 	async function ()
-			// 	{
-			// 		lSecondAuthLink = ( await this.$$( "a" ) )[ 1 ];
-			// 		return ( lSecondAuthLink && await lSecondAuthLink.getAttribute( "href" ) == "/login" );
-			// 	}
-			// );
 
 			lLoginLink = await $( ".register-and-login-links a[href='/login']" );
 			await expect( lLoginLink ).toExist();
@@ -90,17 +84,9 @@ When(
 	"I click on the link 'My orders' in the top right corner",
 	async () =>
 	{
-		let lMyOrdersLink = await $( ".nav-links a[href='/my-orders']" );
+		allureReporter.addFeature( "My orders list" );
 
-		// let lLinksContainer = await $( '.nav-links' );
-		// await lLinksContainer.waitUntil
-		// (
-		// 	async function ()
-		// 	{
-		// 		lMyOrdersLink = ( await this.$$( "a" ) )[ 0 ];
-		// 		return ( lMyOrdersLink && await lMyOrdersLink.getAttribute( "href" ) === "/my-orders" );
-		// 	}
-		// );
+		let lMyOrdersLink = await $( ".nav-links a[href='/my-orders']" );
 
 		await lMyOrdersLink.waitForClickable();
 		await lMyOrdersLink.click();
@@ -113,6 +99,8 @@ Then(
 	"my order history should be displayed",
 	async () =>
 	{
+		allureReporter.addFeature( "My orders list" );
+
 		await expect( await $( 'table[name="my-orders"]' ) ).toExist();
 		await browser.pause( pauseTime );
 	}
@@ -123,6 +111,9 @@ Given(
 	"that I can see my order history",
 	async () =>
 	{
+		allureReporter.addFeature( "My orders list" );
+		allureReporter.addSeverity( "critical" );
+
 		let lSelector = "table[name='my-orders']";
 		let lOrdersTableElm = await $( lSelector );
 		await expect( lOrdersTableElm ).toExist();
@@ -136,6 +127,8 @@ When(
 	"I click on one of the rows in the list containing my old orders",
 	async () =>
 	{
+		allureReporter.addFeature( "My orders list" );
+
 		let lFirstOrderRow = await $( 'table[name="my-orders"] tbody tr.orderlist-row' );
 		await lFirstOrderRow.waitForClickable();
 		await lFirstOrderRow.click();
@@ -147,6 +140,8 @@ Then(
 	"the orders list should be replaced by a page showing total cost and products ordered for an order",
 	async () =>
 	{
+		allureReporter.addFeature( "My orders list" );
+
 		let lSelector = "table[name='order-details']";
 		await expect( await $( lSelector ) ).toExist();
 		await ( await $( lSelector ) ).waitForDisplayed();
@@ -159,6 +154,9 @@ Given(
 	"that I can see an order's details",
 	async () =>
 	{
+		allureReporter.addFeature( "My orders list" );
+		allureReporter.addSeverity( "critical" );
+
 		await expect( await $( 'table[name="order-details"]' ) ).toExist();
 		await browser.pause( pauseTime );
 	}
@@ -169,6 +167,8 @@ When(
 	"I click on the button 'Back to My orders'",
 	async () =>
 	{
+		allureReporter.addFeature( "My orders list" );
+
 		let lBackButton = await $( "button.back-button-orders" );
 		await expect( lBackButton ).toExist();
 		await lBackButton.waitForClickable();
@@ -181,6 +181,8 @@ When(
 	"I click on the link 'Home' in the top right corner",
 	async () =>
 	{
+		allureReporter.addFeature( "My orders list" );
+
 		let lSelector = "div.nav-links a[href='/home']";
 		await expect( await $( lSelector ) ).toExist();
 		await ( await $( lSelector ) ).click();
@@ -193,6 +195,8 @@ Then(
 	"the product list should be displayed",
 	async () =>
 	{
+		allureReporter.addFeature( "My orders list" );
+
 		await expect( await $( "div.productInList div.product-info" ) ).toExist();
 		await browser.pause( pauseTime );
 	}
