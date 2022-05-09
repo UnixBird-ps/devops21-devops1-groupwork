@@ -1,2 +1,8 @@
+const { defaults } = require( "jest-config" );
 
-setupFilesAfterEnv: [ "jest-allure/dist/setup" ]
+module.exports =
+{
+	testRunner : "jasmine2",
+	reporters: [ "default", "jest-allure" ],
+	setupFilesAfterEnv: [ "jest-allure/dist/setup" ]
+};
