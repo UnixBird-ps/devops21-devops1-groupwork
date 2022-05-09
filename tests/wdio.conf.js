@@ -1,4 +1,5 @@
-require( 'dotenv' ).config();
+require( "dotenv" ).config();
+var allure = require( "allure-commandline" );
 
 exports.config =
 {
@@ -151,8 +152,44 @@ exports.config =
 	// Test reporter for stdout.
 	// The only one supported by default is 'dot'
 	// see also: https://webdriver.io/docs/dot-reporter
-	reporters: ['spec'],
+	reporters:
+	[
+		'spec',
+		[
+			'allure',
+			{
+				outputDir: 'tests/allure-results',
+				disableWebdriverStepsReporting: true,
+				disableWebdriverScreenshotsReporting: true,
+			}
+		]
+	],
 
+	// onComplete: function()
+	// {
+	// 	var generation = allure( [ "generate", "--clean", "--output", "tests/allure-report", "tests/allure-results" ] );
+	// 	return new Promise
+	// 	(
+	// 		( resolve, reject ) =>
+	// 		{
+	// 			//const generationTimeout = setTimeout( () => reject( reportError ), 5000 );
+
+	// 			generation.on
+	// 			(
+	// 				"exit",
+	// 				function( exitCode )
+	// 				{
+	// 					clearTimeout( generationTimeout );
+
+	// 					if ( exitCode !== 0 ) return reject( new Error( "Could not generate Allure report" ) );
+
+	// 					console.log( "Allure report successfully generated" );
+	// 					resolve();
+	// 				}
+	// 			)
+	// 		}
+	// 	)
+	// },
 
 	//
 	// If you are using Cucumber you need to specify the location of your step definitions.
