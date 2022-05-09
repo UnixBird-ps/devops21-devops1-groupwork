@@ -7,7 +7,7 @@
         "start": "node ./backend/index.js",
         "test": "echo Run tests by executing 'npm run test-...' with one of the following scripts: test-unit, test-bdd, test-rest or test-all && exit 1",
         "test-unit": "jest --config tests/jest.config.js || exit 1",
-        "test-rest": "newman run tests/rest-api-test.postman_collection.json -r cli,allure --reporter-allure-export tests/allure-results || exit 1",
+        "test-rest": "newman run tests/rest-api-test.postman_collection.json -r cli,allure --reporter-allure-export tests/allure-results > nul || exit 1",
         "test-bdd": "wdio run tests/wdio.conf.js || exit 1",
         "test-all": "npm run test-unit && npm run test-rest && npm run test-bdd || exit 1",
         "allure-generate": "allure generate --clean --output tests/allure-report tests/allure-results",
