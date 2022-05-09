@@ -1,4 +1,5 @@
 const { Given, When, Then } = require( "@wdio/cucumber-framework" );
+const allureReporter = require('@wdio/allure-reporter').default;
 const pauseTime = 0;
 const timeOut = 5000;
 
@@ -30,6 +31,8 @@ Given(
 	"that I'm on the main page and not signed in",
 	async () =>
 	{
+		allureReporter.addFeature( "Register and login pages" );
+
 		let lSelector = ".register-and-login-links a";
 		await browser.url( "/" );
 
@@ -49,6 +52,8 @@ When(
 	"I click on the 'Register' link",
 	async () =>
 	{
+		allureReporter.addFeature( "Register and login pages" );
+
 		let lRegisterLink;
 
 		// let lAuthLinksContainer = await $( ".register-and-login-links" );
@@ -73,6 +78,8 @@ Then(
 	"a registration form should appear on the page",
 	async () =>
 	{
+		allureReporter.addFeature( "Register and login pages" );
+
 		await $( "form[name='registration']" ).waitForDisplayed();
 	}
 );
@@ -82,6 +89,8 @@ Given(
 	"that I can see the registration form",
 	async () =>
 	{
+		allureReporter.addFeature( "Register and login pages" );
+
 		let lSelector = "form[name='registration']";
 		let lRegForm = await $( lSelector );
 
@@ -123,6 +132,8 @@ When(
 	"I enter my registration info and click on the submit button",
 	async () =>
 	{
+		allureReporter.addFeature( "Register and login pages" );
+
 		await $( "form[name='registration'] input[name='firstName']" ).setValue( "Tester2" );
 		await $( "form[name='registration'] input[name='lastName']" ).setValue( "Testare2" );
 		await $( "form[name='registration'] input[name='email']" ).setValue( "tester2@testare2.test" );
@@ -141,6 +152,8 @@ Then(
 	"the page should inform me that the registration was successful",
 	async () =>
 	{
+		allureReporter.addFeature( "Register and login pages" );
+
 		let lFoundWelcomeMsgElm = await $( "div.register h3" );
 		await expect( lFoundWelcomeMsgElm ).toBeTruthy();
 		await expect( await lFoundWelcomeMsgElm.getText() ).toContain( "Welcome as a member!" );
@@ -156,6 +169,8 @@ When(
 	"I click on the 'Login' link",
 	async () =>
 	{
+		allureReporter.addFeature( "Register and login pages" );
+
 		let lLoginLink;
 
 		// let lAuthLinksContainer = await $( '.register-and-login-links' );
@@ -184,6 +199,8 @@ Then(
 	"a login form should appear on the page",
 	async () =>
 	{
+		allureReporter.addFeature( "Register and login pages" );
+
 		await $( "form[name='login']" ).waitForDisplayed( { timeout : timeOut } );
 		await browser.pause( pauseTime );
 	}
@@ -194,6 +211,8 @@ Given(
 	"that I can see the login form",
 	async () =>
 	{
+		allureReporter.addFeature( "Register and login pages" );
+
 		let lSelector = "form[name='login']";
 		let lLoginForm = await $( lSelector );
 
@@ -226,6 +245,8 @@ When(
 	"I enter my login info and click on the submit button",
 	async () =>
 	{
+		allureReporter.addFeature( "Register and login pages" );
+
 		await $( "form[name='login'] input[name='email']" ).setValue( "tester@testare.test" );
 		await $( "form[name='login'] input[name='password']" ).setValue( "12345678" );
 		let lFoundSubmitBtn = await $( "form[name='login'] input[type='submit']" );
@@ -245,6 +266,8 @@ Then(
 	"the page should inform me that the login was successful",
 	async () =>
 	{
+		allureReporter.addFeature( "Register and login pages" );
+
 		let lFirstAuthLink;
 		let lAuthLinksContainer = await $( 'div.register-and-login-links' );
 		await lAuthLinksContainer.waitUntil
@@ -274,6 +297,8 @@ Given(
 	"that I'm currently signed in and on the main page",
 	async () =>
 	{
+		allureReporter.addFeature( "Register and login pages" );
+
 		let lFoundLoggedInAsElm = await $( "div.logon-info" );
 		await expect( lFoundLoggedInAsElm ).toBeTruthy();
 		await expect( await lFoundLoggedInAsElm.getText() ).toContain( "Logged in as Tester" );
@@ -285,6 +310,8 @@ When(
 	"I click on the 'Logout' link",
 	async () =>
 	{
+		allureReporter.addFeature( "Register and login pages" );
+
 		let lFirstAuthLink;
 		let lAuthLinksContainer = await $( 'div.register-and-login-links' );
 		await lAuthLinksContainer.waitUntil
@@ -308,6 +335,8 @@ Then(
 	"the page should inform me that I was signed off",
 	async () =>
 	{
+		allureReporter.addFeature( "Register and login pages" );
+
 		let lAuthLinksContainer = await $( 'div.register-and-login-links' );
 		await lAuthLinksContainer.waitForExist();
 

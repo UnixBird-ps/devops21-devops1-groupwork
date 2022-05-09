@@ -7,6 +7,9 @@ Given(
 	'that I can see the product list',
 	async () =>
 	{
+		allureReporter.addFeature( "Product list" );
+		allureReporter.addSeverity( "critical" );
+
 		await browser.url( '/' );
 		await $( '.productInList h3' ).waitForClickable();
 	}
@@ -17,6 +20,8 @@ When(
 	/^I click on the product name for "(.*)"$/,
 	async ( productName ) =>
 	{
+		allureReporter.addFeature( "Product list" );
+
 		let products = await $$( '.productInList' );
 		let foundProduct;
 		for ( let product of products )
@@ -39,6 +44,8 @@ Then(
 	/^a page with more information on the product "(.*)" should be shown$/,
 	async ( productName ) =>
 	{
+		allureReporter.addFeature( "Product list" );
+
 		let lBackBtn = await $( 'main .backButton' );
 		let lBtnInnerHTML = await lBackBtn.getHTML( false );
 		expect( lBtnInnerHTML ).toContain( 'Back to product list' );
@@ -55,6 +62,8 @@ Given(
 	'that I can see the detailed product page',
 	async () =>
 	{
+		allureReporter.addFeature( "Product list" );
+
 		// Load the main page with products
 		await browser.url( '/' );
 		await $( '.productInList h3' ).waitForClickable();
@@ -76,6 +85,8 @@ When(
 	'I click on the back button',
 	async () =>
 	{
+		allureReporter.addFeature( "Product list" );
+
 		let lBackBtn = await $( 'main .backButton' );
 		//await lBackBtn.scrollIntoView( true );
 		await lBackBtn.click();
@@ -88,6 +99,8 @@ Then(
 	'the page with the list of products should be shown again',
 	async () =>
 	{
+		allureReporter.addFeature( "Product list" );
+
 		// Load the main page with products again
 		await $( '.productInList h3' ).waitForClickable();
 
