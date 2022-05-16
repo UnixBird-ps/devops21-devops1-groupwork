@@ -39,12 +39,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PORT: ${{ secrets.DEV_APP_PORT }}
+      DEV_SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
     steps:
     - uses: actions/checkout@v2
     - name: Check if development server is defined
-      env:
-        PORT: ${{ secrets.DEV_APP_PORT }}
-        DEV_SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
       if: "${{ env.DEV_SSH_HOST == '' }}"
       run: exit 1
     - name: Setup SSH
@@ -75,13 +73,13 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    env:
+      PORT: ${{ secrets.PROD_APP_PORT }}
+      PROD_SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
     environment: "Deploy branch 'main' to production server"
     steps:
     - uses: actions/checkout@v2
     - name: Check if production server is defined
-      env:
-        PORT: ${{ secrets.PROD_APP_PORT }}
-        PROD_SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
       if: "${{ env.PROD_SSH_HOST == '' }}"
       run: exit 1
     - name: Setup SSH
