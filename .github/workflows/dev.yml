@@ -73,7 +73,7 @@ jobs:
         rsync -vaR -e "ssh" --rsync-path "mkdir -p ~/our-webshop-dev/{app,log}; rsync" ecosystem.config.js package.json backend/*.js backend/*.json frontend/* dev:~/our-webshop-dev/app/
         rsync -vaR -e "ssh" --ignore-existing backend/database/webshop_static.db dev:~/our-webshop-dev/app/
     - name: Install dependencies and start the app
-      run: ssh dev "cd ~/our-webshop-dev/app && mv ecosystem.config.js ../ && echo $PORT > ../dev-port.txt && npm install && { pm2 restart our-webshop-dev || pm2 start ../ecosystem.config.js --log ../log/app.log --time; }"
+      run: ssh dev "cd ~/our-webshop-dev/app && mv ecosystem.config.js ../ && npm install && { pm2 restart our-webshop-dev || pm2 start ../ecosystem.config.js --log ../log/app.log --time; }"
   deploy_prod:
     name: Deploy to production server
     needs: test
@@ -115,4 +115,4 @@ jobs:
         _EOF_
         rsync -vaR -e "ssh" --rsync-path "mkdir -p ~/our-webshop-prod/{app,log}; rsync" ecosystem.config.js package.json backend/*.js backend/*.json frontend/* prod:~/our-webshop-prod/app/
     - name: Install dependencies and start the app
-      run: ssh prod "cd ~/our-webshop-prod/app && mv ecosystem.config.js ../ && echo $PORT > ../prod-port.txt && npm install && { pm2 restart our-webshop-prod || pm2 start ../ecosystem.config.js --log ../log/app.log --time; }"
+      run: ssh prod "cd ~/our-webshop-prod/app && mv ecosystem.config.js ../ && npm install && { pm2 restart our-webshop-prod || pm2 start ../ecosystem.config.js --log ../log/app.log --time; }"
