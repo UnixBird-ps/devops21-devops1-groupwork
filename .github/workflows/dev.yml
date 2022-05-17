@@ -73,7 +73,7 @@ jobs:
         rsync -vaR -e "ssh" --rsync-path "mkdir -p ~/our-webshop-dev/app; rsync" ../ecosystem.config.js package.json backend/*.js backend/*.json frontend/* dev:~/our-webshop-dev/app/
         rsync -vaR -e "ssh" --ignore-existing backend/database/webshop_static.db dev:~/our-webshop-dev/app/
     - name: Install dependencies and start the app
-      run: ssh dev "mkdir -p ~/our-webshop-dev/log && cd ~/our-webshop-dev/app && echo $PORT > ../dev-port.txt && npm install && { pm2 restart our-webshop-dev || pm2 start ~/ecosystem.config.js --log ../log/app.log --time; }"
+      run: ssh dev "mkdir -p ~/our-webshop-dev/log && cd ~/our-webshop-dev/app && echo $PORT > ../dev-port.txt && npm install && { pm2 restart our-webshop-dev || pm2 start ../ecosystem.config.js --log ../log/app.log --time; }"
   deploy_prod:
     name: Deploy to production server
     needs: test
