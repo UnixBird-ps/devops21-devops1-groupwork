@@ -67,7 +67,7 @@ jobs:
         rsync -vaR -e "ssh" --rsync-path "mkdir -p ~/our-webshop-dev/app; rsync" package.json backend/*.js backend/*.json frontend/* dev:~/our-webshop-dev/app/
         rsync -vaR -e "ssh" --ignore-existing backend/database/webshop_static.db dev:~/our-webshop-dev/app/
     - name: Install dependencies and start the app
-      run: ssh dev "mkdir -p ~/our-webshop-dev/log && cd ~/our-webshop-dev/app && npm install && { pm2 restart our-webshop-dev || pm2 start backend --name our-webshop-dev --log ../log/app.log --time; }"
+      run: ssh dev "mkdir -p ~/our-webshop-dev/log && cd ~/our-webshop-dev/app && echo $PORT > ../dev-port.txt && npm install && { pm2 restart our-webshop-dev || pm2 start backend --name our-webshop-dev --log ../log/app.log --time; }"
   deploy_prod:
     name: Deploy to production server
     needs: test
@@ -102,4 +102,4 @@ jobs:
     - name: Prepare app dirs
       run: rsync -vaR -e "ssh" --rsync-path "mkdir -p ~/our-webshop-prod/app; rsync" package.json backend/*.js backend/*.json frontend/* prod:~/our-webshop-prod/app/
     - name: Install dependencies and start the app
-      run: ssh prod "mkdir -p ~/our-webshop-prod/log && cd ~/our-webshop-prod/app && npm install && { pm2 restart our-webshop-prod || pm2 start backend --name our-webshop-prod --log ../log/app.log --time; }"
+      run: ssh prod "mkdir -p ~/our-webshop-prod/log && cd ~/our-webshop-prod/app && echo $PORT > ../prod-port.txt && npm install && { pm2 restart our-webshop-prod || pm2 start backend --name our-webshop-prod --log ../log/app.log --time; }"
