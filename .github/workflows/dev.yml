@@ -37,16 +37,16 @@ jobs:
     needs: test
     if: github.ref == 'refs/heads/dev'
     runs-on: ubuntu-latest
+    env:
+      PORT: ${{ secrets.DEV_APP_PORT }}
+      DEV_SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
     steps:
     - uses: actions/checkout@v2
     - name: Check if development server is defined
-      env:
-        DEV_SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
       if: "${{ env.DEV_SSH_HOST == '' }}"
       run: exit 1
     - name: Setup SSH
       env:
-        DEV_SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
         DEV_SSH_USER: ${{ secrets.DEV_SSH_USER }}
         DEV_SSH_PORT: ${{ secrets.DEV_SSH_PORT }}
         DEV_SSH_KEY: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
@@ -54,7 +54,7 @@ jobs:
         mkdir -p ~/.ssh/
         echo "$DEV_SSH_KEY" > ~/.ssh/dev.key
         chmod 600 ~/.ssh/dev.key
-        cat >>~/.ssh/config <<_EOF_
+        cat >~/.ssh/config <<_EOF_
         Host dev
           HostName $DEV_SSH_HOST
           User $DEV_SSH_USER
@@ -64,26 +64,32 @@ jobs:
         _EOF_
     - name: Prepare app dirs
       run: |
-        rsync -vaR -e "ssh" --rsync-path "mkdir -p ~/our-webshop/app; rsync" package.json backend/*.js backend/*.json frontend/* dev:~/our-webshop/app/
-        rsync -vaR -e "ssh" --ignore-existing backend/database/webshop_static.db dev:~/our-webshop/app/
+        cat >ecosystem.config.js <<_EOF_
+        module.exports =
+        {
+          apps : [ { name: "our-webshop-dev", script: "./backend/index.js", env: { "PORT": "$PORT" } } ]
+        }
+        _EOF_
+        rsync -vaR -e "ssh" --rsync-path "mkdir -p ~/our-webshop-dev/{app,log}; rsync" ecosystem.config.js package.json backend/*.js backend/*.json frontend/* dev:~/our-webshop-dev/app/
+        rsync -vaR -e "ssh" --ignore-existing backend/database/webshop_static.db dev:~/our-webshop-dev/app/
     - name: Install dependencies and start the app
-      run: ssh dev "mkdir -p ~/our-webshop/log && cd ~/our-webshop/app && npm install && { pm2 restart our-webshop || pm2 start backend --name our-webshop --log ../log/app.log --time; }"
+      run: ssh dev "cd ~/our-webshop-dev/app && mv ecosystem.config.js ../ && npm install && { pm2 restart our-webshop-dev || pm2 start ../ecosystem.config.js --log ../log/app.log --time; }"
   deploy_prod:
     name: Deploy to production server
     needs: test
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    env:
+      PORT: ${{ secrets.PROD_APP_PORT }}
+      PROD_SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
     environment: "Deploy branch 'main' to production server"
     steps:
     - uses: actions/checkout@v2
     - name: Check if production server is defined
-      env:
-        PROD_SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
       if: "${{ env.PROD_SSH_HOST == '' }}"
       run: exit 1
     - name: Setup SSH
       env:
-        PROD_SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
         PROD_SSH_USER: ${{ secrets.PROD_SSH_USER }}
         PROD_SSH_PORT: ${{ secrets.PROD_SSH_PORT }}
         PROD_SSH_KEY: ${{ secrets.PROD_SSH_PRIVATE_KEY }}
@@ -91,7 +97,7 @@ jobs:
         mkdir -p ~/.ssh/
         echo "$PROD_SSH_KEY" > ~/.ssh/prod.key
         chmod 600 ~/.ssh/prod.key
-        cat >>~/.ssh/config <<_EOF_
+        cat >~/.ssh/config <<_EOF_
         Host prod
           HostName $PROD_SSH_HOST
           User $PROD_SSH_USER
@@ -100,6 +106,13 @@ jobs:
           StrictHostKeyChecking no
         _EOF_
     - name: Prepare app dirs
-      run: rsync -vaR -e "ssh" --rsync-path "mkdir -p ~/our-webshop/app; rsync" package.json backend/*.js backend/*.json frontend/* prod:~/our-webshop/app/
+      run: |
+        cat >ecosystem.config.js <<_EOF_
+        module.exports =
+        {
+          apps : [ { name: "our-webshop-prod", script: "./backend/index.js", env: { "PORT": $PORT } } ]
+        }
+        _EOF_
+        rsync -vaR -e "ssh" --rsync-path "mkdir -p ~/our-webshop-prod/{app,log}; rsync" ecosystem.config.js package.json backend/*.js backend/*.json frontend/* prod:~/our-webshop-prod/app/
     - name: Install dependencies and start the app
-      run: ssh prod "mkdir -p ~/our-webshop/log && cd ~/our-webshop/app && npm install && { pm2 restart our-webshop || pm2 start backend --name our-webshop --log ../log/app.log --time; }"
+      run: ssh prod "cd ~/our-webshop-prod/app && mv ecosystem.config.js ../ && npm install && { pm2 restart our-webshop-prod || pm2 start ../ecosystem.config.js --log ../log/app.log --time; }"
